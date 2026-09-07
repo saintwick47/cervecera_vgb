@@ -1,0 +1,111 @@
+name: Build instaladores (Windows/Linux/macOS)
+
+# Cómo usarla:
+#  - Subí el código a GitHub y entrá a la pestaña Actions → elegí
+#    "Build instaladores" → "Run workflow" → indicá el tag del release
+#    (ej. v1.0.0). Los instaladores se adjuntan solos al release.
+#  - O publicá un release/tag nuevo: se dispara automáticamente.
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Tag del release donde adjuntar (ej. v1.0.0)"
+        required: true
+        default: "v1.0.0"
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: "Windows (instalador .exe)"
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Dependencias
+        run: |
+          pip install pyinstaller customtkinter fpdf2
+          choco install innosetup --no-progress -y
+      - name: Compilar e instalar
+        shell: powershell
+        run: powershell -ExecutionPolicy Bypass -File packaging/windows/build_windows.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: instalador-windows
+          path: dist_installers/CerveceraVGB-Setup-*.exe
+
+  build-linux:
+    name: "Linux (AppImage x86_64)"
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Dependencias del sistema
+        run: sudo apt-get update && sudo apt-get install -y python3-tk
+      - name: Dependencias Python
+        run: pip install pyinstaller customtkinter fpdf2
+      - name: Compilar AppImage
+        run: bash packaging/linux/build_linux_appimage.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: instalador-linux
+          path: dist_installers/CerveceraVGB-*.AppImage
+
+  build-macos:
+    name: "macOS (${{ matrix.arch }})"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: macos-13, arch: intel }
+          - { os: macos-14, arch: arm64 }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Dependencias Python
+        run: pip install pyinstaller customtkinter fpdf2
+      - name: Compilar .app + DMG
+        run: bash packaging/macos/build_macos.sh ${{ matrix.arch }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: instalador-macos-${{ matrix.arch }}
+          path: dist_installers/CerveceraVGB-*-macos-${{ matrix.arch }}.dmg
+
+  publicar-release:
+    name: "Adjuntar al release de GitHub"
+    needs: [build-windows, build-linux, build-macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: "instalador-*"
+          merge-multiple: true
+          path: dist_installers
+      - name: Tag destino
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "RELEASE_TAG=${{ github.event.release.tag_name }}" >> "$GITHUB_ENV"
+          else
+            echo "RELEASE_TAG=${{ github.event.inputs.release_tag }}" >> "$GITHUB_ENV"
+          fi
+      - name: Checksums SHA-256
+        run: |
+          cd dist_installers
+          sha256sum * > checksums.txt
+          cat checksums.txt
+      - name: Publicar assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          files: |
+            dist_installers/*
+          fail_on_unmatched_files: false
+          generate_release_notes: false
