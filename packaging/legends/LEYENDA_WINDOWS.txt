@@ -1,0 +1,30 @@
+==========================================
+ CERVECERA VGB  -  Instalador para Windows
+==========================================
+
+Tu asistente cervecero de escritorio.
+
+■ LO QUE INCLUYE
+  · Editor completo de recetas (maltas, lúpulos, levaduras,
+    perfil de agua con pH, altitud, ratio, hervor…).
+  · Motor de cálculos profesional: OG, FG, ABV, IBU (Tinseth con
+    altitud/formato), SRM, BU/GU, calorías, aguas con evaporación,
+    pH (entrada/maceración/post-hervor/final) y ácido láctico.
+  · Catálogo argentino (maltas, lúpulos, levaduras y aguas de Córdoba).
+  · Comparador de estilos BJCP, inventario, PDF y BeerXML.
+
+■ INSTALACIÓN
+  · Doble clic en "CerveceraVGB-Setup-1.0.0.exe".
+  · Elegí el directorio de instalación (por defecto:
+    C:\\Archivos de Programa\\Cervecera VGB).
+  · Marcá la casilla "Crear acceso directo en el escritorio"
+    para tener el acceso con el logo de la app.
+  · Al finalizar, abrí "Cervecera VGB" desde el escritorio o
+    el menú Inicio.
+
+■ DESINSTALAR
+  · Panel de control → Programas → Cervecera VGB → Desinstalar.
+
+■ CONTACTO
+  · nicoweb45@proton.me (Asunto: beer_vgb)
+==========================================

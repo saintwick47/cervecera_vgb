@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Cervecera VGB
+Comment=Asistente cervecero de escritorio
+Exec=AppRun
+Icon=cervecera-vgb
+Terminal=false
+Type=Application
+Categories=Utility;Productivity;
+StartupWMClass=Cervecera_VGB

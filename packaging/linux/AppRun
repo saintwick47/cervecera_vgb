@@ -1,0 +1,4 @@
+#!/bin/sh
+# AppRun para AppImage de Cervecera VGB
+HERE="$(dirname "$(readlink -f "$0")")"
+exec "$HERE/usr/lib/cervecera_vgb/Cervecera_VGB" "$@"

@@ -1,0 +1,791 @@
+{
+  "Argentina 1 - Strong Scotch Ale": {
+    "agua_vol": 35.0,
+    "fg_estimada": 1.02,
+    "granos_base": 6.34,
+    "granos_especiales": 0.78,
+    "lupulos": [
+      { "aa": 5, "cantidad": 28, "nombre": "East Kent Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 4.76, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 1.58, "extracto": 280, "nombre": "Munich" },
+      { "cantidad": 0.56, "extracto": 250, "nombre": "Crystal 60L" },
+      { "cantidad": 0.22, "extracto": 240, "nombre": "Caramunich" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.6"
+  },
+  "Argentina 2 - IPA Argenta": {
+    "agua_vol": 30.0,
+    "fg_estimada": 1.012,
+    "granos_base": 5.0,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 5.5, "cantidad": 50, "nombre": "Cascade", "tiempo": 60 },
+      { "aa": 12, "cantidad": 30, "nombre": "Citra", "tiempo": 5 }
+    ],
+    "maltas": [
+      { "cantidad": 5.0, "extracto": 300, "nombre": "Pale Malt" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Crystal Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Argentina 3 - Honey Light Lager": {
+    "agua_vol": 28.0,
+    "fg_estimada": 1.008,
+    "granos_base": 4.5,
+    "granos_especiales": 0.0,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 20, "nombre": "Saaz", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 4.0, "extracto": 300, "nombre": "Pilsen" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Avena" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "IPA 1 - West Coast IPA": {
+    "agua_vol": 30.0,
+    "fg_estimada": 1.012,
+    "granos_base": 5.5,
+    "granos_especiales": 0.0,
+    "lupulos": [
+      { "aa": 13, "cantidad": 56, "nombre": "Simcoe", "tiempo": 0 },
+      { "aa": 12, "cantidad": 28, "nombre": "Citra", "tiempo": 0 }
+    ],
+    "maltas": [
+      { "cantidad": 5.0, "extracto": 300, "nombre": "2 Row Pale" },
+      { "cantidad": 0.5, "extracto": 280, "nombre": "Munich" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "IPA 2 - Hazy IPA": {
+    "agua_vol": 28.0,
+    "fg_estimada": 1.014,
+    "granos_base": 3.25,
+    "granos_especiales": 1.75,
+    "lupulos": [
+      { "aa": 12, "cantidad": 50, "nombre": "Citra", "tiempo": 0 },
+      { "aa": 12.5, "cantidad": 50, "nombre": "Mosaic", "tiempo": 0 }
+    ],
+    "maltas": [
+      { "cantidad": 3.25, "extracto": 300, "nombre": "Base Malt" },
+      { "cantidad": 1.5, "extracto": 250, "nombre": "Flaked Adjuncts" },
+      { "cantidad": 0.25, "extracto": 270, "nombre": "Dextrin Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "IPA 3 - American IPA": {
+    "agua_vol": 30.0,
+    "fg_estimada": 1.01,
+    "granos_base": 5.0,
+    "granos_especiales": 0.0,
+    "lupulos": [
+      { "aa": 10, "cantidad": 40, "nombre": "Centennial", "tiempo": 60 },
+      { "aa": 5.5, "cantidad": 40, "nombre": "Cascade", "tiempo": 15 }
+    ],
+    "maltas": [
+      { "cantidad": 4.5, "extracto": 300, "nombre": "American 2 Row" },
+      { "cantidad": 0.5, "extracto": 280, "nombre": "Munich" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Negra 1 - American Stout": {
+    "agua_vol": 30.0,
+    "fg_estimada": 1.015,
+    "granos_base": 3.0,
+    "granos_especiales": 1.7,
+    "lupulos": [
+      { "aa": 11, "cantidad": 21, "nombre": "Nugget", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 3.0, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.9, "extracto": 250, "nombre": "Flaked Barley" },
+      { "cantidad": 0.7, "extracto": 200, "nombre": "Roasted Barley" },
+      { "cantidad": 0.1, "extracto": 180, "nombre": "Black Malt" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.6"
+  },
+  "Negra 2 - Dry Stout": {
+    "agua_vol": 32.0,
+    "fg_estimada": 1.01,
+    "granos_base": 4.0,
+    "granos_especiales": 1.0,
+    "lupulos": [
+      { "aa": 5, "cantidad": 40, "nombre": "East Kent Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 4.0, "extracto": 300, "nombre": "Pale Malt" },
+      { "cantidad": 0.5, "extracto": 200, "nombre": "Chocolate Malt" },
+      { "cantidad": 0.5, "extracto": 180, "nombre": "Roasted Barley" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.6"
+  },
+  "Negra 3 - Sweet Stout": {
+    "agua_vol": 30.0,
+    "fg_estimada": 1.02,
+    "granos_base": 3.5,
+    "granos_especiales": 1.3,
+    "lupulos": [
+      { "aa": 4.5, "cantidad": 30, "nombre": "Fuggles", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 3.5, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Crystal Malt" },
+      { "cantidad": 0.3, "extracto": 180, "nombre": "Black Malt" },
+      { "cantidad": 0.5, "extracto": 200, "nombre": "Lactose" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.6"
+  },
+  "Red Lager 1 - International Amber Lager": {
+    "agua_vol": 30.0,
+    "fg_estimada": 1.012,
+    "granos_base": 4.5,
+    "granos_especiales": 0.4,
+    "lupulos": [
+      { "aa": 8, "cantidad": 20, "nombre": "Perle", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 4.0, "extracto": 300, "nombre": "Pilsner US" },
+      { "cantidad": 0.5, "extracto": 280, "nombre": "Vienna DE" },
+      { "cantidad": 0.3, "extracto": 220, "nombre": "Special B BE" },
+      { "cantidad": 0.1, "extracto": 180, "nombre": "Midnight Wheat" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Red Lager 2 - American Red Lager": {
+    "agua_vol": 32.0,
+    "fg_estimada": 1.01,
+    "granos_base": 4.5,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 4.5, "cantidad": 14, "nombre": "Hallertau", "tiempo": 45 }
+    ],
+    "maltas": [
+      { "cantidad": 4.5, "extracto": 300, "nombre": "Pale Malt" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Crystal Malt" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Red Lager 3 - Red Cream Lager": {
+    "agua_vol": 28.0,
+    "fg_estimada": 1.008,
+    "granos_base": 4.0,
+    "granos_especiales": 0.57,
+    "lupulos": [
+      { "aa": 6.5, "cantidad": 14, "nombre": "Hallertau", "tiempo": 45 }
+    ],
+    "maltas": [
+      { "cantidad": 4.0, "extracto": 300, "nombre": "Pale Malt" },
+      { "cantidad": 0.23, "extracto": 270, "nombre": "Carapils" },
+      { "cantidad": 0.34, "extracto": 250, "nombre": "Caracrystal Wheat" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Rubia 1 - Blonde Ale Básica": {
+    "agua_vol": 30.0,
+    "fg_estimada": 1.01,
+    "granos_base": 5.0,
+    "granos_especiales": 0.0,
+    "lupulos": [
+      { "aa": 5.5, "cantidad": 30, "nombre": "Cascade", "tiempo": 60 },
+      { "aa": 12, "cantidad": 20, "nombre": "Citra", "tiempo": 10 }
+    ],
+    "maltas": [
+      { "cantidad": 4.0, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.5, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.5, "extracto": 280, "nombre": "Vienna Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Rubia 2 - Honey Blonde Ale": {
+    "agua_vol": 28.0,
+    "fg_estimada": 1.008,
+    "granos_base": 4.0,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 14, "cantidad": 4.25, "nombre": "Galaxy", "tiempo": 60 },
+      { "aa": 12, "cantidad": 7.1, "nombre": "Citra", "tiempo": 15 }
+    ],
+    "maltas": [
+      { "cantidad": 3.5, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Honey Malt" },
+      { "cantidad": 0.5, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Rubia 3 - American Blonde": {
+    "agua_vol": 15.0,
+    "fg_estimada": 1.012,
+    "granos_base": 2.375,
+    "granos_especiales": 0.125,
+    "lupulos": [
+      { "aa": 5.5, "cantidad": 14, "nombre": "Cascade", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 1.0, "extracto": 290, "nombre": "White Wheat" },
+      { "cantidad": 1.0, "extracto": 300, "nombre": "2 Row Pale" },
+      { "cantidad": 0.375, "extracto": 280, "nombre": "Munich 10" },
+      { "cantidad": 0.125, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Wheat 1 - Hefeweizen": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.013,
+    "granos_base": 3.5,
+    "granos_especiales": 0.0,
+    "lupulos": [
+      { "aa": 4.0, "cantidad": 25, "nombre": "Hallertau Mittelfrüh", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 1.8, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 1.7, "extracto": 300, "nombre": "Pilsner Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Wheat 2 - Dunkelweizen": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.015,
+    "granos_base": 3.6,
+    "granos_especiales": 0.4,
+    "lupulos": [
+      { "aa": 4.0, "cantidad": 20, "nombre": "Hallertau Tradition", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 1.8, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 1.5, "extracto": 300, "nombre": "Munich Dark" },
+      { "cantidad": 0.3, "extracto": 250, "nombre": "Caramunich II" },
+      { "cantidad": 0.1, "extracto": 200, "nombre": "Carafa Special II" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Wheat 3 - American Wheat": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.011,
+    "granos_base": 3.5,
+    "granos_especiales": 0.0,
+    "lupulos": [
+      { "aa": 5.5, "cantidad": 20, "nombre": "Cascade", "tiempo": 60 },
+      { "aa": 5.5, "cantidad": 15, "nombre": "Cascade", "tiempo": 10 }
+    ],
+    "maltas": [
+      { "cantidad": 1.8, "extracto": 290, "nombre": "White Wheat" },
+      { "cantidad": 1.7, "extracto": 300, "nombre": "2 Row Pale" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Porter 1 - Robust Porter": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.015,
+    "granos_base": 3.5,
+    "granos_especiales": 0.9,
+    "lupulos": [
+      { "aa": 12.0, "cantidad": 20, "nombre": "Magnum", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.8, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Crystal 60L" },
+      { "cantidad": 0.3, "extracto": 200, "nombre": "Chocolate Malt" },
+      { "cantidad": 0.1, "extracto": 180, "nombre": "Black Patent" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.6"
+  },
+  "Porter 2 - Brown Porter": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.014,
+    "granos_base": 3.4,
+    "granos_especiales": 0.8,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 30, "nombre": "East Kent Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.8, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.4, "extracto": 250, "nombre": "Crystal 45L" },
+      { "cantidad": 0.3, "extracto": 220, "nombre": "Chocolate Malt" },
+      { "cantidad": 0.1, "extracto": 210, "nombre": "Brown Malt" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.6"
+  },
+  "Porter 3 - Baltic Porter": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.020,
+    "granos_base": 4.5,
+    "granos_especiales": 1.0,
+    "lupulos": [
+      { "aa": 14.0, "cantidad": 25, "nombre": "Magnum", "tiempo": 90 },
+      { "aa": 4.5, "cantidad": 20, "nombre": "Hallertau", "tiempo": 15 }
+    ],
+    "maltas": [
+      { "cantidad": 3.0, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.8, "extracto": 280, "nombre": "Munich" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Crystal 60L" },
+      { "cantidad": 0.2, "extracto": 200, "nombre": "Carafa Special III" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Pale Ale 1 - American Pale Ale": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.011,
+    "granos_base": 3.5,
+    "granos_especiales": 0.3,
+    "lupulos": [
+      { "aa": 10.0, "cantidad": 20, "nombre": "Centennial", "tiempo": 60 },
+      { "aa": 5.5, "cantidad": 25, "nombre": "Cascade", "tiempo": 10 }
+    ],
+    "maltas": [
+      { "cantidad": 3.2, "extracto": 300, "nombre": "2 Row Pale" },
+      { "cantidad": 0.3, "extracto": 250, "nombre": "Crystal 20L" },
+      { "cantidad": 0.3, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Pale Ale 2 - English Pale Ale": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.012,
+    "granos_base": 3.5,
+    "granos_especiales": 0.4,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 30, "nombre": "East Kent Goldings", "tiempo": 60 },
+      { "aa": 4.5, "cantidad": 15, "nombre": "Fuggles", "tiempo": 15 }
+    ],
+    "maltas": [
+      { "cantidad": 3.1, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.4, "extracto": 250, "nombre": "Crystal 60L" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Pale Ale 3 - Aussie Sparkling Ale": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.010,
+    "granos_base": 3.5,
+    "granos_especiales": 0.2,
+    "lupulos": [
+      { "aa": 14.0, "cantidad": 10, "nombre": "Galaxy", "tiempo": 60 },
+      { "aa": 14.0, "cantidad": 15, "nombre": "Galaxy", "tiempo": 5 }
+    ],
+    "maltas": [
+      { "cantidad": 3.0, "extracto": 300, "nombre": "Ale Malt" },
+      { "cantidad": 0.3, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 0.2, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Belgian 1 - Dubbel": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.016,
+    "granos_base": 3.8,
+    "granos_especiales": 0.8,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 25, "nombre": "Styrian Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.8, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.6, "extracto": 280, "nombre": "Munich" },
+      { "cantidad": 0.4, "extracto": 240, "nombre": "Special B" },
+      { "cantidad": 0.4, "extracto": 250, "nombre": "Caramunich II" },
+      { "cantidad": 0.4, "extracto": 300, "nombre": "Belgian Candy Sugar Dark" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Belgian 2 - Tripel": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.012,
+    "granos_base": 4.2,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 30, "nombre": "Saaz", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 3.8, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.5, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 0.4, "extracto": 300, "nombre": "Belgian Candy Sugar Clear" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Belgian 3 - Golden Strong": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.009,
+    "granos_base": 4.0,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 30, "nombre": "Saaz", "tiempo": 90 },
+      { "aa": 3.5, "cantidad": 15, "nombre": "Saaz", "tiempo": 15 }
+    ],
+    "maltas": [
+      { "cantidad": 3.5, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.5, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 0.5, "extracto": 300, "nombre": "Belgian Candy Sugar Clear" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Saison 1 - Farmhouse Ale": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.006,
+    "granos_base": 3.5,
+    "granos_especiales": 0.3,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 25, "nombre": "East Kent Goldings", "tiempo": 60 },
+      { "aa": 3.5, "cantidad": 20, "nombre": "Saaz", "tiempo": 10 }
+    ],
+    "maltas": [
+      { "cantidad": 3.0, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.5, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 0.3, "extracto": 250, "nombre": "CaraVienne" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Saison 2 - Dark Saison": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.008,
+    "granos_base": 3.6,
+    "granos_especiales": 0.6,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 25, "nombre": "Styrian Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.8, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.5, "extracto": 280, "nombre": "Munich" },
+      { "cantidad": 0.3, "extracto": 250, "nombre": "CaraMunich II" },
+      { "cantidad": 0.3, "extracto": 200, "nombre": "Carafa Special I" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Saison 3 - Super Saison": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.010,
+    "granos_base": 4.2,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 30, "nombre": "Saaz", "tiempo": 60 },
+      { "aa": 14.0, "cantidad": 15, "nombre": "Galaxy", "tiempo": 5 }
+    ],
+    "maltas": [
+      { "cantidad": 3.5, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.5, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "CaraVienne" },
+      { "cantidad": 0.2, "extracto": 300, "nombre": "Belgian Candy Sugar Clear" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Lager 1 - Munich Helles": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.012,
+    "granos_base": 3.5,
+    "granos_especiales": 0.2,
+    "lupulos": [
+      { "aa": 4.0, "cantidad": 25, "nombre": "Hallertau Mittelfrüh", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.8, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.7, "extracto": 280, "nombre": "Munich Light" },
+      { "cantidad": 0.2, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Lager 2 - Schwarzbier": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.013,
+    "granos_base": 3.5,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 4.0, "cantidad": 20, "nombre": "Hallertau Mittelfrüh", "tiempo": 60 },
+      { "aa": 3.5, "cantidad": 15, "nombre": "Tettnanger", "tiempo": 30 }
+    ],
+    "maltas": [
+      { "cantidad": 2.5, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.7, "extracto": 280, "nombre": "Munich Dark" },
+      { "cantidad": 0.3, "extracto": 200, "nombre": "Carafa Special III" },
+      { "cantidad": 0.2, "extracto": 250, "nombre": "CaraMunich I" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.5"
+  },
+  "Lager 3 - Vienna Lager": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.014,
+    "granos_base": 3.6,
+    "granos_especiales": 0.3,
+    "lupulos": [
+      { "aa": 4.5, "cantidad": 25, "nombre": "Hallertau Tradition", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.5, "extracto": 280, "nombre": "Vienna Malt" },
+      { "cantidad": 0.8, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.3, "extracto": 250, "nombre": "CaraMunich I" },
+      { "cantidad": 0.3, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Barleywine 1 - English Barleywine": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.025,
+    "granos_base": 6.0,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 50, "nombre": "East Kent Goldings", "tiempo": 90 },
+      { "aa": 4.5, "cantidad": 20, "nombre": "Fuggles", "tiempo": 30 }
+    ],
+    "maltas": [
+      { "cantidad": 5.3, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.5, "extracto": 280, "nombre": "Munich" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Crystal 60L" },
+      { "cantidad": 0.2, "extracto": 200, "nombre": "Chocolate Malt" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Barleywine 2 - American Barleywine": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.022,
+    "granos_base": 6.2,
+    "granos_especiales": 0.4,
+    "lupulos": [
+      { "aa": 12.0, "cantidad": 30, "nombre": "Chinook", "tiempo": 60 },
+      { "aa": 10.0, "cantidad": 25, "nombre": "Centennial", "tiempo": 15 },
+      { "aa": 12.0, "cantidad": 25, "nombre": "Simcoe", "tiempo": 5 }
+    ],
+    "maltas": [
+      { "cantidad": 5.8, "extracto": 300, "nombre": "2 Row Pale" },
+      { "cantidad": 0.4, "extracto": 250, "nombre": "Crystal 20L" },
+      { "cantidad": 0.4, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Pilsner 1 - German Pilsner": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.011,
+    "granos_base": 3.4,
+    "granos_especiales": 0.0,
+    "lupulos": [
+      { "aa": 4.0, "cantidad": 25, "nombre": "Hallertau Mittelfrüh", "tiempo": 60 },
+      { "aa": 3.5, "cantidad": 20, "nombre": "Tettnanger", "tiempo": 15 }
+    ],
+    "maltas": [
+      { "cantidad": 3.4, "extracto": 300, "nombre": "Pilsner Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Pilsner 2 - Czech Pilsner": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.014,
+    "granos_base": 3.8,
+    "granos_especiales": 0.2,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 40, "nombre": "Saaz", "tiempo": 60 },
+      { "aa": 3.5, "cantidad": 20, "nombre": "Saaz", "tiempo": 20 }
+    ],
+    "maltas": [
+      { "cantidad": 3.6, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.2, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Pilsner 3 - Italian Pilsner": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.009,
+    "granos_base": 3.2,
+    "granos_especiales": 0.2,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 30, "nombre": "Saaz", "tiempo": 60 },
+      { "aa": 4.0, "cantidad": 20, "nombre": "Hallertau Mittelfrüh", "tiempo": 15 }
+    ],
+    "maltas": [
+      { "cantidad": 3.0, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.2, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Amber Ale 1 - American Amber": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.013,
+    "granos_base": 3.6,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 10.0, "cantidad": 20, "nombre": "Centennial", "tiempo": 60 },
+      { "aa": 5.5, "cantidad": 20, "nombre": "Cascade", "tiempo": 10 }
+    ],
+    "maltas": [
+      { "cantidad": 3.0, "extracto": 300, "nombre": "2 Row Pale" },
+      { "cantidad": 0.4, "extracto": 280, "nombre": "Munich" },
+      { "cantidad": 0.3, "extracto": 250, "nombre": "Crystal 60L" },
+      { "cantidad": 0.2, "extracto": 250, "nombre": "Crystal 40L" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Amber Ale 2 - Irish Red Ale": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.014,
+    "granos_base": 3.5,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 25, "nombre": "East Kent Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 3.0, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.3, "extracto": 250, "nombre": "Crystal 40L" },
+      { "cantidad": 0.2, "extracto": 230, "nombre": "Biscuit Malt" },
+      { "cantidad": 0.1, "extracto": 200, "nombre": "Roasted Barley" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Amber Ale 3 - Belgian Amber": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.013,
+    "granos_base": 3.5,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 20, "nombre": "Styrian Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.8, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.5, "extracto": 280, "nombre": "Munich" },
+      { "cantidad": 0.4, "extracto": 250, "nombre": "CaraMunich I" },
+      { "cantidad": 0.1, "extracto": 200, "nombre": "Special B" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  },
+  "Kölsch 1 - Traditional Kölsch": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.010,
+    "granos_base": 3.3,
+    "granos_especiales": 0.2,
+    "lupulos": [
+      { "aa": 4.0, "cantidad": 25, "nombre": "Hallertau Mittelfrüh", "tiempo": 60 },
+      { "aa": 3.5, "cantidad": 15, "nombre": "Tettnanger", "tiempo": 15 }
+    ],
+    "maltas": [
+      { "cantidad": 3.1, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.1, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 0.1, "extracto": 270, "nombre": "Carapils" },
+      { "cantidad": 0.1, "extracto": 280, "nombre": "Vienna Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Kölsch 2 - Hoppy Kölsch": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.009,
+    "granos_base": 3.2,
+    "granos_especiales": 0.2,
+    "lupulos": [
+      { "aa": 4.0, "cantidad": 20, "nombre": "Hallertau Mittelfrüh", "tiempo": 60 },
+      { "aa": 12.0, "cantidad": 15, "nombre": "Mosaic", "tiempo": 5 }
+    ],
+    "maltas": [
+      { "cantidad": 3.0, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 0.2, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Scottish Ale 1 - 60 Shilling": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.012,
+    "granos_base": 3.2,
+    "granos_especiales": 0.3,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 20, "nombre": "East Kent Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.9, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.2, "extracto": 250, "nombre": "Crystal 60L" },
+      { "cantidad": 0.1, "extracto": 200, "nombre": "Roasted Barley" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.5"
+  },
+  "Scottish Ale 2 - 80 Shilling": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.015,
+    "granos_base": 3.8,
+    "granos_especiales": 0.5,
+    "lupulos": [
+      { "aa": 5.0, "cantidad": 25, "nombre": "East Kent Goldings", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 3.4, "extracto": 300, "nombre": "Maris Otter" },
+      { "cantidad": 0.4, "extracto": 280, "nombre": "Munich" },
+      { "cantidad": 0.3, "extracto": 250, "nombre": "Crystal 60L" },
+      { "cantidad": 0.1, "extracto": 200, "nombre": "Roasted Barley" }
+    ],
+    "ph_macerado_objetivo": "5.4 - 5.5"
+  },
+  "Cream Ale 1 - Standard Cream Ale": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.008,
+    "granos_base": 3.3,
+    "granos_especiales": 0.7,
+    "lupulos": [
+      { "aa": 4.5, "cantidad": 20, "nombre": "Hallertau", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.5, "extracto": 300, "nombre": "2 Row Pale" },
+      { "cantidad": 0.8, "extracto": 260, "nombre": "Flaked Corn" },
+      { "cantidad": 0.4, "extracto": 250, "nombre": "Flaked Rice" },
+      { "cantidad": 0.3, "extracto": 270, "nombre": "Carapils" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Cream Ale 2 - Vanilla Cream Ale": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.010,
+    "granos_base": 3.2,
+    "granos_especiales": 0.8,
+    "lupulos": [
+      { "aa": 4.5, "cantidad": 15, "nombre": "Hallertau", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 2.4, "extracto": 300, "nombre": "2 Row Pale" },
+      { "cantidad": 0.6, "extracto": 260, "nombre": "Flaked Corn" },
+      { "cantidad": 0.5, "extracto": 250, "nombre": "Flaked Oats" },
+      { "cantidad": 0.3, "extracto": 270, "nombre": "Carapils" },
+      { "cantidad": 0.2, "extracto": 250, "nombre": "Honey Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Witbier 1 - Traditional Witbier": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.008,
+    "granos_base": 2.8,
+    "granos_especiales": 1.2,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 20, "nombre": "Saaz", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 1.8, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 1.0, "extracto": 260, "nombre": "Flaked Wheat" },
+      { "cantidad": 0.6, "extracto": 250, "nombre": "Flaked Oats" },
+      { "cantidad": 0.4, "extracto": 290, "nombre": "Wheat Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Witbier 2 - Orange Coriander Wit": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.007,
+    "granos_base": 2.7,
+    "granos_especiales": 1.3,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 18, "nombre": "Saaz", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 1.7, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 1.1, "extracto": 260, "nombre": "Flaked Wheat" },
+      { "cantidad": 0.7, "extracto": 250, "nombre": "Flaked Oats" },
+      { "cantidad": 0.5, "extracto": 290, "nombre": "Wheat Malt" }
+    ],
+    "ph_macerado_objetivo": "5.2 - 5.4"
+  },
+  "Witbier 3 - Black Wit": {
+    "agua_vol": 20.0,
+    "fg_estimada": 1.010,
+    "granos_base": 2.9,
+    "granos_especiales": 1.3,
+    "lupulos": [
+      { "aa": 3.5, "cantidad": 20, "nombre": "Saaz", "tiempo": 60 }
+    ],
+    "maltas": [
+      { "cantidad": 1.8, "extracto": 300, "nombre": "Pilsner Malt" },
+      { "cantidad": 1.0, "extracto": 260, "nombre": "Flaked Wheat" },
+      { "cantidad": 0.6, "extracto": 250, "nombre": "Flaked Oats" },
+      { "cantidad": 0.4, "extracto": 290, "nombre": "Wheat Malt" },
+      { "cantidad": 0.2, "extracto": 200, "nombre": "Carafa Special I" }
+    ],
+    "ph_macerado_objetivo": "5.3 - 5.5"
+  }
+}

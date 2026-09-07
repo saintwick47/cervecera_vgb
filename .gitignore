@@ -1,0 +1,14 @@
+# Datos locales de la app y builds
+data/
+*.db
+*.log
+build/
+dist/
+dist_installers/
+packaging/linux/AppDir/
+packaging/icons/logo-*.png
+__pycache__/
+*.pyc
+app.py.bak_paridad
+beer_vgb.png
+logo-*.png
