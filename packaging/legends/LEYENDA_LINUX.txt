@@ -4,21 +4,25 @@
 
 Tu asistente cervecero de escritorio.
 
-■ QUÉ ES
-  · AppImage portable de 64 bits (x86_64): no necesita instalación
-    del sistema, funciona en la mayoría de las distros.
+■ OPCIÓN RECOMENDADA (sin terminal): PAQUETE .deb
+  · Para Ubuntu / Debian / Mint / Pop!_OS y derivadas.
+  · Pasos:
+      1) Descargá CerveceraVGB-1.0.0-x86_64.deb
+      2) Doble clic sobre el .deb → se abre el instalador del sistema
+         (Software / Discover) → clic en "Instalar".
+      3) Abrí "Cervecera VGB" desde el menú de aplicaciones
+         (ya viene con su icono y acceso directo).
+  · Desinstalar: desde el gestor de software del sistema.
 
-■ CÓMO USARLA
-  · Opción A (doble clic):
+■ OPCIÓN PORTÁTIL: AppImage
+  · Para cualquier distro (incluida Arch), sin instalar nada.
+  · Pasos:
       1) Descargá CerveceraVGB-1.0.0-x86_64.AppImage
-      2) Click derecho → Propiedades → Permitir ejecución (chmod +x)
+      2) Click derecho → Propiedades → Permisos → "Permitir ejecución"
+         (o en terminal: chmod +x …)
       3) Doble clic para abrirla.
-  · Opción B (terminal):
-      chmod +x CerveceraVGB-1.0.0-x86_64.AppImage
-      ./CerveceraVGB-1.0.0-x86_64.AppImage
-  · Para integrarla al escritorio con el logo de la app, hacé clic
-    derecho sobre el AppImage → "Integrar en el escritorio" (según
-    tu entorno) o creá un acceso directo a este archivo.
+  · Si aparece "FUSE subsystem not found", instalá libfuse2
+    (sudo apt install libfuse2) o ejecutá con --appimage-extract-and-run.
 
 ■ CARACTERÍSTICAS
   · Editor de recetas con levaduras, altitud, perfil de agua (pH),
@@ -26,11 +30,12 @@ Tu asistente cervecero de escritorio.
   · Cálculos: OG, FG, ABV, IBU, SRM, BU/GU, calorías, aguas con
     evaporación, pH de maceración y corrección con ácido láctico.
   · Estilos BJCP, inventario, exportación PDF y BeerXML.
-  · La base de datos se guarda en ./data junto al ejecutable.
+  · Los datos se guardan en la carpeta del usuario
+    (~/.local/share/CerveceraVGB).
 
 ■ REQUISITOS
-  · Linux x86_64 con glibc moderna (Ubuntu 20.04+ / Debian 11+ /
-    Fedora 34+ / Arch / derivadas). Entornos GNOME/KDE/XFCE.
+  · Linux x86_64 (Ubuntu 20.04+ / Debian 11+ / Mint / Fedora 34+ /
+    Arch / derivadas). Entornos GNOME/KDE/XFCE.
 
 ■ CONTACTO
   · nicoweb45@proton.me (Asunto: beer_vgb)

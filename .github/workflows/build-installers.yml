@@ -52,10 +52,14 @@ jobs:
         run: pip install pyinstaller customtkinter fpdf2
       - name: Compilar AppImage
         run: bash packaging/linux/build_linux_appimage.sh
+      - name: Compilar paquete .deb (instalable)
+        run: bash packaging/linux/build_linux_deb.sh
       - uses: actions/upload-artifact@v4
         with:
           name: instalador-linux
-          path: dist_installers/CerveceraVGB-*.AppImage
+          path: |
+            dist_installers/CerveceraVGB-*.AppImage
+            dist_installers/CerveceraVGB-*.deb
 
   build-macos:
     name: "macOS (${{ matrix.arch }})"
