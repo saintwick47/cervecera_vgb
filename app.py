@@ -28,6 +28,8 @@ import json
 import os
 import sys
 import subprocess
+import threading
+import tempfile
 import urllib.request
 from logger import logger
 from app_paths import get_data_dir
@@ -44,6 +46,10 @@ DEF_LEVADURA      = "Fermentis US-05 (Ale Americana)"
 DEF_ALTITUD       = "Córdoba Capital"
 DEF_FORMATO       = "pellet"
 EVAPORACION_PCT   = 10.0  # evaporación por hora de hervor (%)
+APP_VERSION       = "1.0.0"  # versión instalada (para comprobar actualizaciones)
+RECETARIO_URL     = ("https://github.com/saintwick47/cervecera_vgb/"
+                     "releases/latest/download/recetas_cervecera_vgb.json")
+RELEASE_API_URL   = "https://api.github.com/repos/saintwick47/cervecera_vgb/releases/latest"
 
 
 def format_num(val):
@@ -114,18 +120,20 @@ class AyudaDialog(ctk.CTkToplevel):
 💾 4. EXPORTACIÓN: PDF profesional y BeerXML (Brewfather/Grainfather…).
 
 📖 5. AGREGAR RECETAS (sin reinstalar):
-- Descargá el archivo "recetario" (JSON) desde la sección Recetas de la web
-  https://saintwick47.github.io
-- En la app: botón "📂 Importar JSON" → elegí el archivo descargado.
-- O usá el botón "🔄 Buscar recetas nuevas": descarga el recetario más reciente
-  del release y lo fusiona automáticamente (sin reinstalar ni perder nada).
-- Las recetas nuevas se agregan a tu recetario y quedan guardadas.
+- Al abrir la app, se busca solo el recetario más reciente en la web y se
+  fusiona automáticamente (sin que hagas nada).
+- También podés usar "🔄 Buscar recetas nuevas" (manual) o "📂 Importar JSON"
+  con un archivo descargado. Las recetas nuevas quedan guardadas.
 
-🧾 6. REGISTRO DE ERRORES:
+⬆️ 6. ACTUALIZAR LA APP:
+- Botón "⬆️ Comprobar actualizaciones": si hay una versión nueva, la descarga.
+  En Windows se instala sola (en silencio); en Linux/macOS la descarga y la abre.
+
+🧾 7. REGISTRO DE ERRORES:
 - Si algo falla, usá el botón "🧾 Ver log" (arriba) para ver la ruta del archivo
   de registro. Windows: %LOCALAPPDATA%\\Cervecera VGB\\cervecera_debug.log
 
-📧 7. CONTACTO: nicoweb45@proton.me (Asunto: beer_vgb)
+📧 8. CONTACTO: nicoweb45@proton.me (Asunto: beer_vgb)
 """
         self.texto_ayuda.insert("1.0", mensaje)
         self.texto_ayuda.configure(state="disabled")
@@ -172,6 +180,7 @@ class CerveceraApp(ctk.CTk):
         frame_top.grid(row=0, column=0, columnspan=2, sticky="ew")
         ctk.CTkButton(frame_top, text="📂 Importar JSON", command=self.importar_json_ui, fg_color="#2563EB", hover_color="#1D4ED8", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="🔄 Buscar recetas nuevas", command=self.actualizar_recetas_web, fg_color="#0D9488", hover_color="#0F766E", height=32).pack(side="left", padx=10, pady=5)
+        ctk.CTkButton(frame_top, text="⬆️ Comprobar actualizaciones", command=self.comprobar_actualizaciones, fg_color="#7C3AED", hover_color="#6D28D9", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="💾 Exportar PDF", command=self.exportar_pdf_ui, fg_color="#D97706", hover_color="#B45309", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="💾 Exportar BeerXML", command=self.exportar_xml_ui, fg_color="#7C3AED", hover_color="#6D28D9", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="❓ Manual de Usuario", command=self.mostrar_ayuda, fg_color="#6B7280", hover_color="#4B5563", height=32).pack(side="right", padx=10, pady=5)
@@ -198,6 +207,8 @@ class CerveceraApp(ctk.CTk):
 
         self.cargar_lista_recetas()
         self.nueva_receta()
+        # Auto-actualización silenciosa de recetas al abrir la app
+        threading.Thread(target=self._auto_actualizar, daemon=True).start()
 
     # ==========================================
     # CONFIGURACIÓN PESTAÑA RECETA (CON SCROLL)
@@ -930,31 +941,102 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
         except Exception as e:
             mb.showerror("Error", f"No se pudo leer el JSON:\n{e}")
 
-    def actualizar_recetas_web(self):
-        """Descarga el recetario más reciente del release y lo fusiona (sin reinstalar)."""
-        url = ("https://github.com/saintwick47/cervecera_vgb/"
-               "releases/latest/download/recetas_cervecera_vgb.json")
-        try:
-            with urllib.request.urlopen(url, timeout=20) as r:
-                recetas_json = json.load(r)
-        except Exception as e:
-            logger.error(f"actualizar_recetas_web: no se pudo descargar: {e}")
-            mb.showerror("Error",
-                         "No se pudo descargar el recetario.\n\n"
-                         "Revisá tu conexión y probá de nuevo.\n"
-                         f"Detalle: {e}")
-            return
+    def _descargar_y_fusionar(self):
+        """Descarga el recetario más reciente y lo fusiona. Devuelve (agregadas, omitidas)."""
+        with urllib.request.urlopen(RECETARIO_URL, timeout=20) as r:
+            recetas_json = json.load(r)
         agregadas, omitidas = 0, 0
         for nombre, datos in recetas_json.items():
             if self._guardar_desde_json(nombre, datos):
                 agregadas += 1
             else:
                 omitidas += 1
+        return agregadas, omitidas
+
+    def actualizar_recetas_web(self):
+        """Botón manual: busca y fusiona el recetario, mostrando el resultado."""
+        try:
+            agregadas, omitidas = self._descargar_y_fusionar()
+            self.cargar_lista_recetas()
+            mb.showinfo("Recetas actualizadas",
+                        f"Nuevas recetas agregadas: {agregadas}\n"
+                        f"Ya existían (se omitieron): {omitidas}\n\n"
+                        "Listo, sin reinstalar nada.")
+        except Exception as e:
+            logger.error(f"actualizar_recetas_web: {e}")
+            mb.showerror("Error",
+                         "No se pudo descargar el recetario.\n\n"
+                         "Revisá tu conexión y probá de nuevo.\n"
+                         f"Detalle: {e}")
+
+    def _auto_actualizar(self):
+        """Al abrir la app: en segundo plano descarga y fusiona el recetario (silencioso)."""
+        def tarea():
+            try:
+                agregadas, omitidas = self._descargar_y_fusionar()
+                if agregadas:
+                    self.after(0, self._refrescar_tras_auto, agregadas)
+            except Exception as e:
+                logger.error(f"_auto_actualizar: {e}")
+        threading.Thread(target=tarea, daemon=True).start()
+
+    def _refrescar_tras_auto(self, agregadas):
         self.cargar_lista_recetas()
-        mb.showinfo("Recetas actualizadas",
-                    f"Nuevas recetas agregadas: {agregadas}\n"
-                    f"Ya existían (se omitieron): {omitidas}\n\n"
-                    "Listo, sin reinstalar nada.")
+        logger.info(f"Recetas auto-actualizadas al iniciar: {agregadas} nuevas.")
+        try:
+            self.title("Cervecera VGB - By SaintWick (recetas actualizadas)")
+        except Exception:
+            pass
+
+    def comprobar_actualizaciones(self):
+        """Busca una versión más nueva del PROGRAMA. En Windows la instala en silencio."""
+        try:
+            req = urllib.request.Request(RELEASE_API_URL,
+                                         headers={'User-Agent': 'CerveceraVGB'})
+            with urllib.request.urlopen(req, timeout=20) as r:
+                data = json.load(r)
+            tag = data.get('tag_name', '')
+            version = tag.lstrip('v')
+            if version == APP_VERSION:
+                mb.showinfo("Actualización", f"Tenés la versión {APP_VERSION}. ¡Estás al día! ✅")
+                return
+
+            # elegir el instalador de esta plataforma
+            url = None
+            for a in data.get('assets', []):
+                n = a['name']
+                if sys.platform == 'win32' and n.lower().endswith('.exe'):
+                    url = a['browser_download_url']; break
+                elif sys.platform == 'darwin' and 'macos-arm64' in n:
+                    url = a['browser_download_url']; break
+                elif sys.platform.startswith('linux') and n.endswith('.AppImage'):
+                    url = a['browser_download_url']; break
+            if not url:
+                mb.showinfo("Actualización", f"Hay una versión nueva: {version}.\nDescargala del release.")
+                return
+
+            destino = os.path.join(tempfile.gettempdir(), os.path.basename(url))
+            logger.info(f"Descargando actualización {version} -> {destino}")
+            with urllib.request.urlopen(url, timeout=180) as r, open(destino, 'wb') as f:
+                f.write(r.read())
+
+            if sys.platform == 'win32':
+                logger.info("Lanzando instalador en silencio (auto-update).")
+                subprocess.Popen([destino, '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART'])
+                mb.showinfo("Actualización",
+                            "Se descargó la versión nueva y se está instalando.\nLa app se cerrará; volvé a abrirla al terminar.")
+                self.after(1500, lambda: os._exit(0))
+            else:
+                if sys.platform == 'darwin':
+                    subprocess.Popen(['open', destino])
+                else:
+                    subprocess.Popen(['xdg-open', destino])
+                mb.showinfo("Actualización",
+                            f"Se descargó la versión {version}.\n\n{os.path.basename(destino)}\n"
+                            "Se abrió para que la instales (en Linux/macOS instalar requiere permisos de administrador).")
+        except Exception as e:
+            logger.error(f"comprobar_actualizaciones: {e}")
+            mb.showerror("Error", f"No se pudo comprobar actualizaciones.\n{e}")
 
     def _guardar_desde_json(self, nombre, datos):
         """Adapta una receta del JSON (formato móvil) y la guarda."""
