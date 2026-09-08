@@ -28,6 +28,7 @@ import json
 import os
 import sys
 import subprocess
+import urllib.request
 from logger import logger
 from app_paths import get_data_dir
 
@@ -116,8 +117,9 @@ class AyudaDialog(ctk.CTkToplevel):
 - Descargá el archivo "recetario" (JSON) desde la sección Recetas de la web
   https://saintwick47.github.io
 - En la app: botón "📂 Importar JSON" → elegí el archivo descargado.
-- Las recetas nuevas se agregan a tu recetario y quedan guardadas. Cuando
-  se publique una receta nueva, actualizá descargando el archivo otra vez.
+- O usá el botón "🔄 Buscar recetas nuevas": descarga el recetario más reciente
+  del release y lo fusiona automáticamente (sin reinstalar ni perder nada).
+- Las recetas nuevas se agregan a tu recetario y quedan guardadas.
 
 🧾 6. REGISTRO DE ERRORES:
 - Si algo falla, usá el botón "🧾 Ver log" (arriba) para ver la ruta del archivo
@@ -169,6 +171,7 @@ class CerveceraApp(ctk.CTk):
         frame_top = ctk.CTkFrame(self, height=40, corner_radius=0, fg_color="#2c2c2c")
         frame_top.grid(row=0, column=0, columnspan=2, sticky="ew")
         ctk.CTkButton(frame_top, text="📂 Importar JSON", command=self.importar_json_ui, fg_color="#2563EB", hover_color="#1D4ED8", height=32).pack(side="left", padx=10, pady=5)
+        ctk.CTkButton(frame_top, text="🔄 Buscar recetas nuevas", command=self.actualizar_recetas_web, fg_color="#0D9488", hover_color="#0F766E", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="💾 Exportar PDF", command=self.exportar_pdf_ui, fg_color="#D97706", hover_color="#B45309", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="💾 Exportar BeerXML", command=self.exportar_xml_ui, fg_color="#7C3AED", hover_color="#6D28D9", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="❓ Manual de Usuario", command=self.mostrar_ayuda, fg_color="#6B7280", hover_color="#4B5563", height=32).pack(side="right", padx=10, pady=5)
@@ -926,6 +929,32 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
             mb.showinfo("Éxito", f"Importadas: {importadas}\nOmitidas (duplicadas): {omitidas}")
         except Exception as e:
             mb.showerror("Error", f"No se pudo leer el JSON:\n{e}")
+
+    def actualizar_recetas_web(self):
+        """Descarga el recetario más reciente del release y lo fusiona (sin reinstalar)."""
+        url = ("https://github.com/saintwick47/cervecera_vgb/"
+               "releases/latest/download/recetas_cervecera_vgb.json")
+        try:
+            with urllib.request.urlopen(url, timeout=20) as r:
+                recetas_json = json.load(r)
+        except Exception as e:
+            logger.error(f"actualizar_recetas_web: no se pudo descargar: {e}")
+            mb.showerror("Error",
+                         "No se pudo descargar el recetario.\n\n"
+                         "Revisá tu conexión y probá de nuevo.\n"
+                         f"Detalle: {e}")
+            return
+        agregadas, omitidas = 0, 0
+        for nombre, datos in recetas_json.items():
+            if self._guardar_desde_json(nombre, datos):
+                agregadas += 1
+            else:
+                omitidas += 1
+        self.cargar_lista_recetas()
+        mb.showinfo("Recetas actualizadas",
+                    f"Nuevas recetas agregadas: {agregadas}\n"
+                    f"Ya existían (se omitieron): {omitidas}\n\n"
+                    "Listo, sin reinstalar nada.")
 
     def _guardar_desde_json(self, nombre, datos):
         """Adapta una receta del JSON (formato móvil) y la guarda."""
