@@ -169,7 +169,7 @@ class TestDatabase(unittest.TestCase):
                 'maltas': datos.get('maltas', []), 'lupulos': datos.get('lupulos', [])
             }
             if self.db.save_recipe(receta_adaptada): importadas += 1
-        self.assertEqual(importadas, 50)
+        self.assertEqual(importadas, len(recetas_json))
 
 
 class TestBJCP(unittest.TestCase):

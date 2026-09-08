@@ -112,7 +112,18 @@ class AyudaDialog(ctk.CTkToplevel):
 
 💾 4. EXPORTACIÓN: PDF profesional y BeerXML (Brewfather/Grainfather…).
 
-📧 5. CONTACTO: nicoweb45@proton.me (Asunto: beer_vgb)
+📖 5. AGREGAR RECETAS (sin reinstalar):
+- Descargá el archivo "recetario" (JSON) desde la sección Recetas de la web
+  https://saintwick47.github.io
+- En la app: botón "📂 Importar JSON" → elegí el archivo descargado.
+- Las recetas nuevas se agregan a tu recetario y quedan guardadas. Cuando
+  se publique una receta nueva, actualizá descargando el archivo otra vez.
+
+🧾 6. REGISTRO DE ERRORES:
+- Si algo falla, usá el botón "🧾 Ver log" (arriba) para ver la ruta del archivo
+  de registro. Windows: %LOCALAPPDATA%\\Cervecera VGB\\cervecera_debug.log
+
+📧 7. CONTACTO: nicoweb45@proton.me (Asunto: beer_vgb)
 """
         self.texto_ayuda.insert("1.0", mensaje)
         self.texto_ayuda.configure(state="disabled")
