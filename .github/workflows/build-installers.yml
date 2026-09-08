@@ -54,12 +54,17 @@ jobs:
         run: bash packaging/linux/build_linux_appimage.sh
       - name: Compilar paquete .deb (instalable)
         run: bash packaging/linux/build_linux_deb.sh
+      - name: Compilar paquete .rpm (Fedora/openSUSE/RHEL)
+        run: |
+          sudo apt-get install -y rpm
+          bash packaging/linux/build_linux_rpm.sh
       - uses: actions/upload-artifact@v4
         with:
           name: instalador-linux
           path: |
             dist_installers/CerveceraVGB-*.AppImage
             dist_installers/CerveceraVGB-*.deb
+            dist_installers/CerveceraVGB-*.rpm
 
   build-macos:
     name: "macOS (${{ matrix.arch }})"

@@ -1,0 +1,38 @@
+# Maintainer: SaintWick <nicoweb45@proton.me>
+# PKGBUILD de Cervecera VGB para Arch Linux / Manjaro / EndeavourOS
+# Uso: copiá esta carpeta a tu PC y ejecutá:
+#        makepkg -si
+#    (o instalá desde AUR si se publica).
+
+pkgname=cervecera-vgb
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Cervecera VGB - asistente cervecero offline (Android + escritorio)"
+arch=('x86_64')
+url="https://github.com/saintwick47/cervecera_vgb"
+license=('custom')
+depends=('glibc')
+source=(
+  "CerveceraVGB-${pkgver}-x86_64.AppImage::https://github.com/saintwick47/cervecera_vgb/releases/download/v${pkgver}/CerveceraVGB-${pkgver}-x86_64.AppImage"
+  "cervecera-vgb.png::https://raw.githubusercontent.com/saintwick47/cervecera_vgb/main/packaging/icons/linux/logo.png"
+)
+sha256sums=('SKIP' 'SKIP')
+
+package() {
+  chmod +x "CerveceraVGB-${pkgver}-x86_64.AppImage"
+  install -Dm755 "CerveceraVGB-${pkgver}-x86_64.AppImage" "$pkgdir/opt/cervecera-vgb/Cervecera_VGB"
+  install -Dm644 "cervecera-vgb.png" "$pkgdir/usr/share/icons/hicolor/256x256/apps/cervecera-vgb.png"
+  mkdir -p "$pkgdir/usr/share/applications"
+  cat > "$pkgdir/usr/share/applications/cervecera-vgb.desktop" <<'DESK'
+[Desktop Entry]
+Name=Cervecera VGB
+Comment=Asistente cervecero offline (Tinseth, Morey, Palmer, BJCP 2021)
+Exec=/opt/cervecera-vgb/Cervecera_VGB --appimage-extract-and-run
+Icon=cervecera-vgb
+Terminal=false
+Type=Application
+Categories=Utility;Office;
+StartupWMClass=Cervecera_VGB
+DESK
+  ln -sf /opt/cervecera-vgb/Cervecera_VGB "$pkgdir/usr/bin/cervecera-vgb"
+}

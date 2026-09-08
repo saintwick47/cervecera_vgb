@@ -1,33 +1,38 @@
-# Cervecera VGB — Instaladores de escritorio (v1.0.0)
+# Cervecera VGB — Instalación por plataforma (v1.0.0)
 
 Versión PC (Windows / Linux / macOS) en paridad funcional con la app Android.
 Diferencia: solo cambia el medio de uso.
 
-## 🪟 Windows
-- Archivo: **CerveceraVGB-Setup-1.0.0.exe**
-- Instalador estándar (Inno Setup): elegís la carpeta de instalación,
-  crea acceso directo en el escritorio **con el logo de la app** y
-  entrada en el menú Inicio. Incluye desinstalador.
+## 📱 Android
+- `CerveceraVGB.apk` → instalar directo (permitir orígenes desconocidos).
 
-## 🐧 Linux (x86_64)
-- Archivo: **CerveceraVGB-1.0.0-x86_64.AppImage**
-- Portable: `chmod +x` y doble clic. Se puede integrar al escritorio
-  con su icono.
+## 🪟 Windows
+- `CerveceraVGB-Setup-1.0.0.exe` → instalador Inno: elegís carpeta, crea
+  **acceso directo en el escritorio con el logo** y menú Inicio. Incluye desinstalador.
+
+## 🐧 Linux — instalación por distribución
+
+| Distribución | Formato | Cómo se instala |
+|---|---|---|
+| Ubuntu / Debian / Mint / Pop!_OS / elementary | `.deb` ⭐ | **Doble clic → Instalar → menú de aplicaciones** (con icono, sin terminal) |
+| Fedora / RHEL / CentOS / openSUSE | `.rpm` | `sudo dnf install ./CerveceraVGB-1.0.0-x86_64.rpm` (o doble clic en el instalador) |
+| Arch / Manjaro / EndeavourOS | `PKGBUILD` | Copiá `packaging/arch/` y `makepkg -si` (instala en el menú) |
+| Otras distros | `.AppImage` | `chmod +x` y doble clic (o `--appimage-extract-and-run`) |
+
+- Archivos Linux: `CerveceraVGB-1.0.0-x86_64.deb` · `…-x86_64.rpm` · `…-x86_64.AppImage`.
 
 ## 🍎 macOS
-- Archivos: **CerveceraVGB-1.0.0-macos-intel.dmg** (Intel) y
-  **CerveceraVGB-1.0.0-macos-arm64.dmg** (Apple Silicon)
-- Arrastrá "Cervecera VGB.app" a Aplicaciones.
+- `CerveceraVGB-1.0.0-macos-arm64.dmg` (Apple Silicon) → arrastrar a Aplicaciones.
+- Variante Intel (x86_64): próximamente.
 
-## ✅ Funciones (iguales en las 3 + Android)
-Recetas completas (maltas, lúpulos, levaduras, perfil de agua con pH,
-altitud, ratio, absorción y hervor), motor profesional (OG, FG, ABV,
-IBU, SRM, BU/GU, calorías, aguas con evaporación, pH y ácido láctico),
-catálogo argentino, comparador BJCP, inventario y exportación PDF/BeerXML.
+## ✅ Funciones (iguales en todas las plataformas)
+Recetas completas (maltas, lúpulos, levaduras, perfil de agua con pH, altitud,
+ratio, absorción y hervor), motor profesional (OG, FG, ABV, IBU, SRM, BU/GU,
+calorías, aguas con evaporación, pH y ácido láctico), catálogo argentino,
+comparador BJCP 2021, inventario y exportación PDF/BeerXML.
 
 ## 🔒 Integridad
-Cada instalador se publica con su checksum SHA-256 en
-**checksums.txt** para verificar la descarga.
+Cada instalador se publica con su checksum SHA‑256 en `checksums.txt`.
 
 ## 📧 Soporte
 nicoweb45@proton.me (Asunto: beer_vgb)
