@@ -63,7 +63,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - { os: macos-13, arch: intel }
           - { os: macos-14, arch: arm64 }
     runs-on: ${{ matrix.os }}
     steps:
@@ -96,11 +95,6 @@ jobs:
           else
             echo "RELEASE_TAG=${{ github.event.inputs.release_tag }}" >> "$GITHUB_ENV"
           fi
-      - name: Checksums SHA-256
-        run: |
-          cd dist_installers
-          sha256sum * > checksums.txt
-          cat checksums.txt
       - name: Publicar assets
         uses: softprops/action-gh-release@v2
         with:

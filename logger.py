@@ -3,13 +3,11 @@ import logging
 import sys
 import platform
 import os
+from app_paths import get_data_dir
 
 def _get_log_dir():
-    """Obtiene el directorio de datos persistente (compatible con Flet Mobile/Android)."""
-    d = os.getenv("FLET_APP_STORAGE_DATA") or os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "data")
-    os.makedirs(d, exist_ok=True)
-    return d
+    """Directorio de datos persistente Y ESCRIBIBLE (FIX WinError 5 en Program Files)."""
+    return get_data_dir()
 
 # ── CONFIGURACIÓN DE LOGGING MEJORADA ──────────────────────────────────────
 # 1. Formato detallado para el ARCHIVO

@@ -13,19 +13,17 @@ import sqlite3
 import os
 import sys
 from logger import logger
+from app_paths import get_data_dir
 
 class DatabaseManager:
     def __init__(self, db_name="cervecera_vgb.db", data_dir=None):
-        # FIX CRÍTICO: Si se pasa data_dir (desde Flet mobile), usarlo directamente.
-        # Esto evita el PermissionError en Android donde sys.executable es de solo lectura.
+        # FIX CRÍTICO (WinError 5): si no se pasa data_dir, usar una carpeta del
+        # USUARIO y escribible (nunca Program Files ni la carpeta de la app).
+        # Si se pasa data_dir (desde Flet mobile), usarlo directamente.
         if data_dir:
             self.data_dir = data_dir
         else:
-            if getattr(sys, 'frozen', False):
-                base_dir = os.path.dirname(sys.executable)
-            else:
-                base_dir = os.path.dirname(os.path.abspath(__file__))
-            self.data_dir = os.path.join(base_dir, "data")
+            self.data_dir = get_data_dir()
         os.makedirs(self.data_dir, exist_ok=True)
         self.db_path = os.path.join(self.data_dir, db_name)
         self.conn = None
