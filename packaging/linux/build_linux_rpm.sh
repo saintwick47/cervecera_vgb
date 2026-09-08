@@ -69,5 +69,5 @@ EOF
 echo "== Compilando .rpm (rpmbuild) =="
 rpmbuild --define "_topdir $TOP" -bb "$TOP/SPECS/${APP}.spec"
 mkdir -p dist_installers
-cp "$TOP/RPMS/x86_64/${APP}-${version}-1.x86_64.rpm" "dist_installers/"
-echo "INSTALADOR LISTO: dist_installers/${APP}-${version}-1.x86_64.rpm"
+cp "$TOP/RPMS/x86_64/${APP}-${version}-1.x86_64.rpm" "dist_installers/CerveceraVGB-${version}-x86_64.rpm"
+echo "INSTALADOR LISTO: dist_installers/CerveceraVGB-${version}-x86_64.rpm"
