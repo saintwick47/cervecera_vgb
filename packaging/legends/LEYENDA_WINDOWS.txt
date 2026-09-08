@@ -28,3 +28,7 @@ Tu asistente cervecero de escritorio.
 ■ CONTACTO
   · nicoweb45@proton.me (Asunto: beer_vgb)
 ==========================================
+■ SI ALGO FALLA
+  · La app guarda un registro de errores: abrila con el boton "Ver log"
+    o mirá %LOCALAPPDATA%\Cervecera VGB\cervecera_debug.log
+  · Para soporte, adjuntá ese archivo a: nicoweb45@proton.me
