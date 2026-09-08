@@ -25,6 +25,7 @@ SolidCompression=yes
 WizardStyle=modern
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
+SetupLogging=yes
 InfoBeforeFile=..\..\packaging\legends\LEYENDA_WINDOWS.txt
 
 [Languages]

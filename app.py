@@ -27,6 +27,9 @@ import tkinter as tk  # Añadido para el manejo de iconos en Linux
 import json
 import os
 import sys
+import subprocess
+from logger import logger
+from app_paths import get_data_dir
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
@@ -158,6 +161,7 @@ class CerveceraApp(ctk.CTk):
         ctk.CTkButton(frame_top, text="💾 Exportar PDF", command=self.exportar_pdf_ui, fg_color="#D97706", hover_color="#B45309", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="💾 Exportar BeerXML", command=self.exportar_xml_ui, fg_color="#7C3AED", hover_color="#6D28D9", height=32).pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="❓ Manual de Usuario", command=self.mostrar_ayuda, fg_color="#6B7280", hover_color="#4B5563", height=32).pack(side="right", padx=10, pady=5)
+        ctk.CTkButton(frame_top, text="🧾 Ver log", command=self.mostrar_log, fg_color="#475569", hover_color="#334155", height=32).pack(side="right", padx=10, pady=5)
 
         # --- COLUMNA IZQUIERDA (Recetas) ---
         self.frame_izquierdo = ctk.CTkFrame(self, width=250, corner_radius=0)
@@ -980,7 +984,42 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
     def mostrar_ayuda(self):
         AyudaDialog(self)
 
+    def mostrar_log(self):
+        """Muestra la ruta del registro y lo abre en el visor por defecto."""
+        logp = os.path.join(get_data_dir(), "cervecera_debug.log")
+        existe = os.path.exists(logp)
+        try:
+            if existe:
+                if sys.platform == "win32":
+                    os.startfile(logp)
+                elif sys.platform == "darwin":
+                    subprocess.Popen(["open", logp])
+                else:
+                    subprocess.Popen(["xdg-open", logp])
+        except Exception as e:
+            print(f"No se pudo abrir el log: {e}")
+        if existe:
+            mb.showinfo("Registro (log)", f"El registro de la app está en:\n\n{logp}\n\nSe abrió en el visor por defecto.")
+        else:
+            mb.showinfo("Registro (log)", "Todavía no hay registro de errores.\n\nSi la app falla, aparecerá acá.")
+
 
 if __name__ == "__main__":
-    app = CerveceraApp()
-    app.mainloop()
+    try:
+        app = CerveceraApp()
+        app.mainloop()
+    except Exception as e:
+        try:
+            logger.exception("Error fatal al iniciar Cervecera VGB")
+        except Exception:
+            pass
+        try:
+            import traceback as _tb
+            _tb.print_exc()
+            mb.showerror("Cervecera VGB",
+                         "Ocurrió un error al iniciar la app.\n\n"
+                         "Revisá el registro:\n"
+                         + os.path.join(get_data_dir(), "cervecera_debug.log"))
+        except Exception:
+            pass
+        raise
