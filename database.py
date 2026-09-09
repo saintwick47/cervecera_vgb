@@ -221,6 +221,12 @@ class DatabaseManager:
         cursor.execute("SELECT id, name, volume FROM recipes ORDER BY name")
         return cursor.fetchall()
 
+    def recipe_exists(self, name):
+        """Devuelve True si ya existe una receta con ese nombre."""
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT 1 FROM recipes WHERE name = ?", (name,))
+        return cursor.fetchone() is not None
+
     def get_full_recipe(self, recipe_id):
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM recipes WHERE id = ?", (recipe_id,))

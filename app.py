@@ -46,7 +46,7 @@ DEF_LEVADURA      = "Fermentis US-05 (Ale Americana)"
 DEF_ALTITUD       = "Córdoba Capital"
 DEF_FORMATO       = "pellet"
 EVAPORACION_PCT   = 10.0  # evaporación por hora de hervor (%)
-APP_VERSION       = "1.1.0"  # versión instalada (para comprobar actualizaciones)
+APP_VERSION       = "1.1.1"  # versión instalada (para comprobar actualizaciones)
 RECETARIO_URL     = ("https://github.com/saintwick47/cervecera_vgb/"
                      "releases/latest/download/recetas_cervecera_vgb.json")
 RELEASE_API_URL   = "https://api.github.com/repos/saintwick47/cervecera_vgb/releases/latest"
@@ -1039,7 +1039,10 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
             mb.showerror("Error", f"No se pudo comprobar actualizaciones.\n{e}")
 
     def _guardar_desde_json(self, nombre, datos):
-        """Adapta una receta del JSON (formato móvil) y la guarda."""
+        """Adapta una receta del JSON (formato móvil) y la guarda.
+        Si ya existe, no la intenta guardar (evita el 'IntegrityError' en el log)."""
+        if self.db.recipe_exists(nombre):
+            return None
         levadura_nombre = DEF_LEVADURA
         levadura_datos = LEVADURAS_AR.get(levadura_nombre, {"atenuacion": 81.0, "tolerancia_abv": 12.0})
         receta = {
