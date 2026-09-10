@@ -319,3 +319,121 @@ class BrewEngine:
             'alerta_abv': alerta_abv,
             'srm_hex': BrewEngine.srm_a_color_hex(srm),
         }
+
+    # ==========================================
+    # MÓDULO AGUA OBJETIVO, SALES Y ÓSMOSIS (Fase 3)
+    # ==========================================
+    # Perfiles de agua objetivo por familia de estilo (ppm)
+    PERFILES_AGUA_OBJETIVO = {
+        "Pilsner / Lager claro":  {"ca": 40,  "mg": 5,  "so4": 50,  "cl": 50,  "hco3": 25},
+        "Blonde / Cream Ale":     {"ca": 50,  "mg": 5,  "so4": 70,  "cl": 60,  "hco3": 40},
+        "Pale Ale / IPA":         {"ca": 110, "mg": 10, "so4": 250, "cl": 55,  "hco3": 25},
+        "Amber / Red Ale":        {"ca": 80,  "mg": 8,  "so4": 120, "cl": 60,  "hco3": 60},
+        "Porter":                 {"ca": 70,  "mg": 8,  "so4": 60,  "cl": 90,  "hco3": 100},
+        "Stout / Imperial":       {"ca": 80,  "mg": 10, "so4": 60,  "cl": 110, "hco3": 150},
+        "Belgian / Saison":       {"ca": 60,  "mg": 8,  "so4": 90,  "cl": 70,  "hco3": 35},
+        "Trigo / Weissbier":      {"ca": 50,  "mg": 8,  "so4": 60,  "cl": 70,  "hco3": 40},
+        "Balanceada (genérica)":  {"ca": 70,  "mg": 8,  "so4": 100, "cl": 80,  "hco3": 60},
+    }
+
+    # ppm que aporta 1 gramo de sal disuelto en 1 litro
+    APORTE_SALES = {
+        "yeso":   {"ca": 232.8, "so4": 557.7},   # CaSO4.2H2O
+        "cacl2":  {"ca": 272.6, "cl": 483.0},    # CaCl2.2H2O
+        "epsom":  {"mg": 98.6,  "so4": 389.7},   # MgSO4.7H2O
+        "sal":    {"na": 393.4, "cl": 606.6},    # NaCl
+        "bicarb": {"na": 273.7, "hco3": 728.6},  # NaHCO3
+    }
+
+    @staticmethod
+    def familia_estilo(nombre_estilo):
+        """Familia de estilo (para elegir el agua objetivo)."""
+        n = (nombre_estilo or "").lower()
+        if any(k in n for k in ("pils", "lager", "helles", "kolsch", "light", "mexican")):
+            return "Pilsner / Lager claro"
+        if any(k in n for k in ("ipa", "pale ale", "apa", "neipa")):
+            return "Pale Ale / IPA"
+        if any(k in n for k in ("stout", "imperial", "barley")):
+            return "Stout / Imperial"
+        if "porter" in n:
+            return "Porter"
+        if any(k in n for k in ("amber", "red ale", "red lager", "irish red")):
+            return "Amber / Red Ale"
+        if any(k in n for k in ("belgian", "saison", "dubbel", "tripel", "wit")):
+            return "Belgian / Saison"
+        if any(k in n for k in ("wheat", "weizen", "weiss", "trigo")):
+            return "Trigo / Weissbier"
+        if any(k in n for k in ("blonde", "cream")):
+            return "Blonde / Cream Ale"
+        return "Balanceada (genérica)"
+
+    @staticmethod
+    def perfil_agua_objetivo(nombre_estilo):
+        fam = BrewEngine.familia_estilo(nombre_estilo)
+        return fam, dict(BrewEngine.PERFILES_AGUA_OBJETIVO.get(fam, {}))
+
+    @staticmethod
+    def calcular_sales(agua_actual, objetivo, volumen_l):
+        """
+        Gramos de sales para acercar el agua actual al perfil objetivo.
+        agua_actual / objetivo: dict con ca, mg, so4, cl, hco3 (ppm).
+        Considera la DILUCIÓN con ósmosis (la ósmosis aporta ~0 minerales).
+        Devuelve gramos + valores finales estimados + % de dilución.
+        """
+        v = max(0.0, float(volumen_l or 0))
+        claves = ("ca", "mg", "so4", "cl", "hco3")
+        ap = {k: float(agua_actual.get(k, 0) or 0) for k in claves}
+        ob = {k: float(objetivo.get(k, 0) or 0) for k in claves}
+        A = BrewEngine.APORTE_SALES
+
+        # 1) Dilución con ósmosis si el bicarbonato actual supera el objetivo
+        ro_pct = 0.0
+        if ap["hco3"] > ob["hco3"] and ap["hco3"] > 0:
+            ro_pct = round(max(0.0, (1 - ob["hco3"] / ap["hco3"])) * 100, 0)
+        factor = 1.0 - (ro_pct / 100.0)
+        ap_eff = {k: ap[k] * factor for k in claves}   # agua efectiva tras diluir
+
+        def gramos(deficit, aporte):
+            if v <= 0 or aporte <= 0:
+                return 0.0
+            return max(0.0, deficit) * v / aporte
+
+        g_yeso   = gramos(ob["so4"] - ap_eff["so4"], A["yeso"]["so4"])
+        g_cacl2  = gramos(ob["cl"] - ap_eff["cl"], A["cacl2"]["cl"])
+        g_epsom  = gramos(ob["mg"] - ap_eff["mg"], A["epsom"]["mg"])
+        g_bicarb = gramos(ob["hco3"] - ap_eff["hco3"], A["bicarb"]["hco3"])
+
+        if v > 0:
+            ca_f   = ap_eff["ca"] + g_yeso * A["yeso"]["ca"] / v + g_cacl2 * A["cacl2"]["ca"] / v
+            so4_f  = ap_eff["so4"] + g_yeso * A["yeso"]["so4"] / v + g_epsom * A["epsom"]["so4"] / v
+            cl_f   = ap_eff["cl"] + g_cacl2 * A["cacl2"]["cl"] / v
+            mg_f   = ap_eff["mg"] + g_epsom * A["epsom"]["mg"] / v
+            hco3_f = ap_eff["hco3"] + g_bicarb * A["bicarb"]["hco3"] / v
+        else:
+            ca_f, so4_f, cl_f, mg_f, hco3_f = (ap_eff["ca"], ap_eff["so4"], ap_eff["cl"],
+                                               ap_eff["mg"], ap_eff["hco3"])
+
+        return {
+            "yeso_g": round(g_yeso, 1), "cacl2_g": round(g_cacl2, 1),
+            "epsom_g": round(g_epsom, 1), "bicarb_g": round(g_bicarb, 1),
+            "ca_final": round(ca_f), "mg_final": round(mg_f),
+            "so4_final": round(so4_f), "cl_final": round(cl_f),
+            "hco3_final": round(hco3_f), "ro_pct": ro_pct, "volumen_l": v,
+        }
+
+    @staticmethod
+    def relacion_so4_cl(so4, cl):
+        """Relación sulfato/cloruro y su interpretación."""
+        so4 = float(so4 or 0); cl = float(cl or 0)
+        if cl <= 0:
+            return (0.0, "sin cloruro") if so4 <= 0 else (99.0, "muy amarga (SO4 alto)")
+        r = so4 / cl
+        if r < 0.8:
+            desc = "predomina malta (dulce)"
+        elif r <= 1.5:
+            desc = "equilibrada"
+        elif r <= 2.5:
+            desc = "predomina lúpulo (amarga)"
+        else:
+            desc = "muy amarga (SO4 alto)"
+        return round(r, 2), desc

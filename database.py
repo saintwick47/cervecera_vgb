@@ -62,6 +62,9 @@ class DatabaseManager:
             ('agua_mg',        'REAL DEFAULT 10'),
             ('agua_hco3',      'REAL DEFAULT 150'),
             ('agua_ph_entrada','REAL DEFAULT NULL'),
+            ('agua_so4',       'REAL DEFAULT 0'),
+            ('agua_cl',        'REAL DEFAULT 0'),
+            ('agua_objetivo',  "TEXT DEFAULT ''"),
             ('tiempo_hervor',  'REAL DEFAULT 60'),
             ('ratio_maceracion','REAL DEFAULT 3.0'),
             ('absorcion',      'REAL DEFAULT 1.0'),
@@ -160,8 +163,9 @@ class DatabaseManager:
             cursor.execute('''
                 INSERT INTO recipes (name, style, volume, efficiency, og_estimated, fg_estimated,
                     ibu_estimated, srm_estimated, notes, agua_ca, agua_mg, agua_hco3,
-                    agua_ph_entrada, tiempo_hervor, ratio_maceracion, absorcion, altitud_name)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    agua_ph_entrada, agua_so4, agua_cl, agua_objetivo,
+                    tiempo_hervor, ratio_maceracion, absorcion, altitud_name)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 recipe_data['name'], recipe_data.get('style', ''), recipe_data['volume'],
                 recipe_data.get('efficiency', 0.75),
@@ -170,6 +174,8 @@ class DatabaseManager:
                 recipe_data.get('notes', ''),
                 recipe_data.get('agua_ca', 50), recipe_data.get('agua_mg', 10),
                 recipe_data.get('agua_hco3', 150), recipe_data.get('agua_ph_entrada'),
+                recipe_data.get('agua_so4', 0), recipe_data.get('agua_cl', 0),
+                recipe_data.get('agua_objetivo', ''),
                 recipe_data.get('tiempo_hervor', 60),
                 recipe_data.get('ratio_maceracion', 3.0),
                 recipe_data.get('absorcion', 1.0),
@@ -199,7 +205,7 @@ class DatabaseManager:
             cursor = self.conn.cursor()
             cursor.execute('''UPDATE recipes SET name=?, style=?, volume=?, efficiency=?,
                 og_estimated=?, fg_estimated=?, ibu_estimated=?, srm_estimated=?, notes=?,
-                agua_ca=?, agua_mg=?, agua_hco3=?, agua_ph_entrada=?, tiempo_hervor=?,
+                agua_ca=?, agua_mg=?, agua_hco3=?, agua_ph_entrada=?, agua_so4=?, agua_cl=?, agua_objetivo=?, tiempo_hervor=?,
                 ratio_maceracion=?, absorcion=?, altitud_name=?
                 WHERE id=?''',
             (recipe_data['name'], recipe_data.get('style', ''), recipe_data['volume'],
@@ -208,6 +214,8 @@ class DatabaseManager:
              recipe_data.get('srm_estimated'), recipe_data.get('notes', ''),
              recipe_data.get('agua_ca', 50), recipe_data.get('agua_mg', 10),
              recipe_data.get('agua_hco3', 150), recipe_data.get('agua_ph_entrada'),
+             recipe_data.get('agua_so4', 0), recipe_data.get('agua_cl', 0),
+             recipe_data.get('agua_objetivo', ''),
              recipe_data.get('tiempo_hervor', 60),
              recipe_data.get('ratio_maceracion', 3.0),
              recipe_data.get('absorcion', 1.0),
