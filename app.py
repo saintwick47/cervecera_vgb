@@ -47,7 +47,7 @@ DEF_LEVADURA      = "Fermentis US-05 (Ale Americana)"
 DEF_ALTITUD       = "Córdoba Capital"
 DEF_FORMATO       = "pellet"
 EVAPORACION_PCT   = 10.0  # evaporación por hora de hervor (%)
-APP_VERSION       = "1.4.1"  # versión instalada (para comprobar actualizaciones)
+APP_VERSION       = "1.4.2"  # versión instalada (para comprobar actualizaciones)
 RECETARIO_URL     = ("https://github.com/saintwick47/cervecera_vgb/"
                      "releases/latest/download/recetas_cervecera_vgb.json")
 RELEASE_API_URL   = "https://api.github.com/repos/saintwick47/cervecera_vgb/releases/latest"
