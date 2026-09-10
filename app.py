@@ -46,7 +46,7 @@ DEF_LEVADURA      = "Fermentis US-05 (Ale Americana)"
 DEF_ALTITUD       = "Córdoba Capital"
 DEF_FORMATO       = "pellet"
 EVAPORACION_PCT   = 10.0  # evaporación por hora de hervor (%)
-APP_VERSION       = "1.3.0"  # versión instalada (para comprobar actualizaciones)
+APP_VERSION       = "1.4.0"  # versión instalada (para comprobar actualizaciones)
 RECETARIO_URL     = ("https://github.com/saintwick47/cervecera_vgb/"
                      "releases/latest/download/recetas_cervecera_vgb.json")
 RELEASE_API_URL   = "https://api.github.com/repos/saintwick47/cervecera_vgb/releases/latest"
@@ -363,6 +363,23 @@ class CerveceraApp(ctk.CTk):
         self.entry_ph_agua = ctk.CTkEntry(frame_agua, placeholder_text="7.0", width=55)
         self.entry_ph_agua.grid(row=1, column=7, padx=2, pady=2)
         self.entry_ph_agua.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
+
+        # Módulo de agua: sulfato, cloruro y agua objetivo (sales + ósmosis)
+        ctk.CTkLabel(frame_agua, text="Sulfato SO4:").grid(row=2, column=0, padx=5, pady=2, sticky="w")
+        self.entry_so4 = ctk.CTkEntry(frame_agua, placeholder_text="0", width=60)
+        self.entry_so4.grid(row=2, column=1, padx=2, pady=2)
+        self.entry_so4.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
+
+        ctk.CTkLabel(frame_agua, text="Cloruro Cl:").grid(row=2, column=2, padx=5, pady=2, sticky="w")
+        self.entry_cl = ctk.CTkEntry(frame_agua, placeholder_text="0", width=60)
+        self.entry_cl.grid(row=2, column=3, padx=2, pady=2)
+        self.entry_cl.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
+
+        ctk.CTkLabel(frame_agua, text="🎯 Agua objetivo:").grid(row=2, column=4, padx=5, pady=2, sticky="w")
+        self.combo_agua_obj = ctk.CTkComboBox(frame_agua, values=list(BrewEngine.PERFILES_AGUA_OBJETIVO.keys()),
+                                              command=lambda e: self.calcular_y_mostrar(), width=210)
+        self.combo_agua_obj.set("Balanceada (genérica)")
+        self.combo_agua_obj.grid(row=2, column=5, columnspan=3, padx=2, pady=2, sticky="ew")
 
         # ── 4. Maltas ────────────────────────────────────────────────────
         frame_maltas = ctk.CTkFrame(self.scroll_receta)
@@ -988,7 +1005,27 @@ class CerveceraApp(ctk.CTk):
             "mg": _flotar(self.entry_mg.get(), 10),
             "hco3": _flotar(self.entry_hco3.get(), 150),
             "ph": _flotar(self.entry_ph_agua.get(), 7.0),
+            "so4": _flotar(self.entry_so4.get(), 0),
+            "cl": _flotar(self.entry_cl.get(), 0),
         }
+
+    def _texto_ajuste_agua(self, agua, volumen_agua):
+        """Sales, dilución con ósmosis y relación SO4/Cl para el agua objetivo."""
+        objetivo_nombre = self.combo_agua_obj.get() or "Balanceada (genérica)"
+        objetivo = BrewEngine.PERFILES_AGUA_OBJETIVO.get(objetivo_nombre, {})
+        ratio, desc = BrewEngine.relacion_so4_cl(agua.get("so4", 0), agua.get("cl", 0))
+        sa = BrewEngine.calcular_sales(agua, objetivo, volumen_agua)
+        lineas = [
+            f"\n🎯 AJUSTE DE AGUA (objetivo: {objetivo_nombre})",
+            f"SO4/Cl actual: {ratio} ({desc})",
+            f"Sales: yeso {sa['yeso_g']} g · CaCl2 {sa['cacl2_g']} g · "
+            f"Epsom {sa['epsom_g']} g · bicarbonato {sa['bicarb_g']} g",
+        ]
+        if sa["ro_pct"] > 0:
+            lineas.append(f"HCO3 alto: diluir {sa['ro_pct']:.0f}% con agua de ósmosis")
+        lineas.append(f"Resultado: Ca {sa['ca_final']} · Mg {sa['mg_final']} · "
+                      f"SO4 {sa['so4_final']} · Cl {sa['cl_final']} · HCO3 {sa['hco3_final']} ppm")
+        return "\n".join(lineas)
 
 
     def _leer_parametros(self):
@@ -1078,6 +1115,7 @@ Maceración       : {r['ph']:.2f} {ph_desc}
 Post-hervor      : {r['ph_hervor']:.2f}
 Final (lúpulo)   : {r['ph_final']:.2f}
 Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%)
+{self._texto_ajuste_agua(agua_datos, aguas['agua_maceracion'] + aguas['agua_lavado'])}
 
 ⚠️ {alerta_alcohol}
 
@@ -1135,6 +1173,11 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
         alt_nombre = receta.get('altitud_name') or DEF_ALTITUD
         if alt_nombre in ALTITUDES_CORDOBA:
             self.combo_altitud.set(alt_nombre)
+        self.entry_so4.delete(0, "end"); self.entry_so4.insert(0, format_num(receta.get('agua_so4', 0) or 0))
+        self.entry_cl.delete(0, "end");  self.entry_cl.insert(0, format_num(receta.get('agua_cl', 0) or 0))
+        obj_g = receta.get('agua_objetivo') or "Balanceada (genérica)"
+        if obj_g in BrewEngine.PERFILES_AGUA_OBJETIVO:
+            self.combo_agua_obj.set(obj_g)
         eq_nombre = receta.get('equipo') or ''
         if eq_nombre and eq_nombre in self._nombres_equipos():
             self.combo_equipo.set(eq_nombre)
@@ -1203,6 +1246,9 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
         self.entry_absorcion.delete(0, "end"); self.entry_absorcion.insert(0, "1.0")
         self.entry_hervor.delete(0, "end");    self.entry_hervor.insert(0, "60")
         self.combo_agua.set(DEF_PERFIL_AGUA)
+        self.entry_so4.delete(0, "end"); self.entry_so4.insert(0, "0")
+        self.entry_cl.delete(0, "end");  self.entry_cl.insert(0, "0")
+        self.combo_agua_obj.set("Balanceada (genérica)")
         self._on_perfil_agua(None)
         self.texto_notas.delete("1.0", "end")
         self.texto_resultados.delete("1.0", "end")
@@ -1237,6 +1283,9 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
                            'tolerancia': levadura_datos['tolerancia_abv']}],
             'agua_ca': agua_datos['ca'], 'agua_mg': agua_datos['mg'],
             'agua_hco3': agua_datos['hco3'], 'agua_ph_entrada': agua_datos['ph'],
+            'agua_so4': agua_datos.get('so4', 0), 'agua_cl': agua_datos.get('cl', 0),
+            'agua_objetivo': self.combo_agua_obj.get() or '',
+            'equipo': self.combo_equipo.get() or '',
             'tiempo_hervor': tiempo_hervor,
             'ratio_maceracion': ratio, 'absorcion': absorcion,
             'altitud_name': self.combo_altitud.get() or DEF_ALTITUD,
