@@ -45,6 +45,21 @@ profesional, sin suscripciones ni nube.
   reemplazar las genéricas por reales y generar el catálogo descargable
   (ver `herramientas/LEEME_importar_brewomatic.md`).
 
+## 🔄 PC y Android siempre a la par
+
+Las dos versiones comparten el mismo motor, catálogos y recetario; solo cambia la
+interfaz. Para comprobar que ninguna quedó atrás:
+
+```bash
+python herramientas/paridad.py            # verifica todo
+python herramientas/paridad.py --sync     # copia los archivos compartidos de PC a Android
+```
+
+Compara los módulos compartidos, la versión, la cantidad de recetas, el esquema de
+la base de datos y que cada función exista en las dos apps. La build del APK hace
+esta comprobación sola antes de compilar y **frena** si algo no coincide
+(ver `herramientas/LEEME_paridad.md`).
+
 ## 🗂️ Estructura del repositorio
 
 - `app.py` y módulos `*.py` → app de escritorio (PC).
