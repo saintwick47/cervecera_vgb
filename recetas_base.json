@@ -1,2345 +1,4907 @@
 {
  "Argentina 1 - Strong Scotch Ale": {
-  "agua_vol": 35.0,
-  "fg_estimada": 1.02,
-  "granos_base": 6.34,
-  "granos_especiales": 0.78,
-  "lupulos": [
-   {
-    "aa": 5,
-    "cantidad": 28,
-    "nombre": "East Kent Goldings",
-    "tiempo": 60
-   }
-  ],
+  "style": "17C - Wee Heavy (BJCP 2015)",
+  "notas": "Receta original: Nightrain Scotch Ale · 17C - Wee Heavy (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 25.0,
+  "fg_estimada": 1.013,
+  "granos_base": 6.1,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 4.76,
-    "extracto": 300,
-    "nombre": "Maris Otter"
+    "nombre": "Pale Ale Maltear",
+    "cantidad": 4.0,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 1.58,
-    "extracto": 280,
-    "nombre": "Munich"
+    "nombre": "Caramelo 30 (Maltear)",
+    "cantidad": 0.6,
+    "extracto": 292,
+    "color": 30.0
    },
    {
-    "cantidad": 0.56,
-    "extracto": 250,
-    "nombre": "Crystal 60L"
+    "nombre": "Special X Best Malz",
+    "cantidad": 0.5,
+    "extracto": 275,
+    "color": 132.0
    },
    {
-    "cantidad": 0.22,
-    "extracto": 240,
-    "nombre": "Caramunich"
+    "nombre": "Best Caramel Munich III",
+    "cantidad": 0.5,
+    "extracto": 284,
+    "color": 84.6
+   },
+   {
+    "nombre": "Best Caramel Hell",
+    "cantidad": 0.5,
+    "extracto": 292,
+    "color": 15.5
+   },
+   {
+    "nombre": "Best Caramel Aromatic",
+    "cantidad": 0.0,
+    "extracto": 1035,
+    "color": 20.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.6"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 25.0,
+    "aa": 7.4,
+    "tiempo": 40,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.051,
+   "fg": 1.013,
+   "eficiencia": 70,
+   "estilo": "17C - Wee Heavy (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Nightrain Scotch Ale",
+   "estilo": "17C - Wee Heavy (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/NightrainScotchAle-5a57152440bf121d009c8597-1522113586616",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Argentina 2 - IPA Argenta": {
-  "agua_vol": 30.0,
-  "fg_estimada": 1.012,
-  "granos_base": 5.0,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 5.5,
-    "cantidad": 50,
-    "nombre": "Cascade",
-    "tiempo": 60
-   },
-   {
-    "aa": 12,
-    "cantidad": 30,
-    "nombre": "Citra",
-    "tiempo": 5
-   }
-  ],
+  "style": "IPA Argenta",
+  "notas": "Receta original: #12 - IPA Argenta · IPA Argenta · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 25.0,
+  "fg_estimada": 1.013,
+  "granos_base": 8.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 5.0,
-    "extracto": 300,
-    "nombre": "Pale Malt"
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 6.5,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Crystal Malt"
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 1.5,
+    "extracto": 317,
+    "color": 3.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Nugget",
+    "cantidad": 30.0,
+    "aa": 10.2,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Nugget",
+    "cantidad": 10.0,
+    "aa": 10.2,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Victoria Arg.",
+    "cantidad": 20.0,
+    "aa": 11.7,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mapuche",
+    "cantidad": 10.0,
+    "aa": 7.7,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 7.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Victoria Arg.",
+    "cantidad": 20.0,
+    "aa": 11.7,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.059,
+   "fg": 1.013,
+   "eficiencia": 59,
+   "estilo": "IPA Argenta"
+  },
+  "origen": {
+   "receta": "#12 - IPA Argenta",
+   "estilo": "IPA Argenta",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/12IPAArgenta-56fc088ffd6b9d1d006ed8c9-1459358499160",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Argentina 3 - Honey Light Lager": {
-  "agua_vol": 28.0,
-  "fg_estimada": 1.008,
-  "granos_base": 4.5,
+  "style": "01A - American Light Lager (BJCP 2015)",
+  "notas": "Receta original: Lager light · 01A - American Light Lager (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.01,
+  "granos_base": 3.8,
   "granos_especiales": 0.0,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 20,
-    "nombre": "Saaz",
-    "tiempo": 60
-   }
-  ],
   "maltas": [
    {
-    "cantidad": 4.0,
-    "extracto": 300,
-    "nombre": "Pilsen"
+    "nombre": "Pilsner Ba-Malt",
+    "cantidad": 2.5,
+    "extracto": 309,
+    "color": 2.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Avena"
+    "nombre": "Copos Maiz",
+    "cantidad": 0.4,
+    "extracto": 309,
+    "color": 1.3
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 0.4,
+    "extracto": 309,
+    "color": 1.0
+   },
+   {
+    "nombre": "Malt Château Cara Gold 120",
+    "cantidad": 0.3,
+    "extracto": 275,
+    "color": 60.0
+   },
+   {
+    "nombre": "Copos Trigo",
+    "cantidad": 0.2,
+    "extracto": 292,
+    "color": 1.6
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 5.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Magnum",
+    "cantidad": 5.0,
+    "aa": 12.5,
+    "tiempo": 45,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 5.0,
+    "aa": 8.5,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Magnum",
+    "cantidad": 5.0,
+    "aa": 12.5,
+    "tiempo": 15,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "WLP800 - Pilsner Lager",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.041,
+   "fg": 1.01,
+   "eficiencia": 70,
+   "estilo": "01A - American Light Lager (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Lager light",
+   "estilo": "01A - American Light Lager (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Lagerlight-57435b989883221d000f0cb5-1496699374249",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "IPA 1 - West Coast IPA": {
-  "agua_vol": 30.0,
-  "fg_estimada": 1.012,
-  "granos_base": 5.5,
+  "style": "21A - American IPA (BJCP 2015)",
+  "notas": "Receta original: American IPA · 21A - American IPA (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 24.0,
+  "fg_estimada": 1.014,
+  "granos_base": 7.0,
   "granos_especiales": 0.0,
-  "lupulos": [
-   {
-    "aa": 13,
-    "cantidad": 56,
-    "nombre": "Simcoe",
-    "tiempo": 0
-   },
-   {
-    "aa": 12,
-    "cantidad": 28,
-    "nombre": "Citra",
-    "tiempo": 0
-   }
-  ],
   "maltas": [
    {
+    "nombre": "Pilsner Ba-Malt",
     "cantidad": 5.0,
-    "extracto": 300,
-    "nombre": "2 Row Pale"
+    "extracto": 309,
+    "color": 2.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 280,
-    "nombre": "Munich"
+    "nombre": "Carahell Weyermann (10 L)",
+    "cantidad": 1.0,
+    "extracto": 284,
+    "color": 10.0
+   },
+   {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 1.0,
+    "extracto": 309,
+    "color": 4.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Mosaic",
+    "cantidad": 50.0,
+    "aa": 12.5,
+    "tiempo": 25,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Equinox",
+    "cantidad": 50.0,
+    "aa": 14.6,
+    "tiempo": 25,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 50.0,
+    "aa": 9.0,
+    "tiempo": 25,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Centennial",
+    "cantidad": 50.0,
+    "aa": 8.5,
+    "tiempo": 25,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mosaic",
+    "cantidad": 100.0,
+    "aa": 12.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Equinox",
+    "cantidad": 100.0,
+    "aa": 14.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 50.0,
+    "aa": 13.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 50.0,
+    "aa": 9.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.062,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "21A - American IPA (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "American IPA",
+   "estilo": "21A - American IPA (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/AmericanIPA-5b2ed60ecbcf490004af8363-1553558948032",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "IPA 2 - Hazy IPA": {
-  "agua_vol": 28.0,
-  "fg_estimada": 1.014,
-  "granos_base": 3.25,
-  "granos_especiales": 1.75,
-  "lupulos": [
-   {
-    "aa": 12,
-    "cantidad": 50,
-    "nombre": "Citra",
-    "tiempo": 0
-   },
-   {
-    "aa": 12.5,
-    "cantidad": 50,
-    "nombre": "Mosaic",
-    "tiempo": 0
-   }
-  ],
+  "style": "Neipa",
+  "notas": "Receta original: NEIPA- Brew Day · Neipa · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 60.0,
+  "fg_estimada": 1.015,
+  "granos_base": 16.27,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.25,
-    "extracto": 300,
-    "nombre": "Base Malt"
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 8.83,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 1.5,
-    "extracto": 250,
-    "nombre": "Flaked Adjuncts"
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 5.58,
+    "extracto": 317,
+    "color": 3.0
    },
    {
-    "cantidad": 0.25,
-    "extracto": 270,
-    "nombre": "Dextrin Malt"
+    "nombre": "Copos Avena",
+    "cantidad": 1.86,
+    "extracto": 309,
+    "color": 1.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Citra",
+    "cantidad": 47.0,
+    "aa": 13.6,
+    "tiempo": 5,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mosaic",
+    "cantidad": 47.0,
+    "aa": 12.5,
+    "tiempo": 5,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mosaic",
+    "cantidad": 186.0,
+    "aa": 12.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 186.0,
+    "aa": 12.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Idaho",
+    "cantidad": 94.0,
+    "aa": 11.4,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mosaic",
+    "cantidad": 186.0,
+    "aa": 12.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 186.0,
+    "aa": 13.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Idaho",
+    "cantidad": 94.0,
+    "aa": 11.4,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "s04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.059,
+   "fg": 1.015,
+   "eficiencia": 70,
+   "estilo": "Neipa"
+  },
+  "origen": {
+   "receta": "NEIPA- Brew Day",
+   "estilo": "Neipa",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/CITRASingleHopTommyNEIPA-58612dcfe8a0161d00b0cf0e-1514397457063",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "IPA 3 - American IPA": {
-  "agua_vol": 30.0,
-  "fg_estimada": 1.01,
-  "granos_base": 5.0,
+  "style": "21A - American IPA (BJCP 2015)",
+  "notas": "Receta original: 3ra IPA · 21A - American IPA (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 105.0,
+  "fg_estimada": 1.014,
+  "granos_base": 26.25,
   "granos_especiales": 0.0,
-  "lupulos": [
-   {
-    "aa": 10,
-    "cantidad": 40,
-    "nombre": "Centennial",
-    "tiempo": 60
-   },
-   {
-    "aa": 5.5,
-    "cantidad": 40,
-    "nombre": "Cascade",
-    "tiempo": 15
-   }
-  ],
   "maltas": [
    {
-    "cantidad": 4.5,
-    "extracto": 300,
-    "nombre": "American 2 Row"
+    "nombre": "Pale Ale Weyermann",
+    "cantidad": 21.0,
+    "extracto": 317,
+    "color": 3.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 280,
-    "nombre": "Munich"
+    "nombre": "Munich I Weyermann",
+    "cantidad": 3.15,
+    "extracto": 317,
+    "color": 7.0
+   },
+   {
+    "nombre": "Caraamber Weyermann (25 L)",
+    "cantidad": 2.1,
+    "extracto": 309,
+    "color": 35.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Bravo",
+    "cantidad": 40.0,
+    "aa": 16.0,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Zeus",
+    "cantidad": 85.0,
+    "aa": 13.1,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 53.0,
+    "aa": 8.5,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Chinook",
+    "cantidad": 52.0,
+    "aa": 11.1,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 105.0,
+    "aa": 9.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 45.0,
+    "aa": 9.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 280.0,
+    "aa": 13.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.055,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "21A - American IPA (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "3ra IPA",
+   "estilo": "21A - American IPA (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/2daIPA-5916535c7ea1461d00580613-1503106416620",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Negra 1 - American Stout": {
-  "agua_vol": 30.0,
-  "fg_estimada": 1.015,
-  "granos_base": 3.0,
-  "granos_especiales": 1.7,
-  "lupulos": [
-   {
-    "aa": 11,
-    "cantidad": 21,
-    "nombre": "Nugget",
-    "tiempo": 60
-   }
-  ],
+  "style": "20B - American Stout (BJCP 2015)",
+  "notas": "Receta original: American Stout · 20B - American Stout (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 80.0,
+  "fg_estimada": 1.013,
+  "granos_base": 23.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.0,
-    "extracto": 300,
-    "nombre": "Maris Otter"
+    "nombre": "Pilsner MOSA",
+    "cantidad": 20.0,
+    "extracto": 317,
+    "color": 2.2
    },
    {
-    "cantidad": 0.9,
+    "nombre": "Roasted Barley Weyermann (Cebada Tostada)",
+    "cantidad": 1.5,
+    "extracto": 209,
+    "color": 400.0
+   },
+   {
+    "nombre": "Carafa I Weyermann (Pale Chocolate)",
+    "cantidad": 1.0,
     "extracto": 250,
-    "nombre": "Flaked Barley"
+    "color": 400.0
    },
    {
-    "cantidad": 0.7,
-    "extracto": 200,
-    "nombre": "Roasted Barley"
-   },
-   {
-    "cantidad": 0.1,
-    "extracto": 180,
-    "nombre": "Black Malt"
+    "nombre": "Copos Avena",
+    "cantidad": 0.5,
+    "extracto": 309,
+    "color": 1.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.6"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 140.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 60.0,
+    "aa": 6.3,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 15.0,
+    "aa": 6.3,
+    "tiempo": 15,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.057,
+   "fg": 1.013,
+   "eficiencia": 65,
+   "estilo": "20B - American Stout (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "American Stout",
+   "estilo": "20B - American Stout (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/AmericanStout-551ac6c19a50be2a7d00004e-1500049138945",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Negra 2 - Dry Stout": {
-  "agua_vol": 32.0,
-  "fg_estimada": 1.01,
-  "granos_base": 4.0,
-  "granos_especiales": 1.0,
-  "lupulos": [
-   {
-    "aa": 5,
-    "cantidad": 40,
-    "nombre": "East Kent Goldings",
-    "tiempo": 60
-   }
-  ],
+  "style": "15B - Irish Stout (BJCP 2015)",
+  "notas": "Receta original: Concurso Marzo 2017 - 15B - Irish Stout · 15B - Irish Stout (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.009,
+  "granos_base": 4.05,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 4.0,
-    "extracto": 300,
-    "nombre": "Pale Malt"
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 2.5,
+    "extracto": 309,
+    "color": 4.0
    },
    {
+    "nombre": "Caramelo 60 (Ba-Malt)",
     "cantidad": 0.5,
-    "extracto": 200,
-    "nombre": "Chocolate Malt"
+    "extracto": 284,
+    "color": 60.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 180,
-    "nombre": "Roasted Barley"
+    "nombre": "Cebada Tostada (Ba-Malt)",
+    "cantidad": 0.4,
+    "extracto": 234,
+    "color": 500.0
+   },
+   {
+    "nombre": "Caraaroma Weyermann (140 L)",
+    "cantidad": 0.35,
+    "extracto": 275,
+    "color": 140.0
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 0.3,
+    "extracto": 309,
+    "color": 1.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.6"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 10.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Northern Brewer",
+    "cantidad": 10.0,
+    "aa": 9.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 5.0,
+    "aa": 6.3,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Northern Brewer",
+    "cantidad": 5.0,
+    "aa": 9.6,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Willamette",
+    "cantidad": 10.0,
+    "aa": 7.1,
+    "tiempo": 10,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 10.0,
+    "aa": 8.5,
+    "tiempo": 10,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.042,
+   "fg": 1.009,
+   "eficiencia": 70,
+   "estilo": "15B - Irish Stout (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Concurso Marzo 2017 - 15B - Irish Stout",
+   "estilo": "15B - Irish Stout (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/15BIrishStoutConcursoMarzo2017-5699c3a4c170c61d00c2687c-1485572553188",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Negra 3 - Sweet Stout": {
-  "agua_vol": 30.0,
-  "fg_estimada": 1.02,
-  "granos_base": 3.5,
-  "granos_especiales": 1.3,
-  "lupulos": [
-   {
-    "aa": 4.5,
-    "cantidad": 30,
-    "nombre": "Fuggles",
-    "tiempo": 60
-   }
-  ],
+  "style": "16A - Sweet Stout (BJCP 2015)",
+  "notas": "Receta original: 20170515 chocolate milk stout · 16A - Sweet Stout (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 22.0,
+  "fg_estimada": 1.012,
+  "granos_base": 5.7,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.5,
-    "extracto": 300,
-    "nombre": "Maris Otter"
+    "nombre": "Pilsner MOSA",
+    "cantidad": 4.5,
+    "extracto": 317,
+    "color": 2.2
    },
    {
+    "nombre": "Copos Avena",
     "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Crystal Malt"
+    "extracto": 309,
+    "color": 1.0
    },
    {
+    "nombre": "Castle Chateau Chocolat",
     "cantidad": 0.3,
-    "extracto": 180,
-    "nombre": "Black Malt"
+    "extracto": 250,
+    "color": 457.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 200,
-    "nombre": "Lactose"
+    "nombre": "Castle Chateau Black",
+    "cantidad": 0.2,
+    "extracto": 250,
+    "color": 488.0
+   },
+   {
+    "nombre": "Castle Chateau Crystal",
+    "cantidad": 0.2,
+    "extracto": 300,
+    "color": 76.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.6"
+  "lupulos": [
+   {
+    "nombre": "Perle",
+    "cantidad": 50.0,
+    "aa": 4.8,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "",
+    "cantidad": 0.0,
+    "aa": 5.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.056,
+   "fg": 1.012,
+   "eficiencia": 70,
+   "estilo": "16A - Sweet Stout (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "20170515 chocolate milk stout",
+   "estilo": "16A - Sweet Stout (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/20170515chocolatemilkstout-58940647d169151d00d509f1-1494876476742",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Red Lager 1 - International Amber Lager": {
-  "agua_vol": 30.0,
-  "fg_estimada": 1.012,
-  "granos_base": 4.5,
-  "granos_especiales": 0.4,
-  "lupulos": [
-   {
-    "aa": 8,
-    "cantidad": 20,
-    "nombre": "Perle",
-    "tiempo": 60
-   }
-  ],
+  "style": "02B - International Amber Lager (BJCP 2015)",
+  "notas": "Receta original: 1° Pilsen · 02B - International Amber Lager (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.014,
+  "granos_base": 5.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 4.0,
-    "extracto": 300,
-    "nombre": "Pilsner US"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 280,
-    "nombre": "Vienna DE"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 220,
-    "nombre": "Special B BE"
-   },
-   {
-    "cantidad": 0.1,
-    "extracto": 180,
-    "nombre": "Midnight Wheat"
+    "nombre": "Pilsner Maltear",
+    "cantidad": 5.0,
+    "extracto": 309,
+    "color": 2.4
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 75,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 15,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew S-33",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.054,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "02B - International Amber Lager (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "1° Pilsen",
+   "estilo": "02B - International Amber Lager (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/1Pilsen-5953c23a38f5931d0089befd-1500565236704",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Red Lager 2 - American Red Lager": {
-  "agua_vol": 32.0,
-  "fg_estimada": 1.01,
-  "granos_base": 4.5,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 4.5,
-    "cantidad": 14,
-    "nombre": "Hallertau",
-    "tiempo": 45
-   }
-  ],
+  "style": "02B - International Amber Lager (BJCP 2015)",
+  "notas": "Receta original: BS_Red Lager · 02B - International Amber Lager (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.012,
+  "granos_base": 4.4,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 4.5,
-    "extracto": 300,
-    "nombre": "Pale Malt"
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 4.0,
+    "extracto": 309,
+    "color": 2.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Crystal Malt"
+    "nombre": "Caramelo 60 (Ba-Malt)",
+    "cantidad": 0.4,
+    "extracto": 284,
+    "color": 60.0
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "flor"
+   },
+   {
+    "nombre": "",
+    "cantidad": 0.0,
+    "aa": 5.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager S-23",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.047,
+   "fg": 1.012,
+   "eficiencia": 70,
+   "estilo": "02B - International Amber Lager (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_Red Lager",
+   "estilo": "02B - International Amber Lager (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSRedLager-57af058a4ad8541d000ad1d1-1485476536180",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Red Lager 3 - Red Cream Lager": {
-  "agua_vol": 28.0,
-  "fg_estimada": 1.008,
-  "granos_base": 4.0,
-  "granos_especiales": 0.57,
-  "lupulos": [
-   {
-    "aa": 6.5,
-    "cantidad": 14,
-    "nombre": "Hallertau",
-    "tiempo": 45
-   }
-  ],
+  "style": "01C - Cream Ale (BJCP 2015)",
+  "notas": "Receta original: BS_Cream Ale · 01C - Cream Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.012,
+  "granos_base": 4.2,
+  "granos_especiales": 0.0,
   "maltas": [
    {
+    "nombre": "Pilsner Tai Pan",
     "cantidad": 4.0,
-    "extracto": 300,
-    "nombre": "Pale Malt"
+    "extracto": 309,
+    "color": 2.0
    },
    {
-    "cantidad": 0.23,
-    "extracto": 270,
-    "nombre": "Carapils"
-   },
-   {
-    "cantidad": 0.34,
-    "extracto": 250,
-    "nombre": "Caracrystal Wheat"
+    "nombre": "Azucar de Maiz",
+    "cantidad": 0.2,
+    "extracto": 384,
+    "color": 2.0
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager S-23",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.046,
+   "fg": 1.012,
+   "eficiencia": 70,
+   "estilo": "01C - Cream Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_Cream Ale",
+   "estilo": "01C - Cream Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSCreamAle-57af058a4ad8541d000ad1d1-1487941854136",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Rubia 1 - Blonde Ale Básica": {
-  "agua_vol": 30.0,
+  "style": "18A - Blonde Ale (BJCP 2015)",
+  "notas": "Receta original: #39 Blonde Ale · 18A - Blonde Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 45.0,
+  "fg_estimada": 1.01,
+  "granos_base": 8.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 7.0,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Munich I (Ba-Malt)",
+    "cantidad": 0.4,
+    "extracto": 309,
+    "color": 7.0
+   },
+   {
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 0.4,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Malt Château Cara Blond 20",
+    "cantidad": 0.2,
+    "extracto": 284,
+    "color": 10.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Bullion",
+    "cantidad": 30.0,
+    "aa": 9.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Bullion",
+    "cantidad": 20.0,
+    "aa": 9.5,
+    "tiempo": 20,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.044,
+   "fg": 1.01,
+   "eficiencia": 80,
+   "estilo": "18A - Blonde Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "#39 Blonde Ale",
+   "estilo": "18A - Blonde Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/39BlondeAle-540a466c3649d08d060016cc-1505264427572",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Rubia 2 - Honey Blonde Ale": {
+  "style": "18A - Blonde Ale (BJCP 2015)",
+  "notas": "Receta original: Blonde · 18A - Blonde Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 54.0,
+  "fg_estimada": 1.009,
+  "granos_base": 10.8,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Maltear",
+    "cantidad": 10.0,
+    "extracto": 309,
+    "color": 2.4
+   },
+   {
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 0.5,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Caramelo 30 (Ba-Malt)",
+    "cantidad": 0.3,
+    "extracto": 292,
+    "color": 30.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Zeus",
+    "cantidad": 20.0,
+    "aa": 13.5,
+    "tiempo": 75,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 30.0,
+    "aa": 6.3,
+    "tiempo": 45,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.043,
+   "fg": 1.009,
+   "eficiencia": 70,
+   "estilo": "18A - Blonde Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Blonde",
+   "estilo": "18A - Blonde Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Blonde-5777cef997813d1d00414710-1534117992087",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Rubia 3 - American Blonde": {
+  "style": "18A - Blonde Ale (BJCP 2015)",
+  "notas": "Receta original: Ale Dorada · 18A - Blonde Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.015,
+  "granos_base": 5.6,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Ba-Malt",
+    "cantidad": 5.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Caramelo 30 (Ba-Malt)",
+    "cantidad": 0.6,
+    "extracto": 292,
+    "color": 30.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Saaz",
+    "cantidad": 10.0,
+    "aa": 3.6,
+    "tiempo": 75,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.06,
+   "fg": 1.015,
+   "eficiencia": 70,
+   "estilo": "18A - Blonde Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Ale Dorada",
+   "estilo": "18A - Blonde Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/AleDorada-594cfb4de1ffc11d000e6a39-1499340819911",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Wheat 1 - Hefeweizen": {
+  "style": "10A - Weissbier (BJCP 2015)",
+  "notas": "Receta original: BS_WeissBier · 10A - Weissbier (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.011,
+  "granos_base": 4.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 2.0,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 2.0,
+    "extracto": 309,
+    "color": 2.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 7.0,
+    "tiempo": 30,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew WB-06",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.044,
+   "fg": 1.011,
+   "eficiencia": 70,
+   "estilo": "10A - Weissbier (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_WeissBier",
+   "estilo": "10A - Weissbier (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSWeissBier-57af058a4ad8541d000ad1d1-1478552740759",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Wheat 2 - Dunkelweizen": {
+  "style": "10B - Dunkles Weissbier (BJCP 2015)",
+  "notas": "Receta original: #25 - Dunkles Weissbier · 10B - Dunkles Weissbier (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 50.0,
+  "fg_estimada": 1.007,
+  "granos_base": 10.31,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 6.0,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Munich I (Ba-Malt)",
+    "cantidad": 2.0,
+    "extracto": 309,
+    "color": 7.0
+   },
+   {
+    "nombre": "Viena Maltear",
+    "cantidad": 2.0,
+    "extracto": 317,
+    "color": 4.6
+   },
+   {
+    "nombre": "Biscuit (Ba-Malt)",
+    "cantidad": 0.17,
+    "extracto": 300,
+    "color": 20.0
+   },
+   {
+    "nombre": "Melanoidin Malt (Ba-Malt)",
+    "cantidad": 0.14,
+    "extracto": 309,
+    "color": 30.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Hallertau Aroma",
+    "cantidad": 50.0,
+    "aa": 8.1,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew WB-06",
+    "atenuacion": 86.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.049,
+   "fg": 1.007,
+   "eficiencia": 75,
+   "estilo": "10B - Dunkles Weissbier (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "#25 - Dunkles Weissbier",
+   "estilo": "10B - Dunkles Weissbier (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/25DunklesWeissbier-540a466c3649d08d060016cc-1486492951094",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Wheat 3 - American Wheat": {
+  "style": "01D - American Wheat Beer (BJCP 2015)",
+  "notas": "Receta original: AWB A lo que salga · 01D - American Wheat Beer (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 50.0,
+  "fg_estimada": 1.011,
+  "granos_base": 12.6,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Castle Chateau Pale Ale",
+    "cantidad": 6.11,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Castle Chateau Wheat Blanc",
+    "cantidad": 4.26,
+    "extracto": 317,
+    "color": 2.0
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 0.93,
+    "extracto": 309,
+    "color": 1.0
+   },
+   {
+    "nombre": "Castle Chateau Munich",
+    "cantidad": 0.37,
+    "extracto": 317,
+    "color": 12.7
+   },
+   {
+    "nombre": "Castle Chateau Wheat Blanc",
+    "cantidad": 0.93,
+    "extracto": 317,
+    "color": 2.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 30.0,
+    "aa": 8.5,
+    "tiempo": 50,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 25.0,
+    "aa": 8.5,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 20.0,
+    "aa": 13.6,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 20.0,
+    "aa": 8.5,
+    "tiempo": 5,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 55.0,
+    "aa": 13.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.051,
+   "fg": 1.011,
+   "eficiencia": 65,
+   "estilo": "01D - American Wheat Beer (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "AWB A lo que salga",
+   "estilo": "01D - American Wheat Beer (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/AWBAloquesalga-5888f0794cd2f71d00b20a2e-1515788267867",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Porter 1 - Robust Porter": {
+  "style": "20A - American Porter (BJCP 2015)",
+  "notas": "Receta original: #43 Robust Porter · 20A - American Porter (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 110.0,
+  "fg_estimada": 1.011,
+  "granos_base": 28.6,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner US Cargill",
+    "cantidad": 23.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Castle Chateau Chocolat",
+    "cantidad": 1.8,
+    "extracto": 250,
+    "color": 457.0
+   },
+   {
+    "nombre": "Munich I (Ba-Malt)",
+    "cantidad": 1.8,
+    "extracto": 309,
+    "color": 7.0
+   },
+   {
+    "nombre": "Caramelo 60 (Ba-Malt)",
+    "cantidad": 1.5,
+    "extracto": 284,
+    "color": 60.0
+   },
+   {
+    "nombre": "Carafa I Special (dehusked)",
+    "cantidad": 0.5,
+    "extracto": 250,
+    "color": 339.9
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Bullion",
+    "cantidad": 200.0,
+    "aa": 9.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "",
+    "cantidad": 0.0,
+    "aa": 5.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Danstar Nottingham",
+    "atenuacion": 82.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.063,
+   "fg": 1.011,
+   "eficiencia": 80,
+   "estilo": "20A - American Porter (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "#43 Robust Porter",
+   "estilo": "20A - American Porter (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/43Porter-540a466c3649d08d060016cc-1511442068443",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Porter 2 - Brown Porter": {
+  "style": "13C - English Porter (BJCP 2015)",
+  "notas": "Receta original: #28 - English Porter · 13C - English Porter (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 50.0,
+  "fg_estimada": 1.012,
+  "granos_base": 10.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 9.0,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Castle Chateau Chocolat",
+    "cantidad": 0.5,
+    "extracto": 250,
+    "color": 457.0
+   },
+   {
+    "nombre": "Castle Chateau Special B",
+    "cantidad": 0.5,
+    "extracto": 250,
+    "color": 152.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Nugget",
+    "cantidad": 45.0,
+    "aa": 10.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Styrian Golding",
+    "cantidad": 50.0,
+    "aa": 2.7,
+    "tiempo": 15,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.046,
+   "fg": 1.012,
+   "eficiencia": 76,
+   "estilo": "13C - English Porter (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "#28 - English Porter",
+   "estilo": "13C - English Porter (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/27EnglishPorter-540a466c3649d08d060016cc-1490120649578",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Porter 3 - Baltic Porter": {
+  "style": "09C - Baltic Porter (BJCP 2015)",
+  "notas": "Receta original: Brown Ale · 09C - Baltic Porter (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 19.0,
+  "fg_estimada": 1.013,
+  "granos_base": 4.45,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Munich Maltear",
+    "cantidad": 3.5,
+    "extracto": 309,
+    "color": 4.9
+   },
+   {
+    "nombre": "Caramelo 120 (Ba-Malt)",
+    "cantidad": 0.5,
+    "extracto": 275,
+    "color": 120.0
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 0.3,
+    "extracto": 309,
+    "color": 1.0
+   },
+   {
+    "nombre": "Chocolate (Ba-Malt)",
+    "cantidad": 0.15,
+    "extracto": 242,
+    "color": 400.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Apollo",
+    "cantidad": 5.0,
+    "aa": 15.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Apollo",
+    "cantidad": 10.0,
+    "aa": 15.0,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Traful",
+    "cantidad": 10.0,
+    "aa": 5.0,
+    "tiempo": 5,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.05,
+   "fg": 1.013,
+   "eficiencia": 70,
+   "estilo": "09C - Baltic Porter (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Brown Ale",
+   "estilo": "09C - Baltic Porter (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BrownAle-58ab2400bd277a1d0012f90f-1490833184335",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Pale Ale 1 - American Pale Ale": {
+  "style": "18B - American Pale Ale (BJCP 2015)",
+  "notas": "Receta original: 2017 APA Kellan / trinchera junio17 · 18B - American Pale Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 680.0,
+  "fg_estimada": 1.012,
+  "granos_base": 170.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 75.0,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Pilsner Maltear",
+    "cantidad": 75.0,
+    "extracto": 309,
+    "color": 2.4
+   },
+   {
+    "nombre": "Caramelo 30 (Ba-Malt)",
+    "cantidad": 10.0,
+    "extracto": 292,
+    "color": 30.0
+   },
+   {
+    "nombre": "Carapils (Dextrine) Ba-Malt",
+    "cantidad": 7.0,
+    "extracto": 275,
+    "color": 2.0
+   },
+   {
+    "nombre": "Biscuit (Ba-Malt)",
+    "cantidad": 3.0,
+    "extracto": 300,
+    "color": 20.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Bravo",
+    "cantidad": 60.0,
+    "aa": 16.0,
+    "tiempo": 70,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Bravo",
+    "cantidad": 250.0,
+    "aa": 16.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Nugget",
+    "cantidad": 250.0,
+    "aa": 12.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 300.0,
+    "aa": 6.3,
+    "tiempo": 20,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 300.0,
+    "aa": 6.3,
+    "tiempo": 10,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 300.0,
+    "aa": 8.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 700.0,
+    "aa": 9.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Columbus",
+    "cantidad": 700.0,
+    "aa": 16.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 700.0,
+    "aa": 13.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.054,
+   "fg": 1.012,
+   "eficiencia": 70,
+   "estilo": "18B - American Pale Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "2017 APA Kellan / trinchera junio17",
+   "estilo": "18B - American Pale Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/2017APAKellantrinchcoera-532b95b152e8696225000033-1496886772485",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Pale Ale 2 - English Pale Ale": {
+  "style": "11A - Ordinary Bitter (BJCP 2015)",
+  "notas": "Receta original: Aland Bitter - 265 · 11A - Ordinary Bitter (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 236.0,
+  "fg_estimada": 1.008,
+  "granos_base": 39.35,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Weyerman",
+    "cantidad": 34.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Munich I Weyermann",
+    "cantidad": 2.0,
+    "extracto": 317,
+    "color": 7.0
+   },
+   {
+    "nombre": "Caramunich III Weyermann (60 L)",
+    "cantidad": 1.5,
+    "extracto": 275,
+    "color": 75.0
+   },
+   {
+    "nombre": "Caramelo 60 (Ba-Malt)",
+    "cantidad": 1.5,
+    "extracto": 284,
+    "color": 60.0
+   },
+   {
+    "nombre": "Roasted Barley Weyermann (Cebada Tostada)",
+    "cantidad": 0.35,
+    "extracto": 209,
+    "color": 0.3
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "East Kent Golding",
+    "cantidad": 300.0,
+    "aa": 4.7,
+    "tiempo": 75,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "East Kent Golding",
+    "cantidad": 300.0,
+    "aa": 4.7,
+    "tiempo": 45,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-04",
+    "atenuacion": 80.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.041,
+   "fg": 1.008,
+   "eficiencia": 80,
+   "estilo": "11A - Ordinary Bitter (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Aland Bitter - 265",
+   "estilo": "11A - Ordinary Bitter (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/AlandBitter275-56e0ee56fddcfb1d00fece4d-1506523426056",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Pale Ale 3 - Aussie Sparkling Ale": {
+  "style": "12B - Australian Sparkling Ale (BJCP 2015)",
+  "notas": "Receta original: Australian Sparkling Ale - Pablitens · 12B - Australian Sparkling Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.005,
+  "granos_base": 4.2,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Maltear",
+    "cantidad": 3.3,
+    "extracto": 309,
+    "color": 2.4
+   },
+   {
+    "nombre": "Carapils Weyermann",
+    "cantidad": 0.4,
+    "extracto": 275,
+    "color": 2.0
+   },
+   {
+    "nombre": "Viena Weyermann",
+    "cantidad": 0.3,
+    "extracto": 317,
+    "color": 4.0
+   },
+   {
+    "nombre": "Carahell Weyermann (10 L)",
+    "cantidad": 0.2,
+    "extracto": 284,
+    "color": 10.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Loral",
+    "cantidad": 6.0,
+    "aa": 12.0,
+    "tiempo": 50,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "German Mandarina Bavaria",
+    "cantidad": 6.0,
+    "aa": 8.0,
+    "tiempo": 40,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Centennial",
+    "cantidad": 6.0,
+    "aa": 8.5,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 6.0,
+    "aa": 9.0,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "German Mandarina Bavaria",
+    "cantidad": 10.0,
+    "aa": 8.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale BE 134",
+    "atenuacion": 90.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.045,
+   "fg": 1.005,
+   "eficiencia": 70,
+   "estilo": "12B - Australian Sparkling Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Australian Sparkling Ale - Pablitens",
+   "estilo": "12B - Australian Sparkling Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Pablitens-5ba2ac9a469016000430901d-1537389722294",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Belgian 1 - Dubbel": {
+  "style": "26B - Belgian Dubbel (BJCP 2015)",
+  "notas": "Receta original: 2 Belgas · 26B - Belgian Dubbel (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 54.0,
+  "fg_estimada": 1.014,
+  "granos_base": 18.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 13.3,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Munich I (Ba-Malt)",
+    "cantidad": 1.3,
+    "extracto": 309,
+    "color": 7.0
+   },
+   {
+    "nombre": "Castle Chateau Special B",
+    "cantidad": 0.6,
+    "extracto": 250,
+    "color": 152.0
+   },
+   {
+    "nombre": "Caramelo 60 (Ba-Malt)",
+    "cantidad": 0.6,
+    "extracto": 284,
+    "color": 60.0
+   },
+   {
+    "nombre": "Biscuit (Ba-Malt)",
+    "cantidad": 0.6,
+    "extracto": 300,
+    "color": 20.0
+   },
+   {
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 0.6,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Azucar de Maiz",
+    "cantidad": 1.0,
+    "extracto": 384,
+    "color": 2.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "East Kent Golding",
+    "cantidad": 85.0,
+    "aa": 4.7,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "East Kent Golding",
+    "cantidad": 15.0,
+    "aa": 4.7,
+    "tiempo": 15,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew Abbaye",
+    "atenuacion": 80.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.072,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "26B - Belgian Dubbel (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "2 Belgas",
+   "estilo": "26B - Belgian Dubbel (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/2Belgas-559f394548eaebe06c004d4f-1482805665745",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Belgian 2 - Tripel": {
+  "style": "26C - Belgian Tripel (BJCP 2015)",
+  "notas": "Receta original: BS_Tripel · 26C - Belgian Tripel (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.011,
+  "granos_base": 7.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 6.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 1.0,
+    "extracto": 309,
+    "color": 4.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Apollo",
+    "cantidad": 20.0,
+    "aa": 18.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 7.0,
+    "tiempo": 15,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew T-58",
+    "atenuacion": 85.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.076,
+   "fg": 1.011,
+   "eficiencia": 70,
+   "estilo": "26C - Belgian Tripel (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_Tripel",
+   "estilo": "26C - Belgian Tripel (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSTripel-57af058a4ad8541d000ad1d1-1478405477368",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Belgian 3 - Golden Strong": {
+  "style": "25C - Belgian Golden Strong Ale (BJCP 2015)",
+  "notas": "Receta original: Apolo Club - La Belga · 25C - Belgian Golden Strong Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 72.0,
+  "fg_estimada": 1.014,
+  "granos_base": 23.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 20.0,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Candi Sugar, Clear",
+    "cantidad": 3.0,
+    "extracto": 384,
+    "color": 0.5
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Delta",
+    "cantidad": 130.0,
+    "aa": 5.0,
+    "tiempo": 90,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew Abbaye",
+    "atenuacion": 80.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.072,
+   "fg": 1.014,
+   "eficiencia": 71,
+   "estilo": "25C - Belgian Golden Strong Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Apolo Club - La Belga",
+   "estilo": "25C - Belgian Golden Strong Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/ApoloClubLaBelga-59b014adc268771d0081c169-1532632560036",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Saison 1 - Farmhouse Ale": {
+  "style": "25B - Saison (BJCP 2015)",
+  "notas": "Receta original: ALHAJA CULIPARDA · 25B - Saison (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 26.0,
+  "fg_estimada": 1.008,
+  "granos_base": 7.5,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pale Ale Weyermann",
+    "cantidad": 5.5,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Biscuit (Ba-Malt)",
+    "cantidad": 0.8,
+    "extracto": 300,
+    "color": 20.0
+   },
+   {
+    "nombre": "Caraaroma Weyermann (140 L)",
+    "cantidad": 0.5,
+    "extracto": 275,
+    "color": 140.0
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 0.2,
+    "extracto": 309,
+    "color": 1.0
+   },
+   {
+    "nombre": "Honey",
+    "cantidad": 0.5,
+    "extracto": 292,
+    "color": 1.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Perle",
+    "cantidad": 40.0,
+    "aa": 6.0,
+    "tiempo": 75,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Perle",
+    "cantidad": 40.0,
+    "aa": 6.0,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Perle",
+    "cantidad": 25.0,
+    "aa": 6.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Perle",
+    "cantidad": 50.0,
+    "aa": 6.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "MANGROVE M29",
+    "atenuacion": 88.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.067,
+   "fg": 1.008,
+   "eficiencia": 75,
+   "estilo": "25B - Saison (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "ALHAJA CULIPARDA",
+   "estilo": "25B - Saison (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/ALHAJACULIPARDA-555b606500d82cba4a000027-1466615008725",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Saison 2 - Dark Saison": {
+  "style": "25B - Saison (BJCP 2015)",
+  "notas": "Receta original: Amber Abbey · 25B - Saison (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
   "fg_estimada": 1.01,
   "granos_base": 5.0,
   "granos_especiales": 0.0,
-  "lupulos": [
-   {
-    "aa": 5.5,
-    "cantidad": 30,
-    "nombre": "Cascade",
-    "tiempo": 60
-   },
-   {
-    "aa": 12,
-    "cantidad": 20,
-    "nombre": "Citra",
-    "tiempo": 10
-   }
-  ],
   "maltas": [
    {
-    "cantidad": 4.0,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "nombre": "Pilsner Ba-Malt",
+    "cantidad": 3.0,
+    "extracto": 309,
+    "color": 2.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 300,
-    "nombre": "Maris Otter"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 280,
-    "nombre": "Vienna Malt"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Rubia 2 - Honey Blonde Ale": {
-  "agua_vol": 28.0,
-  "fg_estimada": 1.008,
-  "granos_base": 4.0,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 14,
-    "cantidad": 4.25,
-    "nombre": "Galaxy",
-    "tiempo": 60
-   },
-   {
-    "aa": 12,
-    "cantidad": 7.1,
-    "nombre": "Citra",
-    "tiempo": 15
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 3.5,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Honey Malt"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 270,
-    "nombre": "Carapils"
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
- },
- "Rubia 3 - American Blonde": {
-  "agua_vol": 15.0,
-  "fg_estimada": 1.012,
-  "granos_base": 2.375,
-  "granos_especiales": 0.125,
-  "lupulos": [
-   {
-    "aa": 5.5,
-    "cantidad": 14,
-    "nombre": "Cascade",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 1.0,
-    "extracto": 290,
-    "nombre": "White Wheat"
-   },
-   {
-    "cantidad": 1.0,
-    "extracto": 300,
-    "nombre": "2 Row Pale"
-   },
-   {
-    "cantidad": 0.375,
-    "extracto": 280,
-    "nombre": "Munich 10"
-   },
-   {
-    "cantidad": 0.125,
-    "extracto": 270,
-    "nombre": "Carapils"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Wheat 1 - Hefeweizen": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.013,
-  "granos_base": 3.5,
-  "granos_especiales": 0.0,
-  "lupulos": [
-   {
-    "aa": 4.0,
-    "cantidad": 25,
-    "nombre": "Hallertau Mittelfrüh",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 1.8,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   },
-   {
-    "cantidad": 1.7,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Wheat 2 - Dunkelweizen": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.015,
-  "granos_base": 3.6,
-  "granos_especiales": 0.4,
-  "lupulos": [
-   {
-    "aa": 4.0,
-    "cantidad": 20,
-    "nombre": "Hallertau Tradition",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 1.8,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   },
-   {
+    "nombre": "Munich Maltear",
     "cantidad": 1.5,
-    "extracto": 300,
-    "nombre": "Munich Dark"
+    "extracto": 309,
+    "color": 4.9
    },
    {
-    "cantidad": 0.3,
-    "extracto": 250,
-    "nombre": "Caramunich II"
-   },
-   {
-    "cantidad": 0.1,
-    "extracto": 200,
-    "nombre": "Carafa Special II"
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
- },
- "Wheat 3 - American Wheat": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.011,
-  "granos_base": 3.5,
-  "granos_especiales": 0.0,
-  "lupulos": [
-   {
-    "aa": 5.5,
-    "cantidad": 20,
-    "nombre": "Cascade",
-    "tiempo": 60
-   },
-   {
-    "aa": 5.5,
-    "cantidad": 15,
-    "nombre": "Cascade",
-    "tiempo": 10
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 1.8,
-    "extracto": 290,
-    "nombre": "White Wheat"
-   },
-   {
-    "cantidad": 1.7,
-    "extracto": 300,
-    "nombre": "2 Row Pale"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Porter 1 - Robust Porter": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.015,
-  "granos_base": 3.5,
-  "granos_especiales": 0.9,
-  "lupulos": [
-   {
-    "aa": 12.0,
-    "cantidad": 20,
-    "nombre": "Magnum",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 2.8,
-    "extracto": 300,
-    "nombre": "Maris Otter"
-   },
-   {
+    "nombre": "Castle Chateau Cara Ruby",
     "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Crystal 60L"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 200,
-    "nombre": "Chocolate Malt"
-   },
-   {
-    "cantidad": 0.1,
-    "extracto": 180,
-    "nombre": "Black Patent"
+    "extracto": 292,
+    "color": 20.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.6"
- },
- "Porter 2 - Brown Porter": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.014,
-  "granos_base": 3.4,
-  "granos_especiales": 0.8,
   "lupulos": [
    {
-    "aa": 5.0,
-    "cantidad": 30,
-    "nombre": "East Kent Goldings",
-    "tiempo": 60
+    "nombre": "Northern Brewer",
+    "cantidad": 28.0,
+    "aa": 6.5,
+    "tiempo": 75,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Hallertau Mittlefrueh",
+    "cantidad": 10.0,
+    "aa": 4.2,
+    "tiempo": 5,
+    "formato": "pellet"
    }
   ],
-  "maltas": [
+  "levaduras": [
    {
-    "cantidad": 2.8,
-    "extracto": 300,
-    "nombre": "Maris Otter"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 250,
-    "nombre": "Crystal 45L"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 220,
-    "nombre": "Chocolate Malt"
-   },
-   {
-    "cantidad": 0.1,
-    "extracto": 210,
-    "nombre": "Brown Malt"
+    "nombre": "Danstar Belle Saison",
+    "atenuacion": 82.0,
+    "tolerancia": 12.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.6"
- },
- "Porter 3 - Baltic Porter": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.02,
-  "granos_base": 4.5,
-  "granos_especiales": 1.0,
-  "lupulos": [
-   {
-    "aa": 14.0,
-    "cantidad": 25,
-    "nombre": "Magnum",
-    "tiempo": 90
-   },
-   {
-    "aa": 4.5,
-    "cantidad": 20,
-    "nombre": "Hallertau",
-    "tiempo": 15
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 3.0,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.8,
-    "extracto": 280,
-    "nombre": "Munich"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Crystal 60L"
-   },
-   {
-    "cantidad": 0.2,
-    "extracto": 200,
-    "nombre": "Carafa Special III"
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
- },
- "Pale Ale 1 - American Pale Ale": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.011,
-  "granos_base": 3.5,
-  "granos_especiales": 0.3,
-  "lupulos": [
-   {
-    "aa": 10.0,
-    "cantidad": 20,
-    "nombre": "Centennial",
-    "tiempo": 60
-   },
-   {
-    "aa": 5.5,
-    "cantidad": 25,
-    "nombre": "Cascade",
-    "tiempo": 10
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 3.2,
-    "extracto": 300,
-    "nombre": "2 Row Pale"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 250,
-    "nombre": "Crystal 20L"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 270,
-    "nombre": "Carapils"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Pale Ale 2 - English Pale Ale": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.012,
-  "granos_base": 3.5,
-  "granos_especiales": 0.4,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 30,
-    "nombre": "East Kent Goldings",
-    "tiempo": 60
-   },
-   {
-    "aa": 4.5,
-    "cantidad": 15,
-    "nombre": "Fuggles",
-    "tiempo": 15
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 3.1,
-    "extracto": 300,
-    "nombre": "Maris Otter"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 250,
-    "nombre": "Crystal 60L"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Pale Ale 3 - Aussie Sparkling Ale": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.01,
-  "granos_base": 3.5,
-  "granos_especiales": 0.2,
-  "lupulos": [
-   {
-    "aa": 14.0,
-    "cantidad": 10,
-    "nombre": "Galaxy",
-    "tiempo": 60
-   },
-   {
-    "aa": 14.0,
-    "cantidad": 15,
-    "nombre": "Galaxy",
-    "tiempo": 5
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 3.0,
-    "extracto": 300,
-    "nombre": "Ale Malt"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   },
-   {
-    "cantidad": 0.2,
-    "extracto": 270,
-    "nombre": "Carapils"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Belgian 1 - Dubbel": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.016,
-  "granos_base": 3.8,
-  "granos_especiales": 0.8,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 25,
-    "nombre": "Styrian Goldings",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 2.8,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.6,
-    "extracto": 280,
-    "nombre": "Munich"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 240,
-    "nombre": "Special B"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 250,
-    "nombre": "Caramunich II"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 300,
-    "nombre": "Belgian Candy Sugar Dark"
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
- },
- "Belgian 2 - Tripel": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.012,
-  "granos_base": 4.2,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 30,
-    "nombre": "Saaz",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 3.8,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 300,
-    "nombre": "Belgian Candy Sugar Clear"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Belgian 3 - Golden Strong": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.009,
-  "granos_base": 4.0,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 30,
-    "nombre": "Saaz",
-    "tiempo": 90
-   },
-   {
-    "aa": 3.5,
-    "cantidad": 15,
-    "nombre": "Saaz",
-    "tiempo": 15
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 3.5,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 300,
-    "nombre": "Belgian Candy Sugar Clear"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Saison 1 - Farmhouse Ale": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.006,
-  "granos_base": 3.5,
-  "granos_especiales": 0.3,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 25,
-    "nombre": "East Kent Goldings",
-    "tiempo": 60
-   },
-   {
-    "aa": 3.5,
-    "cantidad": 20,
-    "nombre": "Saaz",
-    "tiempo": 10
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 3.0,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 250,
-    "nombre": "CaraVienne"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Saison 2 - Dark Saison": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.008,
-  "granos_base": 3.6,
-  "granos_especiales": 0.6,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 25,
-    "nombre": "Styrian Goldings",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 2.8,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 280,
-    "nombre": "Munich"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 250,
-    "nombre": "CaraMunich II"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 200,
-    "nombre": "Carafa Special I"
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.054,
+   "fg": 1.01,
+   "eficiencia": 70,
+   "estilo": "25B - Saison (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Amber Abbey",
+   "estilo": "25B - Saison (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/AmberAbbey-54dc08bb84306c3f250006a3-1466019133538",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Saison 3 - Super Saison": {
+  "style": "25B - Saison (BJCP 2015)",
+  "notas": "Receta original: BS_Saison · 25B - Saison (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
   "agua_vol": 20.0,
-  "fg_estimada": 1.01,
-  "granos_base": 4.2,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 30,
-    "nombre": "Saaz",
-    "tiempo": 60
-   },
-   {
-    "aa": 14.0,
-    "cantidad": 15,
-    "nombre": "Galaxy",
-    "tiempo": 5
-   }
-  ],
+  "fg_estimada": 1.005,
+  "granos_base": 5.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.5,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 4.0,
+    "extracto": 309,
+    "color": 3.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "CaraVienne"
-   },
-   {
-    "cantidad": 0.2,
-    "extracto": 300,
-    "nombre": "Belgian Candy Sugar Clear"
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 1.0,
+    "extracto": 317,
+    "color": 3.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 30.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 30,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Danstar Belle Saison",
+    "atenuacion": 90.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.054,
+   "fg": 1.005,
+   "eficiencia": 70,
+   "estilo": "25B - Saison (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_Saison",
+   "estilo": "25B - Saison (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSSaison-57af058a4ad8541d000ad1d1-1490811890747",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Lager 1 - Munich Helles": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.012,
-  "granos_base": 3.5,
-  "granos_especiales": 0.2,
-  "lupulos": [
-   {
-    "aa": 4.0,
-    "cantidad": 25,
-    "nombre": "Hallertau Mittelfrüh",
-    "tiempo": 60
-   }
-  ],
+  "style": "04A - Munich Helles (BJCP 2015)",
+  "notas": "Receta original: Mr. Chaud / Munich Helles · 04A - Munich Helles (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 50.0,
+  "fg_estimada": 1.009,
+  "granos_base": 12.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 2.8,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "nombre": "Pilsner Maltear",
+    "cantidad": 11.0,
+    "extracto": 309,
+    "color": 2.4
    },
    {
-    "cantidad": 0.7,
-    "extracto": 280,
-    "nombre": "Munich Light"
-   },
-   {
-    "cantidad": 0.2,
-    "extracto": 270,
-    "nombre": "Carapils"
+    "nombre": "Munich I (Ba-Malt)",
+    "cantidad": 1.0,
+    "extracto": 309,
+    "color": 7.0
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Saaz",
+    "cantidad": 40.0,
+    "aa": 3.6,
+    "tiempo": 70,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Saaz",
+    "cantidad": 20.0,
+    "aa": 3.6,
+    "tiempo": 50,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Saaz",
+    "cantidad": 20.0,
+    "aa": 3.6,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Equinox",
+    "cantidad": 10.0,
+    "aa": 14.6,
+    "tiempo": 5,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 20.0,
+    "aa": 13.6,
+    "tiempo": 5,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager W-34/70",
+    "atenuacion": 83.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.052,
+   "fg": 1.009,
+   "eficiencia": 70,
+   "estilo": "04A - Munich Helles (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Mr. Chaud / Munich Helles",
+   "estilo": "04A - Munich Helles (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Mr-590c83bb73fc0c1d007df03a-1493992635728",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Lager 2 - Schwarzbier": {
+  "style": "08B - Schwarzbier (BJCP 2015)",
+  "notas": "Receta original: BS_Brazilian Maltzbier · 08B - Schwarzbier (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
   "agua_vol": 20.0,
-  "fg_estimada": 1.013,
-  "granos_base": 3.5,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 4.0,
-    "cantidad": 20,
-    "nombre": "Hallertau Mittelfrüh",
-    "tiempo": 60
-   },
-   {
-    "aa": 3.5,
-    "cantidad": 15,
-    "nombre": "Tettnanger",
-    "tiempo": 30
-   }
-  ],
+  "fg_estimada": 1.016,
+  "granos_base": 4.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 2.5,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 3.0,
+    "extracto": 309,
+    "color": 2.0
    },
    {
-    "cantidad": 0.7,
-    "extracto": 280,
-    "nombre": "Munich Dark"
+    "nombre": "Cebada Tostada (Ba-Malt)",
+    "cantidad": 0.4,
+    "extracto": 234,
+    "color": 500.0
    },
    {
-    "cantidad": 0.3,
-    "extracto": 200,
-    "nombre": "Carafa Special III"
+    "nombre": "Caramelo 120 (Ba-Malt)",
+    "cantidad": 0.4,
+    "extracto": 275,
+    "color": 120.0
    },
    {
+    "nombre": "Carapils (Dextrine) Ba-Malt",
     "cantidad": 0.2,
-    "extracto": 250,
-    "nombre": "CaraMunich I"
+    "extracto": 275,
+    "color": 2.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager S-23",
+    "atenuacion": 60.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.041,
+   "fg": 1.016,
+   "eficiencia": 70,
+   "estilo": "08B - Schwarzbier (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_Brazilian Maltzbier",
+   "estilo": "08B - Schwarzbier (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSBrazilianMaltzbier-57af058a4ad8541d000ad1d1-1486146760478",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Lager 3 - Vienna Lager": {
+  "style": "07A - Vienna Lager (BJCP 2015)",
+  "notas": "Receta original: Vienna lager · 07A - Vienna Lager (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
   "agua_vol": 20.0,
-  "fg_estimada": 1.014,
-  "granos_base": 3.6,
-  "granos_especiales": 0.3,
-  "lupulos": [
-   {
-    "aa": 4.5,
-    "cantidad": 25,
-    "nombre": "Hallertau Tradition",
-    "tiempo": 60
-   }
-  ],
+  "fg_estimada": 1.009,
+  "granos_base": 5.9,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 2.5,
-    "extracto": 280,
-    "nombre": "Vienna Malt"
+    "nombre": "Viena uma",
+    "cantidad": 4.0,
+    "extracto": 309,
+    "color": 4.6
    },
    {
+    "nombre": "Pilsner Uma",
     "cantidad": 0.8,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "extracto": 309,
+    "color": 2.0
    },
    {
+    "nombre": "Pauls Medium Crystal Malt - UK",
     "cantidad": 0.3,
+    "extracto": 292,
+    "color": 64.0
+   },
+   {
+    "nombre": "Munich uma",
+    "cantidad": 0.3,
+    "extracto": 317,
+    "color": 7.0
+   },
+   {
+    "nombre": "Carapils (Dextrine) uma",
+    "cantidad": 0.2,
     "extracto": 250,
-    "nombre": "CaraMunich I"
+    "color": 2.0
    },
    {
-    "cantidad": 0.3,
-    "extracto": 270,
-    "nombre": "Carapils"
+    "nombre": "Copos Avena",
+    "cantidad": 0.2,
+    "extracto": 250,
+    "color": 1.0
+   },
+   {
+    "nombre": "Mouterij Special B",
+    "cantidad": 0.1,
+    "extracto": 300,
+    "color": 130.0
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Columbus",
+    "cantidad": 10.0,
+    "aa": 16.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Hallertau Tradition",
+    "cantidad": 10.0,
+    "aa": 5.5,
+    "tiempo": 15,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager W-34/70",
+    "atenuacion": 83.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.053,
+   "fg": 1.009,
+   "eficiencia": 60,
+   "estilo": "07A - Vienna Lager (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Vienna lager",
+   "estilo": "07A - Vienna Lager (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/SmokedPorter-591d0573539a171d00c7ee66-1513464088518",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Barleywine 1 - English Barleywine": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.025,
-  "granos_base": 6.0,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 50,
-    "nombre": "East Kent Goldings",
-    "tiempo": 90
-   },
-   {
-    "aa": 4.5,
-    "cantidad": 20,
-    "nombre": "Fuggles",
-    "tiempo": 30
-   }
-  ],
+  "style": "17D - English Barleywine (BJCP 2015)",
+  "notas": "Receta original: Barley Wine  50 lts · 17D - English Barleywine (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 50.0,
+  "fg_estimada": 1.029,
+  "granos_base": 26.8,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 5.3,
-    "extracto": 300,
-    "nombre": "Maris Otter"
+    "nombre": "Pale Ale Maltear",
+    "cantidad": 15.0,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 280,
-    "nombre": "Munich"
+    "nombre": "Munich Maltear",
+    "cantidad": 10.0,
+    "extracto": 309,
+    "color": 4.9
    },
    {
-    "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Crystal 60L"
+    "nombre": "Caramelo 60 (Ba-Malt)",
+    "cantidad": 0.8,
+    "extracto": 284,
+    "color": 60.0
    },
    {
+    "nombre": "Melanoidin Malt (Ba-Malt)",
+    "cantidad": 0.8,
+    "extracto": 309,
+    "color": 30.0
+   },
+   {
+    "nombre": "Cebada Tostada (Ba-Malt)",
     "cantidad": 0.2,
-    "extracto": 200,
-    "nombre": "Chocolate Malt"
+    "extracto": 234,
+    "color": 500.0
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Nugget",
+    "cantidad": 50.0,
+    "aa": 12.0,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 60.0,
+    "aa": 6.3,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Nugget",
+    "cantidad": 40.0,
+    "aa": 12.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 30.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Wyeast 3787 - Trappist High Gravity",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.115,
+   "fg": 1.029,
+   "eficiencia": 70,
+   "estilo": "17D - English Barleywine (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Barley Wine  50 lts",
+   "estilo": "17D - English Barleywine (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BarleyWine50lts-581129c46ef58d1d0037acce-1523979930318",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Barleywine 2 - American Barleywine": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.022,
-  "granos_base": 6.2,
-  "granos_especiales": 0.4,
-  "lupulos": [
-   {
-    "aa": 12.0,
-    "cantidad": 30,
-    "nombre": "Chinook",
-    "tiempo": 60
-   },
-   {
-    "aa": 10.0,
-    "cantidad": 25,
-    "nombre": "Centennial",
-    "tiempo": 15
-   },
-   {
-    "aa": 12.0,
-    "cantidad": 25,
-    "nombre": "Simcoe",
-    "tiempo": 5
-   }
-  ],
+  "style": "22C - American Barleywine (BJCP 2015)",
+  "notas": "Receta original: Barley · 22C - American Barleywine (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 225.0,
+  "fg_estimada": 1.021,
+  "granos_base": 74.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 5.8,
-    "extracto": 300,
-    "nombre": "2 Row Pale"
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 50.0,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 0.4,
+    "nombre": "Munich I (Ba-Malt)",
+    "cantidad": 12.5,
+    "extracto": 309,
+    "color": 7.0
+   },
+   {
+    "nombre": "Caramelo 120 (Ba-Malt)",
+    "cantidad": 2.5,
+    "extracto": 275,
+    "color": 120.0
+   },
+   {
+    "nombre": "Melanoidin Malt (Ba-Malt)",
+    "cantidad": 2.0,
+    "extracto": 309,
+    "color": 30.0
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 1.5,
+    "extracto": 309,
+    "color": 1.0
+   },
+   {
+    "nombre": "Carafa I Weyermann (Pale Chocolate)",
+    "cantidad": 0.5,
     "extracto": 250,
-    "nombre": "Crystal 20L"
+    "color": 400.0
    },
    {
-    "cantidad": 0.4,
-    "extracto": 270,
-    "nombre": "Carapils"
+    "nombre": "Azucar de Maiz",
+    "cantidad": 5.0,
+    "extracto": 384,
+    "color": 2.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Nugget",
+    "cantidad": 350.0,
+    "aa": 12.7,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 350.0,
+    "aa": 7.6,
+    "tiempo": 35,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.082,
+   "fg": 1.021,
+   "eficiencia": 80,
+   "estilo": "22C - American Barleywine (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Barley",
+   "estilo": "22C - American Barleywine (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Barley-585c39ade8a0161d00b02e7b-1524863689526",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Pilsner 1 - German Pilsner": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.011,
-  "granos_base": 3.4,
+  "style": "05D - German Pils (BJCP 2015)",
+  "notas": "Receta original: GERMAN PILS · 05D - German Pils (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 500.0,
+  "fg_estimada": 1.014,
+  "granos_base": 125.0,
   "granos_especiales": 0.0,
-  "lupulos": [
-   {
-    "aa": 4.0,
-    "cantidad": 25,
-    "nombre": "Hallertau Mittelfrüh",
-    "tiempo": 60
-   },
-   {
-    "aa": 3.5,
-    "cantidad": 20,
-    "nombre": "Tettnanger",
-    "tiempo": 15
-   }
-  ],
   "maltas": [
    {
-    "cantidad": 3.4,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "nombre": "Pilsner Weyerman",
+    "cantidad": 100.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Munich I Weyermann",
+    "cantidad": 25.0,
+    "extracto": 317,
+    "color": 7.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Magnum",
+    "cantidad": 200.0,
+    "aa": 14.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Hallertau Tradition",
+    "cantidad": 1000.0,
+    "aa": 4.0,
+    "tiempo": 5,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager S-23",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.054,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "05D - German Pils (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "GERMAN PILS",
+   "estilo": "05D - German Pils (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Lagergerman-5c8d1e89b5aa750004292f7c-1571184551242",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Pilsner 2 - Czech Pilsner": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.014,
-  "granos_base": 3.8,
-  "granos_especiales": 0.2,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 40,
-    "nombre": "Saaz",
-    "tiempo": 60
-   },
-   {
-    "aa": 3.5,
-    "cantidad": 20,
-    "nombre": "Saaz",
-    "tiempo": 20
-   }
-  ],
+  "style": "03B - Czech Premium Pale Lager (BJCP 2015)",
+  "notas": "Receta original: American Premium Lager · 03B - Czech Premium Pale Lager (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 120.0,
+  "fg_estimada": 1.016,
+  "granos_base": 33.3,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.6,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "nombre": "Carapils Weyermann",
+    "cantidad": 22.0,
+    "extracto": 275,
+    "color": 2.0
    },
    {
-    "cantidad": 0.2,
-    "extracto": 270,
-    "nombre": "Carapils"
+    "nombre": "Munich Maltear",
+    "cantidad": 10.0,
+    "extracto": 309,
+    "color": 4.9
+   },
+   {
+    "nombre": "Carapils Weyermann",
+    "cantidad": 1.3,
+    "extracto": 275,
+    "color": 2.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Bullion",
+    "cantidad": 100.0,
+    "aa": 9.5,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Spalt",
+    "cantidad": 100.0,
+    "aa": 4.0,
+    "tiempo": 45,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Nugget",
+    "cantidad": 50.0,
+    "aa": 12.0,
+    "tiempo": 45,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Bullion",
+    "cantidad": 50.0,
+    "aa": 9.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mosaic",
+    "cantidad": 200.0,
+    "aa": 12.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager S-23",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.062,
+   "fg": 1.016,
+   "eficiencia": 78,
+   "estilo": "03B - Czech Premium Pale Lager (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "American Premium Lager",
+   "estilo": "03B - Czech Premium Pale Lager (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/AmericanPremiumlager-59bae046358ae01d00ec50c4-1532284732770",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Pilsner 3 - Italian Pilsner": {
+  "style": "05D - German Pils (BJCP 2015)",
+  "notas": "Receta original: BS_Pilsen Alemana · 05D - German Pils (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
   "agua_vol": 20.0,
-  "fg_estimada": 1.009,
-  "granos_base": 3.2,
-  "granos_especiales": 0.2,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 30,
-    "nombre": "Saaz",
-    "tiempo": 60
-   },
-   {
-    "aa": 4.0,
-    "cantidad": 20,
-    "nombre": "Hallertau Mittelfrüh",
-    "tiempo": 15
-   }
-  ],
+  "fg_estimada": 1.011,
+  "granos_base": 4.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.0,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.2,
-    "extracto": 270,
-    "nombre": "Carapils"
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 4.0,
+    "extracto": 309,
+    "color": 2.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Spalt",
+    "cantidad": 50.0,
+    "aa": 4.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Spalt",
+    "cantidad": 20.0,
+    "aa": 4.0,
+    "tiempo": 30,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager S-23",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.045,
+   "fg": 1.011,
+   "eficiencia": 73,
+   "estilo": "05D - German Pils (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_Pilsen Alemana",
+   "estilo": "05D - German Pils (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSPilsenAlemana-57af058a4ad8541d000ad1d1-1483970677548",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Amber Ale 1 - American Amber": {
-  "agua_vol": 20.0,
+  "style": "19A - American Amber Ale (BJCP 2015)",
+  "notas": "Receta original: Triple A Russer · 19A - American Amber Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 100.0,
   "fg_estimada": 1.013,
-  "granos_base": 3.6,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 10.0,
-    "cantidad": 20,
-    "nombre": "Centennial",
-    "tiempo": 60
-   },
-   {
-    "aa": 5.5,
-    "cantidad": 20,
-    "nombre": "Cascade",
-    "tiempo": 10
-   }
-  ],
+  "granos_base": 29.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 22.0,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Copos Avena",
     "cantidad": 3.0,
-    "extracto": 300,
-    "nombre": "2 Row Pale"
+    "extracto": 309,
+    "color": 1.0
    },
    {
-    "cantidad": 0.4,
-    "extracto": 280,
-    "nombre": "Munich"
-   },
-   {
-    "cantidad": 0.3,
+    "nombre": "Castle Chateau Special B",
+    "cantidad": 1.5,
     "extracto": 250,
-    "nombre": "Crystal 60L"
+    "color": 152.0
    },
    {
-    "cantidad": 0.2,
-    "extracto": 250,
-    "nombre": "Crystal 40L"
+    "nombre": "Melanoidin Malt (Ba-Malt)",
+    "cantidad": 1.5,
+    "extracto": 309,
+    "color": 30.0
+   },
+   {
+    "nombre": "Caramelo 30 (Ba-Malt)",
+    "cantidad": 1.0,
+    "extracto": 292,
+    "color": 30.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 50.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Nugget",
+    "cantidad": 50.0,
+    "aa": 12.0,
+    "tiempo": 20,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.058,
+   "fg": 1.013,
+   "eficiencia": 66,
+   "estilo": "19A - American Amber Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Triple A Russer",
+   "estilo": "19A - American Amber Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/-586039dfe8a0161d00b0cd41-1482702862885",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Amber Ale 2 - Irish Red Ale": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.014,
-  "granos_base": 3.5,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 25,
-    "nombre": "East Kent Goldings",
-    "tiempo": 60
-   }
-  ],
+  "style": "15A - Irish Red Ale (BJCP 2015)",
+  "notas": "Receta original: 310318 Irish Red Ale · 15A - Irish Red Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 22.5,
+  "fg_estimada": 1.012,
+  "granos_base": 5.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.0,
-    "extracto": 300,
-    "nombre": "Maris Otter"
+    "nombre": "Pilsner Maltear",
+    "cantidad": 4.0,
+    "extracto": 309,
+    "color": 2.4
    },
    {
-    "cantidad": 0.3,
-    "extracto": 250,
-    "nombre": "Crystal 40L"
+    "nombre": "Copos Avena",
+    "cantidad": 0.5,
+    "extracto": 309,
+    "color": 1.0
    },
    {
-    "cantidad": 0.2,
-    "extracto": 230,
-    "nombre": "Biscuit Malt"
+    "nombre": "Caramelo 30 (Ba-Malt)",
+    "cantidad": 0.4,
+    "extracto": 292,
+    "color": 30.0
    },
    {
+    "nombre": "Caramelo 120 (Ba-Malt)",
     "cantidad": 0.1,
-    "extracto": 200,
-    "nombre": "Roasted Barley"
+    "extracto": 275,
+    "color": 120.0
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 7.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Fuggles",
+    "cantidad": 10.0,
+    "aa": 5.7,
+    "tiempo": 10,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.048,
+   "fg": 1.012,
+   "eficiencia": 70,
+   "estilo": "15A - Irish Red Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "310318 Irish Red Ale",
+   "estilo": "15A - Irish Red Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/310318IrishRedAle-5851bd6d664f2f1d00a33abb-1522365087691",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Amber Ale 3 - Belgian Amber": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.013,
-  "granos_base": 3.5,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 20,
-    "nombre": "Styrian Goldings",
-    "tiempo": 60
-   }
-  ],
+  "style": "26A - Trappist Single (BJCP 2015)",
+  "notas": "Receta original: la come trappo · 26A - Trappist Single (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 30.0,
+  "fg_estimada": 1.012,
+  "granos_base": 6.9,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 2.8,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "nombre": "Pilsner Maltear",
+    "cantidad": 6.45,
+    "extracto": 309,
+    "color": 2.4
    },
    {
-    "cantidad": 0.5,
-    "extracto": 280,
-    "nombre": "Munich"
+    "nombre": "Carapils (Dextrine) Ba-Malt",
+    "cantidad": 0.25,
+    "extracto": 275,
+    "color": 2.0
    },
    {
-    "cantidad": 0.4,
-    "extracto": 250,
-    "nombre": "CaraMunich I"
-   },
-   {
-    "cantidad": 0.1,
-    "extracto": 200,
-    "nombre": "Special B"
+    "nombre": "Copos Avena",
+    "cantidad": 0.2,
+    "extracto": 309,
+    "color": 1.0
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 44.0,
+    "aa": 7.2,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Hallertau Mittlefrueh",
+    "cantidad": 11.0,
+    "aa": 4.2,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Hallertau Mittlefrueh",
+    "cantidad": 5.0,
+    "aa": 4.2,
+    "tiempo": 5,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew S-33",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.046,
+   "fg": 1.012,
+   "eficiencia": 65,
+   "estilo": "26A - Trappist Single (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "la come trappo",
+   "estilo": "26A - Trappist Single (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/lacometrappo-551235000fd4e49e1c000771-1478009886098",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Kölsch 1 - Traditional Kölsch": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.01,
-  "granos_base": 3.3,
-  "granos_especiales": 0.2,
-  "lupulos": [
-   {
-    "aa": 4.0,
-    "cantidad": 25,
-    "nombre": "Hallertau Mittelfrüh",
-    "tiempo": 60
-   },
-   {
-    "aa": 3.5,
-    "cantidad": 15,
-    "nombre": "Tettnanger",
-    "tiempo": 15
-   }
-  ],
+  "style": "05B - Kolsch (BJCP 2015)",
+  "notas": "Receta original: Angualasto Kolsch · 05B - Kolsch (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 75.0,
+  "fg_estimada": 1.013,
+  "granos_base": 18.5,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.1,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "nombre": "Pilsner Ba-Malt",
+    "cantidad": 14.0,
+    "extracto": 309,
+    "color": 2.0
    },
    {
-    "cantidad": 0.1,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 3.75,
+    "extracto": 317,
+    "color": 3.0
    },
    {
-    "cantidad": 0.1,
-    "extracto": 270,
-    "nombre": "Carapils"
-   },
-   {
-    "cantidad": 0.1,
-    "extracto": 280,
-    "nombre": "Vienna Malt"
+    "nombre": "Carapils (Dextrine) Ba-Malt",
+    "cantidad": 0.75,
+    "extracto": 275,
+    "color": 2.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 70.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "B Saaz",
+    "cantidad": 30.0,
+    "aa": 6.8,
+    "tiempo": 30,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.05,
+   "fg": 1.013,
+   "eficiencia": 65,
+   "estilo": "05B - Kolsch (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Angualasto Kolsch",
+   "estilo": "05B - Kolsch (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/AngualastoKolsch-59571eb24d2fac1d00d8e141-1520549190085",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Kölsch 2 - Hoppy Kölsch": {
+  "style": "05B - Kolsch (BJCP 2015)",
+  "notas": "Receta original: BS_Kölsch · 05B - Kolsch (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
   "agua_vol": 20.0,
-  "fg_estimada": 1.009,
-  "granos_base": 3.2,
-  "granos_especiales": 0.2,
-  "lupulos": [
-   {
-    "aa": 4.0,
-    "cantidad": 20,
-    "nombre": "Hallertau Mittelfrüh",
-    "tiempo": 60
-   },
-   {
-    "aa": 12.0,
-    "cantidad": 15,
-    "nombre": "Mosaic",
-    "tiempo": 5
-   }
-  ],
+  "fg_estimada": 1.011,
+  "granos_base": 4.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.0,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 0.2,
-    "extracto": 270,
-    "nombre": "Carapils"
+    "nombre": "Pilsner Ba-Malt",
+    "cantidad": 4.0,
+    "extracto": 309,
+    "color": 2.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale K-97",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.043,
+   "fg": 1.011,
+   "eficiencia": 70,
+   "estilo": "05B - Kolsch (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_Kölsch",
+   "estilo": "05B - Kolsch (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSKlsch-57af058a4ad8541d000ad1d1-1487891166780",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Scottish Ale 1 - 60 Shilling": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.012,
-  "granos_base": 3.2,
-  "granos_especiales": 0.3,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 20,
-    "nombre": "East Kent Goldings",
-    "tiempo": 60
-   }
-  ],
+  "style": "14A - Scottish Light (BJCP 2015)",
+  "notas": "Receta original: Scottish · 14A - Scottish Light (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 45.0,
+  "fg_estimada": 1.009,
+  "granos_base": 7.75,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 2.9,
-    "extracto": 300,
-    "nombre": "Maris Otter"
+    "nombre": "Pale Ale Maltear",
+    "cantidad": 3.5,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 0.2,
-    "extracto": 250,
-    "nombre": "Crystal 60L"
+    "nombre": "Pilsner Maltear",
+    "cantidad": 3.5,
+    "extracto": 309,
+    "color": 2.4
    },
    {
-    "cantidad": 0.1,
-    "extracto": 200,
-    "nombre": "Roasted Barley"
+    "nombre": "Caramelo 120 (Ba-Malt)",
+    "cantidad": 0.25,
+    "extracto": 275,
+    "color": 120.0
+   },
+   {
+    "nombre": "Caramelo 60 (Ba-Malt)",
+    "cantidad": 0.25,
+    "extracto": 284,
+    "color": 60.0
+   },
+   {
+    "nombre": "Cebada Tostada (Ba-Malt)",
+    "cantidad": 0.25,
+    "extracto": 234,
+    "color": 500.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "Zeus",
+    "cantidad": 25.0,
+    "aa": 13.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mapuche",
+    "cantidad": 16.0,
+    "aa": 7.7,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 14.0,
+    "aa": 9.0,
+    "tiempo": 10,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.037,
+   "fg": 1.009,
+   "eficiencia": 70,
+   "estilo": "14A - Scottish Light (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Scottish",
+   "estilo": "14A - Scottish Light (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Scottish-5cf1a937c7990600040c28ed-1567808833081",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Scottish Ale 2 - 80 Shilling": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.015,
-  "granos_base": 3.8,
-  "granos_especiales": 0.5,
-  "lupulos": [
-   {
-    "aa": 5.0,
-    "cantidad": 25,
-    "nombre": "East Kent Goldings",
-    "tiempo": 60
-   }
-  ],
+  "style": "14B - Scottish Heavy",
+  "notas": "Receta original: 6600 Scottish Heavy. ( 100 ltrs) · 14B - Scottish Heavy · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 100.0,
+  "fg_estimada": 1.009,
+  "granos_base": 17.3,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 3.4,
-    "extracto": 300,
-    "nombre": "Maris Otter"
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 13.3,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 0.4,
-    "extracto": 280,
-    "nombre": "Munich"
+    "nombre": "Caramelo 60 (Ba-Malt)",
+    "cantidad": 1.7,
+    "extracto": 284,
+    "color": 60.0
    },
    {
-    "cantidad": 0.3,
-    "extracto": 250,
-    "nombre": "Crystal 60L"
+    "nombre": "Ahumada (Ba-Malt)",
+    "cantidad": 1.7,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 0.1,
-    "extracto": 200,
-    "nombre": "Roasted Barley"
+    "nombre": "Cebada Tostada (Ba-Malt)",
+    "cantidad": 0.6,
+    "extracto": 234,
+    "color": 500.0
    }
   ],
-  "ph_macerado_objetivo": "5.4 - 5.5"
+  "lupulos": [
+   {
+    "nombre": "East Kent Golding",
+    "cantidad": 110.0,
+    "aa": 4.7,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "East Kent Golding",
+    "cantidad": 25.0,
+    "aa": 4.7,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "WLP013 - London Ale",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.037,
+   "fg": 1.009,
+   "eficiencia": 70,
+   "estilo": "14B - Scottish Heavy"
+  },
+  "origen": {
+   "receta": "6600 Scottish Heavy. ( 100 ltrs)",
+   "estilo": "14B - Scottish Heavy",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/6600ScottishHeavy100ltrs-58725e9b1d24e61d00720993-1507666881819",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Cream Ale 1 - Standard Cream Ale": {
+  "style": "01C - Cream Ale (BJCP 2015)",
+  "notas": "Receta original: CREAM ALE · 01C - Cream Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
   "agua_vol": 20.0,
-  "fg_estimada": 1.008,
-  "granos_base": 3.3,
-  "granos_especiales": 0.7,
-  "lupulos": [
-   {
-    "aa": 4.5,
-    "cantidad": 20,
-    "nombre": "Hallertau",
-    "tiempo": 60
-   }
-  ],
+  "fg_estimada": 1.014,
+  "granos_base": 5.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 2.5,
-    "extracto": 300,
-    "nombre": "2 Row Pale"
+    "nombre": "Pilsner Ba-Malt",
+    "cantidad": 4.5,
+    "extracto": 309,
+    "color": 2.0
    },
    {
-    "cantidad": 0.8,
-    "extracto": 260,
-    "nombre": "Flaked Corn"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 250,
-    "nombre": "Flaked Rice"
-   },
-   {
+    "nombre": "Melanoidin Weyermann",
     "cantidad": 0.3,
-    "extracto": 270,
-    "nombre": "Carapils"
+    "extracto": 309,
+    "color": 35.0
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 0.2,
+    "extracto": 309,
+    "color": 1.0
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Victoria Arg.",
+    "cantidad": 10.0,
+    "aa": 11.7,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Crystal",
+    "cantidad": 20.0,
+    "aa": 4.3,
+    "tiempo": 10,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.054,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "01C - Cream Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "CREAM ALE",
+   "estilo": "01C - Cream Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/CREAMALE-592f50ba2818cc1d00daf46c-1500683023256",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Cream Ale 2 - Vanilla Cream Ale": {
+  "style": "01C - Cream Ale (BJCP 2015)",
+  "notas": "Receta original: Cream? · 01C - Cream Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
   "agua_vol": 20.0,
-  "fg_estimada": 1.01,
-  "granos_base": 3.2,
-  "granos_especiales": 0.8,
-  "lupulos": [
-   {
-    "aa": 4.5,
-    "cantidad": 15,
-    "nombre": "Hallertau",
-    "tiempo": 60
-   }
-  ],
+  "fg_estimada": 1.014,
+  "granos_base": 5.15,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "cantidad": 2.4,
-    "extracto": 300,
-    "nombre": "2 Row Pale"
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 4.5,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "cantidad": 0.6,
-    "extracto": 260,
-    "nombre": "Flaked Corn"
+    "nombre": "Munich I (Ba-Malt)",
+    "cantidad": 0.4,
+    "extracto": 309,
+    "color": 7.0
    },
    {
-    "cantidad": 0.5,
-    "extracto": 250,
-    "nombre": "Flaked Oats"
-   },
-   {
-    "cantidad": 0.3,
-    "extracto": 270,
-    "nombre": "Carapils"
-   },
-   {
-    "cantidad": 0.2,
-    "extracto": 250,
-    "nombre": "Honey Malt"
+    "nombre": "Viena Maltear",
+    "cantidad": 0.25,
+    "extracto": 317,
+    "color": 4.6
    }
   ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 13.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mapuche",
+    "cantidad": 10.0,
+    "aa": 7.7,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Mapuche",
+    "cantidad": 7.0,
+    "aa": 7.7,
+    "tiempo": 10,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.056,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "01C - Cream Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Cream?",
+   "estilo": "01C - Cream Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Cream-577ade1f3a37cf1d00804e56-1511207808442",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Witbier 1 - Traditional Witbier": {
+  "style": "24A - Witbier (BJCP 2015)",
+  "notas": "Receta original: Bluee Moon clone - BO · 24A - Witbier (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
   "agua_vol": 20.0,
-  "fg_estimada": 1.008,
-  "granos_base": 2.8,
-  "granos_especiales": 1.2,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 20,
-    "nombre": "Saaz",
-    "tiempo": 60
-   }
-  ],
+  "fg_estimada": 1.015,
+  "granos_base": 5.43,
+  "granos_especiales": 0.0,
   "maltas": [
    {
+    "nombre": "Pale Ale Maltear",
+    "cantidad": 2.27,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Trigo Malteado (Ba-Malt)",
     "cantidad": 1.8,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
+    "extracto": 317,
+    "color": 3.0
    },
    {
-    "cantidad": 1.0,
-    "extracto": 260,
-    "nombre": "Flaked Wheat"
-   },
-   {
-    "cantidad": 0.6,
-    "extracto": 250,
-    "nombre": "Flaked Oats"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Witbier 2 - Orange Coriander Wit": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.007,
-  "granos_base": 2.7,
-  "granos_especiales": 1.3,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 18,
-    "nombre": "Saaz",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 1.7,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 1.1,
-    "extracto": 260,
-    "nombre": "Flaked Wheat"
-   },
-   {
-    "cantidad": 0.7,
-    "extracto": 250,
-    "nombre": "Flaked Oats"
-   },
-   {
-    "cantidad": 0.5,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   }
-  ],
-  "ph_macerado_objetivo": "5.2 - 5.4"
- },
- "Witbier 3 - Black Wit": {
-  "agua_vol": 20.0,
-  "fg_estimada": 1.01,
-  "granos_base": 2.9,
-  "granos_especiales": 1.3,
-  "lupulos": [
-   {
-    "aa": 3.5,
-    "cantidad": 20,
-    "nombre": "Saaz",
-    "tiempo": 60
-   }
-  ],
-  "maltas": [
-   {
-    "cantidad": 1.8,
-    "extracto": 300,
-    "nombre": "Pilsner Malt"
-   },
-   {
-    "cantidad": 1.0,
-    "extracto": 260,
-    "nombre": "Flaked Wheat"
-   },
-   {
-    "cantidad": 0.6,
-    "extracto": 250,
-    "nombre": "Flaked Oats"
-   },
-   {
-    "cantidad": 0.4,
-    "extracto": 290,
-    "nombre": "Wheat Malt"
-   },
-   {
-    "cantidad": 0.2,
-    "extracto": 200,
-    "nombre": "Carafa Special I"
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.5"
- },
- "Marca - Sierra Nevada Pale Ale (Clon)": {
-  "agua_vol": 19,
-  "fg_estimada": 1.013,
-  "granos_base": 0,
-  "granos_especiales": 4.75,
-  "maltas": [
-   {
-    "nombre": "Pale Malt",
-    "cantidad": 4.4,
-    "extracto": 300,
-    "color": 2.5
-   },
-   {
-    "nombre": "Crystal 40",
-    "cantidad": 0.35,
-    "extracto": 280,
-    "color": 20
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Magnum",
-    "aa": 12,
-    "cantidad": 18,
-    "tiempo": 60
-   },
-   {
-    "nombre": "Cascade",
-    "aa": 6,
-    "cantidad": 25,
-    "tiempo": 15
-   },
-   {
-    "nombre": "Cascade",
-    "aa": 6,
-    "cantidad": 15,
-    "tiempo": 0
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Guinness Draught (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.01,
-  "granos_base": 0,
-  "granos_especiales": 5.7,
-  "maltas": [
-   {
-    "nombre": "Pale Malt",
-    "cantidad": 4.2,
-    "extracto": 300,
-    "color": 2.5
-   },
-   {
-    "nombre": "Flaked Barley",
-    "cantidad": 0.6,
-    "extracto": 260,
-    "color": 2
-   },
-   {
-    "nombre": "Chocolate",
-    "cantidad": 0.5,
-    "extracto": 250,
-    "color": 350
-   },
-   {
-    "nombre": "Roasted Barley",
-    "cantidad": 0.4,
-    "extracto": 240,
-    "color": 500
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Magnum",
-    "aa": 12,
-    "cantidad": 20,
-    "tiempo": 60
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Pilsner Urquell (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.012,
-  "granos_base": 0,
-  "granos_especiales": 4.5,
-  "maltas": [
-   {
-    "nombre": "Pilsner",
-    "cantidad": 4.5,
-    "extracto": 300,
-    "color": 2.0
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Saaz",
-    "aa": 3,
-    "cantidad": 35,
-    "tiempo": 60
-   },
-   {
-    "nombre": "Saaz",
-    "aa": 3,
-    "cantidad": 15,
-    "tiempo": 15
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Heineken (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.01,
-  "granos_base": 0,
-  "granos_especiales": 4.3,
-  "maltas": [
-   {
-    "nombre": "Pilsner",
-    "cantidad": 4.3,
-    "extracto": 300,
-    "color": 2.0
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Hallertau",
-    "aa": 4.5,
-    "cantidad": 25,
-    "tiempo": 60
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Stella Artois (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.008,
-  "granos_base": 0,
-  "granos_especiales": 4.4,
-  "maltas": [
-   {
-    "nombre": "Pilsner",
-    "cantidad": 4.4,
-    "extracto": 300,
-    "color": 2.0
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Saaz",
-    "aa": 2.5,
-    "cantidad": 30,
-    "tiempo": 60
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Weihenstephaner Hefeweizen (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.012,
-  "granos_base": 0,
-  "granos_especiales": 5.0,
-  "maltas": [
-   {
-    "nombre": "Wheat Malt",
-    "cantidad": 3.0,
-    "extracto": 300,
-    "color": 1.8
-   },
-   {
-    "nombre": "Pilsner",
-    "cantidad": 2.0,
-    "extracto": 300,
-    "color": 2.0
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Hallertau",
-    "aa": 4,
-    "cantidad": 20,
-    "tiempo": 60
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Duvel (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.008,
-  "granos_base": 0,
-  "granos_especiales": 5.9,
-  "maltas": [
-   {
-    "nombre": "Pilsner",
-    "cantidad": 5.0,
-    "extracto": 300,
-    "color": 2.0
-   },
-   {
-    "nombre": "Sugar",
+    "nombre": "Castle Chateau Cara Blond",
     "cantidad": 0.9,
-    "extracto": 300,
-    "color": 0
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Saaz",
-    "aa": 3,
-    "cantidad": 28,
-    "tiempo": 60
-   },
-   {
-    "nombre": "Saaz",
-    "aa": 3,
-    "cantidad": 10,
-    "tiempo": 30
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Stone IPA (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.012,
-  "granos_base": 0,
-  "granos_especiales": 5.2,
-  "maltas": [
-   {
-    "nombre": "Pale Malt",
-    "cantidad": 5.2,
-    "extracto": 300,
-    "color": 2.5
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Magnum",
-    "aa": 12,
-    "cantidad": 20,
-    "tiempo": 60
-   },
-   {
-    "nombre": "Citra",
-    "aa": 12,
-    "cantidad": 30,
-    "tiempo": 15
-   },
-   {
-    "nombre": "Citra",
-    "aa": 12,
-    "cantidad": 30,
-    "tiempo": 0
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Brooklyn Lager (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.012,
-  "granos_base": 0,
-  "granos_especiales": 4.9,
-  "maltas": [
-   {
-    "nombre": "Pilsner",
-    "cantidad": 4.2,
-    "extracto": 300,
-    "color": 2.0
-   },
-   {
-    "nombre": "Vienna",
-    "cantidad": 0.7,
-    "extracto": 295,
-    "color": 4
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Hallertau",
-    "aa": 4.5,
-    "cantidad": 30,
-    "tiempo": 60
-   },
-   {
-    "nombre": "Cascade",
-    "aa": 6,
-    "cantidad": 15,
-    "tiempo": 15
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Anchor Liberty Ale (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.01,
-  "granos_base": 0,
-  "granos_especiales": 4.6,
-  "maltas": [
-   {
-    "nombre": "Pale Malt",
-    "cantidad": 4.6,
-    "extracto": 300,
-    "color": 2.5
-   }
-  ],
-  "lupulos": [
-   {
-    "nombre": "Cascade",
-    "aa": 6,
-    "cantidad": 40,
-    "tiempo": 60
-   },
-   {
-    "nombre": "Cascade",
-    "aa": 6,
-    "cantidad": 20,
-    "tiempo": 15
-   }
-  ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
- },
- "Marca - Paulaner Salvator (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.016,
-  "granos_base": 0,
-  "granos_especiales": 6.3,
-  "maltas": [
-   {
-    "nombre": "Munich",
-    "cantidad": 4.5,
-    "extracto": 295,
+    "extracto": 309,
     "color": 8.0
    },
    {
-    "nombre": "Pilsner",
-    "cantidad": 1.5,
-    "extracto": 300,
+    "nombre": "Carapils Weyermann",
+    "cantidad": 0.23,
+    "extracto": 275,
     "color": 2.0
    },
    {
-    "nombre": "Melanoidin",
-    "cantidad": 0.3,
-    "extracto": 290,
-    "color": 25
+    "nombre": "Copos Avena",
+    "cantidad": 0.23,
+    "extracto": 309,
+    "color": 1.0
    }
   ],
   "lupulos": [
    {
-    "nombre": "Hallertau",
-    "aa": 4.5,
-    "cantidad": 25,
-    "tiempo": 60
+    "nombre": "German Mandarina Bavaria",
+    "cantidad": 25.0,
+    "aa": 8.0,
+    "tiempo": 60,
+    "formato": "pellet"
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
+  "levaduras": [
+   {
+    "nombre": "Safale S-04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.06,
+   "fg": 1.015,
+   "eficiencia": 71,
+   "estilo": "24A - Witbier (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Bluee Moon clone - BO",
+   "estilo": "24A - Witbier (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BlueeMooncloneBO-59ab06d5e5838a1d009fca00-1510163526249",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Witbier 2 - Orange Coriander Wit": {
+  "style": "24A - Witbier (BJCP 2015)",
+  "notas": "Receta original: BS_Witbier · 24A - Witbier (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.011,
+  "granos_base": 4.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 2.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Trigo Candeal",
+    "cantidad": 2.0,
+    "extracto": 292,
+    "color": 1.6
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 30,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew S-33",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.042,
+   "fg": 1.011,
+   "eficiencia": 70,
+   "estilo": "24A - Witbier (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_Witbier",
+   "estilo": "24A - Witbier (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Witbier-57af058a4ad8541d000ad1d1-1482930158519",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Witbier 3 - Black Wit": {
+  "style": "24A - Witbier (BJCP 2015)",
+  "notas": "Receta original: MERCEDITAS · 24A - Witbier (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 80.0,
+  "fg_estimada": 1.008,
+  "granos_base": 15.7,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 8.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 6.0,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Trigo Burgol",
+    "cantidad": 1.0,
+    "extracto": 292,
+    "color": 1.6
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 0.7,
+    "extracto": 309,
+    "color": 1.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Saaz",
+    "cantidad": 100.0,
+    "aa": 3.6,
+    "tiempo": 45,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Danstar Nottingham",
+    "atenuacion": 82.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.044,
+   "fg": 1.008,
+   "eficiencia": 72,
+   "estilo": "24A - Witbier (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "MERCEDITAS",
+   "estilo": "24A - Witbier (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/MERCEDITAS-524a02c51ce6b6c104000015-1521224085010",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Sierra Nevada Pale Ale (Clon)": {
+  "style": "18B - American Pale Ale (BJCP 2015)",
+  "notas": "Receta original: 2 APA  doble DH  Rodríguez Beer · 18B - American Pale Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 26.0,
+  "fg_estimada": 1.014,
+  "granos_base": 6.1,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Castle Chateau Pale Ale",
+    "cantidad": 5.8,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Castle Chateau Vienna",
+    "cantidad": 0.2,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Castle Chateau Cara Clair (Carapils)",
+    "cantidad": 0.1,
+    "extracto": 275,
+    "color": 2.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Columbus",
+    "cantidad": 9.0,
+    "aa": 16.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Whirfloc Tablet",
+    "cantidad": 4.5,
+    "aa": 5.0,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Columbus",
+    "cantidad": 11.0,
+    "aa": 16.0,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 10.0,
+    "aa": 13.6,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Columbus",
+    "cantidad": 20.0,
+    "aa": 16.0,
+    "tiempo": 5,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 15.0,
+    "aa": 13.6,
+    "tiempo": 5,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "German Mandarina Bavaria",
+    "cantidad": 25.0,
+    "aa": 7.8,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Columbus (2 días)",
+    "cantidad": 40.0,
+    "aa": 16.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra (4 días )",
+    "cantidad": 30.0,
+    "aa": 13.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safeale S-05",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.054,
+   "fg": 1.014,
+   "eficiencia": 75,
+   "estilo": "18B - American Pale Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "2 APA  doble DH  Rodríguez Beer",
+   "estilo": "18B - American Pale Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/2APABJCP18BRodrguezBeer-5ad520484383a900042f8346-1528240200513",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Guinness Draught (Clon)": {
+  "style": "15B - Irish Stout (BJCP 2015)",
+  "notas": "Receta original: 920 Style #1 - Irish Stout - 500L · 15B - Irish Stout (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 500.0,
+  "fg_estimada": 1.012,
+  "granos_base": 99.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Tai Pan",
+    "cantidad": 75.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Chateau Roasted Barley",
+    "cantidad": 10.0,
+    "extracto": 209,
+    "color": 584.0
+   },
+   {
+    "nombre": "Munich Maltear",
+    "cantidad": 10.0,
+    "extracto": 309,
+    "color": 4.9
+   },
+   {
+    "nombre": "Castle Chateau Cafe Light",
+    "cantidad": 3.0,
+    "extracto": 250,
+    "color": 94.0
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 1.0,
+    "extracto": 309,
+    "color": 1.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Apollo",
+    "cantidad": 226.0,
+    "aa": 18.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "WLP039 - Nottingham Ale",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.046,
+   "fg": 1.012,
+   "eficiencia": 78,
+   "estilo": "15B - Irish Stout (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "920 Style #1 - Irish Stout - 500L",
+   "estilo": "15B - Irish Stout (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/920Style1IrishStout500L-52461c6c4b11374753000056-1509981153253",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Pilsner Urquell (Clon)": {
+  "style": "03B - Czech Premium Pale Lager (BJCP 2015)",
+  "notas": "Receta original: Bohemian Pilsner · 03B - Czech Premium Pale Lager (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 41.0,
+  "fg_estimada": 1.013,
+  "granos_base": 10.5,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Maltear",
+    "cantidad": 8.5,
+    "extracto": 309,
+    "color": 2.4
+   },
+   {
+    "nombre": "Munich Maltear",
+    "cantidad": 1.5,
+    "extracto": 309,
+    "color": 4.9
+   },
+   {
+    "nombre": "Caramelo 30 (Maltear)",
+    "cantidad": 0.5,
+    "extracto": 292,
+    "color": 30.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Mapuche",
+    "cantidad": 66.0,
+    "aa": 7.7,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 18.3,
+    "aa": 14.4,
+    "tiempo": 15,
+    "formato": "flor"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 10.0,
+    "aa": 14.4,
+    "tiempo": 5,
+    "formato": "flor"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Wyeast 2124 - Bohemian Lager",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.05,
+   "fg": 1.013,
+   "eficiencia": 63,
+   "estilo": "03B - Czech Premium Pale Lager (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Bohemian Pilsner",
+   "estilo": "03B - Czech Premium Pale Lager (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BohemianPilsner-55bfc5b6cd4a5fc31d0015d1-1495718212154",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Heineken (Clon)": {
+  "style": "05D - German Pils (BJCP 2015)",
+  "notas": "Receta original: Birrucca Pils · 05D - German Pils (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 32.0,
+  "fg_estimada": 1.008,
+  "granos_base": 8.12,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner US Cargill",
+    "cantidad": 8.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Maltodextrina",
+    "cantidad": 0.12,
+    "extracto": 384,
+    "color": 2.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Tettnanger",
+    "cantidad": 100.0,
+    "aa": 4.6,
+    "tiempo": 120,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Hallertau Tradition",
+    "cantidad": 25.0,
+    "aa": 6.2,
+    "tiempo": 10,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Hallertau Tradition",
+    "cantidad": 25.0,
+    "aa": 6.2,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager W-34/70",
+    "atenuacion": 83.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.047,
+   "fg": 1.008,
+   "eficiencia": 60,
+   "estilo": "05D - German Pils (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Birrucca Pils",
+   "estilo": "05D - German Pils (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BirruccaPilsener-5574cb566a7398d31000006c-1498919442575",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Stella Artois (Clon)": {
+  "style": "05D - German Pils (BJCP 2015)",
+  "notas": "Receta original: German Pils Gringa · 05D - German Pils (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.009,
+  "granos_base": 5.65,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Uma",
+    "cantidad": 5.2,
+    "extracto": 309,
+    "color": 2.4
+   },
+   {
+    "nombre": "Carapils (Dextrine) Uma",
+    "cantidad": 0.25,
+    "extracto": 275,
+    "color": 2.0
+   },
+   {
+    "nombre": "Munich Uma",
+    "cantidad": 0.2,
+    "extracto": 309,
+    "color": 4.9
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Bravo",
+    "cantidad": 20.0,
+    "aa": 13.1,
+    "tiempo": 75,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Hallertau Tradition (pre whirlpool)",
+    "cantidad": 40.0,
+    "aa": 5.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager W-34/70",
+    "atenuacion": 83.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.055,
+   "fg": 1.009,
+   "eficiencia": 63,
+   "estilo": "05D - German Pils (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "German Pils Gringa",
+   "estilo": "05D - German Pils (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BritishBrown-591d0573539a171d00c7ee66-1523657622141",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Weihenstephaner Hefeweizen (Clon)": {
+  "style": "10A - Weissbier (BJCP 2015)",
+  "notas": "Receta original: BS_WeissBier · 10A - Weissbier (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.011,
+  "granos_base": 4.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 2.0,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Pilsner Ba-Malt",
+    "cantidad": 2.0,
+    "extracto": 309,
+    "color": 2.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 7.0,
+    "tiempo": 30,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew WB-06",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.044,
+   "fg": 1.011,
+   "eficiencia": 70,
+   "estilo": "10A - Weissbier (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BS_WeissBier",
+   "estilo": "10A - Weissbier (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BSWeissBier-58f3f5c970b0fb1d00231e69-1509807053842",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Duvel (Clon)": {
+  "style": "25C - Belgian Golden Strong Ale (BJCP 2015)",
+  "notas": "Receta original: BGSA belgastrong · 25C - Belgian Golden Strong Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 50.0,
+  "fg_estimada": 1.014,
+  "granos_base": 32.25,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner US Cargill",
+    "cantidad": 25.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Carared Weyermann (30 L)",
+    "cantidad": 1.25,
+    "extracto": 300,
+    "color": 25.0
+   },
+   {
+    "nombre": "Carahell Weyermann (10 L)",
+    "cantidad": 1.0,
+    "extracto": 284,
+    "color": 10.0
+   },
+   {
+    "nombre": "Azucar de Maiz",
+    "cantidad": 5.0,
+    "extracto": 384,
+    "color": 2.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "East Kent Golding",
+    "cantidad": 180.0,
+    "aa": 5.0,
+    "tiempo": 90,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Danstar Belle Saison",
+    "atenuacion": 90.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.144,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "25C - Belgian Golden Strong Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "BGSA belgastrong",
+   "estilo": "25C - Belgian Golden Strong Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BGSAbelgastrong-59682f0b4ac4011d00158733-1528407262122",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Stone IPA (Clon)": {
+  "style": "21A - American IPA (BJCP 2015)",
+  "notas": "Receta original: 3ra IPA 2 · 21A - American IPA (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 105.0,
+  "fg_estimada": 1.014,
+  "granos_base": 26.25,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pale Ale Weyermann",
+    "cantidad": 21.0,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Munich I Weyermann",
+    "cantidad": 3.15,
+    "extracto": 317,
+    "color": 7.0
+   },
+   {
+    "nombre": "Caraamber Weyermann (25 L)",
+    "cantidad": 2.1,
+    "extracto": 309,
+    "color": 35.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Bravo",
+    "cantidad": 40.0,
+    "aa": 16.0,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Zeus",
+    "cantidad": 85.0,
+    "aa": 13.1,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 53.0,
+    "aa": 8.5,
+    "tiempo": 30,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Chinook",
+    "cantidad": 52.0,
+    "aa": 11.1,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 45.0,
+    "aa": 9.0,
+    "tiempo": 15,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Amarillo",
+    "cantidad": 105.0,
+    "aa": 9.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Citra",
+    "cantidad": 280.0,
+    "aa": 13.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.055,
+   "fg": 1.014,
+   "eficiencia": 70,
+   "estilo": "21A - American IPA (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "3ra IPA 2",
+   "estilo": "21A - American IPA (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/3raIPA2-5916535c7ea1461d00580613-1508280716800",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Brooklyn Lager (Clon)": {
+  "style": "02B - International Amber Lager (BJCP 2015)",
+  "notas": "Receta original: Colorada Cocó · 02B - International Amber Lager (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 21.0,
+  "fg_estimada": 1.011,
+  "granos_base": 4.5,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pilsner Maltear",
+    "cantidad": 3.5,
+    "extracto": 309,
+    "color": 2.4
+   },
+   {
+    "nombre": "Caramelo 120 (Ba-Malt)",
+    "cantidad": 1.0,
+    "extracto": 275,
+    "color": 120.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 15.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade Arg",
+    "cantidad": 15.0,
+    "aa": 6.3,
+    "tiempo": 15,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safbrew S-33",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.045,
+   "fg": 1.011,
+   "eficiencia": 70,
+   "estilo": "02B - International Amber Lager (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Colorada Cocó",
+   "estilo": "02B - International Amber Lager (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/Coloradareincidente-5953c23a38f5931d0089befd-1503355644816",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Anchor Liberty Ale (Clon)": {
+  "style": "18B - American Pale Ale (BJCP 2015)",
+  "notas": "Receta original: 60 Min Juana American Pale · 18B - American Pale Ale (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 50.0,
+  "fg_estimada": 1.012,
+  "granos_base": 14.0,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 12.5,
+    "extracto": 309,
+    "color": 4.0
+   },
+   {
+    "nombre": "Carapils (Dextrine) Ba-Malt",
+    "cantidad": 1.0,
+    "extracto": 275,
+    "color": 2.0
+   },
+   {
+    "nombre": "Munich I (Ba-Malt)",
+    "cantidad": 0.5,
+    "extracto": 309,
+    "color": 7.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Zeus",
+    "cantidad": 50.0,
+    "aa": 13.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Columbus",
+    "cantidad": 50.0,
+    "aa": 16.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 50.0,
+    "aa": 8.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Willamette",
+    "cantidad": 25.0,
+    "aa": 7.1,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Northern Brewer",
+    "cantidad": 50.0,
+    "aa": 9.6,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Zeus",
+    "cantidad": 50.0,
+    "aa": 13.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Columbus",
+    "cantidad": 75.0,
+    "aa": 16.0,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Cascade USA",
+    "cantidad": 50.0,
+    "aa": 8.5,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Safale US-05",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.056,
+   "fg": 1.012,
+   "eficiencia": 65,
+   "estilo": "18B - American Pale Ale (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "60 Min Juana American Pale",
+   "estilo": "18B - American Pale Ale (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/60MinJuanaAmericanPale-53fcc6be3649d08d060000eb-1488825128280",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
+ },
+ "Marca - Paulaner Salvator (Clon)": {
+  "style": "09B - Eisbock (BJCP 2015)",
+  "notas": "Receta original: RBK - EISBOCK (La Cerveza del HIELO) · 09B - Eisbock (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 25.0,
+  "fg_estimada": 1.016,
+  "granos_base": 10.1,
+  "granos_especiales": 0.0,
+  "maltas": [
+   {
+    "nombre": "Cargill Special Pale",
+    "cantidad": 5.0,
+    "extracto": 317,
+    "color": 3.5
+   },
+   {
+    "nombre": "Munich US Cargill",
+    "cantidad": 2.0,
+    "extracto": 317,
+    "color": 12.0
+   },
+   {
+    "nombre": "Pilsner Weyerman",
+    "cantidad": 2.0,
+    "extracto": 309,
+    "color": 2.0
+   },
+   {
+    "nombre": "Caramunich II Weyermann (45 L)",
+    "cantidad": 0.7,
+    "extracto": 284,
+    "color": 60.0
+   },
+   {
+    "nombre": "Caraaroma Weyermann (140 L)",
+    "cantidad": 0.15,
+    "extracto": 275,
+    "color": 140.0
+   },
+   {
+    "nombre": "Carafa I Weyermann (Pale Chocolate)",
+    "cantidad": 0.1,
+    "extracto": 250,
+    "color": 400.0
+   },
+   {
+    "nombre": "Melanoidin Weyermann",
+    "cantidad": 0.1,
+    "extracto": 309,
+    "color": 35.0
+   },
+   {
+    "nombre": "Carafa III Weyermann (Black Patent)",
+    "cantidad": 0.05,
+    "extracto": 209,
+    "color": 550.0
+   }
+  ],
+  "lupulos": [
+   {
+    "nombre": "Hellertau Tradition",
+    "cantidad": 25.0,
+    "aa": 5.7,
+    "tiempo": 90,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Saaz",
+    "cantidad": 50.0,
+    "aa": 3.8,
+    "tiempo": 60,
+    "formato": "pellet"
+   }
+  ],
+  "levaduras": [
+   {
+    "nombre": "Saflager W-34/70",
+    "atenuacion": 83.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.094,
+   "fg": 1.016,
+   "eficiencia": 75,
+   "estilo": "09B - Eisbock (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "RBK - EISBOCK (La Cerveza del HIELO)",
+   "estilo": "09B - Eisbock (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/RBKDoppelbockv10-5bb3fd021c1071000401038a-1696559865192",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Marca - Corona Extra (Clon)": {
-  "agua_vol": 20,
-  "fg_estimada": 1.009,
-  "granos_base": 0,
-  "granos_especiales": 4.4,
+  "style": "01A - American Light Lager (BJCP 2015)",
+  "notas": "Receta original: Lager light tipo mejicana · 01A - American Light Lager (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 22.0,
+  "fg_estimada": 1.007,
+  "granos_base": 4.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "nombre": "Pilsner",
-    "cantidad": 4.4,
-    "extracto": 300,
-    "color": 2.0
+    "nombre": "Pilsner Maltear",
+    "cantidad": 3.0,
+    "extracto": 309,
+    "color": 2.4
+   },
+   {
+    "nombre": "Viena Maltear",
+    "cantidad": 1.0,
+    "extracto": 317,
+    "color": 4.6
    }
   ],
   "lupulos": [
    {
+    "nombre": "Cascade Arg",
+    "cantidad": 20.0,
+    "aa": 6.3,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
     "nombre": "Saaz",
-    "aa": 2.5,
-    "cantidad": 18,
-    "tiempo": 60
+    "cantidad": 20.0,
+    "aa": 3.6,
+    "tiempo": 10,
+    "formato": "pellet"
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
+  "levaduras": [
+   {
+    "nombre": "Saflager W-34/70",
+    "atenuacion": 83.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.04,
+   "fg": 1.007,
+   "eficiencia": 70,
+   "estilo": "01A - American Light Lager (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Lager light tipo mejicana",
+   "estilo": "01A - American Light Lager (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/PilsenMexicana-557ad907fe00a7ce4f000186-1511840180064",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Nueva - NEIPA Tropical Haze": {
-  "agua_vol": 20,
+  "style": "Neipa",
+  "notas": "Receta original: CITRA Single Hop Tommy NEIPA · Neipa · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 30.0,
   "fg_estimada": 1.014,
-  "granos_base": 0,
-  "granos_especiales": 5.5,
+  "granos_base": 8.1,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "nombre": "Pale Malt",
-    "cantidad": 4.6,
-    "extracto": 300,
-    "color": 2.5
+    "nombre": "Pale Ale (Ba-Malt)",
+    "cantidad": 4.2,
+    "extracto": 309,
+    "color": 4.0
    },
    {
-    "nombre": "Flaked Oats",
-    "cantidad": 0.9,
-    "extracto": 260,
-    "color": 1.5
+    "nombre": "Trigo Malteado (Ba-Malt)",
+    "cantidad": 2.7,
+    "extracto": 317,
+    "color": 3.0
+   },
+   {
+    "nombre": "Copos Avena",
+    "cantidad": 1.2,
+    "extracto": 309,
+    "color": 1.0
    }
   ],
   "lupulos": [
    {
     "nombre": "Citra",
-    "aa": 12,
-    "cantidad": 20,
-    "tiempo": 10
-   },
-   {
-    "nombre": "Mosaic",
-    "aa": 11,
-    "cantidad": 30,
-    "tiempo": 0
+    "cantidad": 100.0,
+    "aa": 13.6,
+    "tiempo": 10,
+    "formato": "pellet"
    },
    {
     "nombre": "Citra",
-    "aa": 12,
-    "cantidad": 30,
-    "tiempo": 0
+    "cantidad": 250.0,
+    "aa": 13.6,
+    "tiempo": 60,
+    "formato": "pellet"
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
+  "levaduras": [
+   {
+    "nombre": "s04",
+    "atenuacion": 75.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.055,
+   "fg": 1.014,
+   "eficiencia": 65,
+   "estilo": "Neipa"
+  },
+  "origen": {
+   "receta": "CITRA Single Hop Tommy NEIPA",
+   "estilo": "Neipa",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/CITRASingleHopTommyNEIPA-586134f2e8a0161d00b0cf63-1511550806639",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Nueva - Gose de Frutos Rojos": {
-  "agua_vol": 20,
-  "fg_estimada": 1.006,
-  "granos_base": 0,
-  "granos_especiales": 4.5,
+  "style": "27A - Gose (BJCP 2015)",
+  "notas": "Receta original: Gose de Prueba · 27A - Gose (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 20.0,
+  "fg_estimada": 1.008,
+  "granos_base": 5.0,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "nombre": "Wheat Malt",
-    "cantidad": 2.5,
-    "extracto": 300,
-    "color": 1.8
+    "nombre": "Castle Chateau Wheat Blanc",
+    "cantidad": 3.0,
+    "extracto": 317,
+    "color": 2.0
    },
    {
-    "nombre": "Pilsner",
+    "nombre": "Belgomalt Pilsen - BL",
     "cantidad": 2.0,
-    "extracto": 300,
+    "extracto": 325,
     "color": 2.0
    }
   ],
   "lupulos": [
    {
-    "nombre": "Saaz",
-    "aa": 3,
-    "cantidad": 8,
-    "tiempo": 15
+    "nombre": "Hallertau Mittlefrueh",
+    "cantidad": 8.0,
+    "aa": 6.3,
+    "tiempo": 120,
+    "formato": "pellet"
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
+  "levaduras": [
+   {
+    "nombre": "Safale K-97",
+    "atenuacion": 82.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.043,
+   "fg": 1.008,
+   "eficiencia": 54,
+   "estilo": "27A - Gose (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Gose de Prueba",
+   "estilo": "27A - Gose (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/GosedePrueba-5eaa3bc96b39390004c04ba2-1622138652923",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Nueva - Imperial Stout Café": {
-  "agua_vol": 20,
-  "fg_estimada": 1.02,
-  "granos_base": 0,
-  "granos_especiales": 6.5,
+  "style": "20C - Imperial Stout (BJCP 2015)",
+  "notas": "Receta original: Choco Stout · 20C - Imperial Stout (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 40.0,
+  "fg_estimada": 1.018,
+  "granos_base": 15.1,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "nombre": "Pale Malt",
+    "nombre": "Viena Weyermann",
+    "cantidad": 8.0,
+    "extracto": 317,
+    "color": 4.0
+   },
+   {
+    "nombre": "Munich I (Ba-Malt)",
     "cantidad": 5.0,
-    "extracto": 300,
-    "color": 2.5
+    "extracto": 309,
+    "color": 7.0
    },
    {
-    "nombre": "Chocolate",
-    "cantidad": 0.6,
-    "extracto": 250,
-    "color": 350
-   },
-   {
-    "nombre": "Roasted Barley",
+    "nombre": "Caramelo 30 (Ba-Malt)",
     "cantidad": 0.5,
-    "extracto": 240,
-    "color": 500
+    "extracto": 292,
+    "color": 30.0
    },
    {
-    "nombre": "Crystal 120",
+    "nombre": "Copos Avena",
+    "cantidad": 0.5,
+    "extracto": 309,
+    "color": 1.0
+   },
+   {
+    "nombre": "Castle Chateau Chocolat",
     "cantidad": 0.4,
-    "extracto": 275,
-    "color": 60
+    "extracto": 250,
+    "color": 457.0
+   },
+   {
+    "nombre": "Castle Chateau Special B",
+    "cantidad": 0.4,
+    "extracto": 250,
+    "color": 152.0
+   },
+   {
+    "nombre": "Cebada Tostada (Ba-Malt)",
+    "cantidad": 0.3,
+    "extracto": 234,
+    "color": 500.0
    }
   ],
   "lupulos": [
    {
-    "nombre": "Magnum",
-    "aa": 12,
-    "cantidad": 25,
-    "tiempo": 60
+    "nombre": "Apollo",
+    "cantidad": 60.0,
+    "aa": 18.5,
+    "tiempo": 90,
+    "formato": "pellet"
    },
    {
-    "nombre": "Cascade",
-    "aa": 6,
-    "cantidad": 20,
-    "tiempo": 15
+    "nombre": "Celeia",
+    "cantidad": 30.0,
+    "aa": 5.0,
+    "tiempo": 10,
+    "formato": "pellet"
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
+  "levaduras": [
+   {
+    "nombre": "Danstar Nottingham",
+    "atenuacion": 78.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.081,
+   "fg": 1.018,
+   "eficiencia": 70,
+   "estilo": "20C - Imperial Stout (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Choco Stout",
+   "estilo": "20C - Imperial Stout (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/ChocoStout-55ca5143807709c069001605-1464630617152",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  },
  "Nueva - Oktoberfest Festbier": {
-  "agua_vol": 20,
-  "fg_estimada": 1.012,
-  "granos_base": 0,
-  "granos_especiales": 5.0,
+  "style": "06A - Marzen (BJCP 2015)",
+  "notas": "Receta original: Birrucca Oktoberfest · 06A - Marzen (BJCP 2015) · fuente Brew-o-Matic (brew-o-matic.com.ar)",
+  "agua_vol": 32.0,
+  "fg_estimada": 1.01,
+  "granos_base": 8.5,
+  "granos_especiales": 0.0,
   "maltas": [
    {
-    "nombre": "Pilsner",
-    "cantidad": 4.4,
-    "extracto": 300,
+    "nombre": "Munich I Weyermann",
+    "cantidad": 3.0,
+    "extracto": 317,
+    "color": 7.0
+   },
+   {
+    "nombre": "Pilsner US Cargill",
+    "cantidad": 2.5,
+    "extracto": 309,
     "color": 2.0
    },
    {
-    "nombre": "Munich",
-    "cantidad": 0.6,
-    "extracto": 295,
-    "color": 8
+    "nombre": "Viena Weyermann",
+    "cantidad": 2.0,
+    "extracto": 317,
+    "color": 4.0
+   },
+   {
+    "nombre": "Caramunich III Weyermann (60 L)",
+    "cantidad": 1.0,
+    "extracto": 275,
+    "color": 75.0
    }
   ],
   "lupulos": [
    {
-    "nombre": "Hallertau",
-    "aa": 4.5,
-    "cantidad": 22,
-    "tiempo": 60
+    "nombre": "Tettnanger",
+    "cantidad": 40.0,
+    "aa": 6.2,
+    "tiempo": 60,
+    "formato": "pellet"
+   },
+   {
+    "nombre": "Tettnanger",
+    "cantidad": 10.0,
+    "aa": 6.2,
+    "tiempo": 20,
+    "formato": "pellet"
    }
   ],
-  "ph_macerado_objetivo": "5.3 - 5.6"
+  "levaduras": [
+   {
+    "nombre": "Saflager W-34/70",
+    "atenuacion": 83.0,
+    "tolerancia": 12.0
+   }
+  ],
+  "ph_macerado_objetivo": "",
+  "_bom": {
+   "og": 1.057,
+   "fg": 1.01,
+   "eficiencia": 69,
+   "estilo": "06A - Marzen (BJCP 2015)"
+  },
+  "origen": {
+   "receta": "Birrucca Oktoberfest",
+   "estilo": "06A - Marzen (BJCP 2015)",
+   "url": "https://www.brew-o-matic.com.ar/#/recipe/clone/BirruccaOktoberfest-5574cb566a7398d31000006c-1515008424194",
+   "fuente": "Brew-o-Matic (brew-o-matic.com.ar)"
+  }
  }
 }

@@ -1,0 +1,66 @@
+OK   Argentina 1 - Strong Scotch Ale              <- Nightrain Scotch Ale                   ΔOG +0.0004 ΔFG -0.0001
+OK   Argentina 2 - IPA Argenta                    <- #12 - IPA Argenta                      ΔOG -0.0004 ΔFG -0.0001
+OK   Argentina 3 - Honey Light Lager              <- Lager light                            ΔOG -0.0004 ΔFG +0.0001
+OK   IPA 1 - West Coast IPA                       <- American IPA                           ΔOG +0.0004 ΔFG -0.0003
+OK   IPA 2 - Hazy IPA                             <- NEIPA- Brew Day                        ΔOG +0.0002 ΔFG -0.0002
+OK   IPA 3 - American IPA                         <- 3ra IPA                                ΔOG +0.0004 ΔFG -0.0002
+OK   Negra 1 - American Stout                     <- American Stout                         ΔOG +0.0003 ΔFG -0.0004
+OK   Negra 2 - Dry Stout                          <- Concurso Marzo 2017 - 15B - Irish Stou ΔOG -0.0001 ΔFG +0.0002
+OK   Negra 3 - Sweet Stout                        <- 20170515 chocolate milk stout          ΔOG +0.0002 ΔFG +0.0004
+OK   Red Lager 1 - International Amber Lager      <- 1° Pilsen                              ΔOG +0.0001 ΔFG -0.0005
+OK   Red Lager 2 - American Red Lager             <- BS_Red Lager                           ΔOG +0.0002 ΔFG -0.0002
+OK   Red Lager 3 - Red Cream Lager                <- BS_Cream Ale                           ΔOG -0.0001 ΔFG -0.0005
+OK   Rubia 1 - Blonde Ale Básica                  <- #39 Blonde Ale                         ΔOG -0.0001 ΔFG -0.0003
+OK   Rubia 2 - Honey Blonde Ale                   <- Blonde                                 ΔOG +0.0002 ΔFG +0.0005
+OK   Rubia 3 - American Blonde                    <- Ale Dorada                             ΔOG +0.0002 ΔFG +0.0001
+OK   Wheat 1 - Hefeweizen                         <- BS_WeissBier                           ΔOG -0.0002 ΔFG +0.0000
+OK   Wheat 2 - Dunkelweizen                       <- #25 - Dunkles Weissbier                ΔOG -0.0003 ΔFG -0.0002
+OK   Wheat 3 - American Wheat                     <- AWB A lo que salga                     ΔOG +0.0002 ΔFG +0.0003
+OK   Porter 1 - Robust Porter                     <- #43 Robust Porter                      ΔOG +0.0000 ΔFG +0.0003
+OK   Porter 2 - Brown Porter                      <- #28 - English Porter                   ΔOG +0.0001 ΔFG -0.0005
+OK   Porter 3 - Baltic Porter                     <- Brown Ale                              ΔOG -0.0003 ΔFG -0.0006
+OK   Pale Ale 1 - American Pale Ale               <- 2017 APA Kellan / trinchera junio17    ΔOG -0.0004 ΔFG -0.0002
+OK   Pale Ale 2 - English Pale Ale                <- Aland Bitter - 265                     ΔOG -0.0001 ΔFG +0.0002
+OK   Pale Ale 3 - Aussie Sparkling Ale            <- Australian Sparkling Ale - Pablitens   ΔOG -0.0001 ΔFG -0.0005
+OK   Belgian 1 - Dubbel                           <- 2 Belgas                               ΔOG +0.0004 ΔFG +0.0005
+OK   Belgian 2 - Tripel                           <- BS_Tripel                              ΔOG -0.0003 ΔFG +0.0004
+OK   Belgian 3 - Golden Strong                    <- Apolo Club - La Belga                  ΔOG +0.0003 ΔFG +0.0005
+OK   Saison 1 - Farmhouse Ale                     <- ALHAJA CULIPARDA                       ΔOG +0.0002 ΔFG +0.0001
+OK   Saison 2 - Dark Saison                       <- Amber Abbey                            ΔOG -0.0002 ΔFG -0.0003
+OK   Saison 3 - Super Saison                      <- BS_Saison                              ΔOG +0.0004 ΔFG +0.0004
+OK   Lager 1 - Munich Helles                      <- Mr. Chaud / Munich Helles              ΔOG -0.0001 ΔFG -0.0002
+OK   Lager 2 - Schwarzbier                        <- BS_Brazilian Maltzbier                 ΔOG +0.0005 ΔFG +0.0006
+OK   Lager 3 - Vienna Lager                       <- Vienna lager                           ΔOG +0.0009 ΔFG +0.0002
+OK   Barleywine 1 - English Barleywine            <- Barley Wine  50 lts                    ΔOG +0.0004 ΔFG -0.0001
+OK   Barleywine 2 - American Barleywine           <- Barley                                 ΔOG +0.0002 ΔFG -0.0004
+OK   Pilsner 1 - German Pilsner                   <- GERMAN PILS                            ΔOG +0.0004 ΔFG -0.0004
+OK   Pilsner 2 - Czech Pilsner                    <- American Premium Lager                 ΔOG -0.0003 ΔFG -0.0006
+OK   Pilsner 3 - Italian Pilsner                  <- BS_Pilsen Alemana                      ΔOG +0.0001 ΔFG +0.0003
+OK   Amber Ale 1 - American Amber                 <- Triple A Russer                        ΔOG +0.0004 ΔFG -0.0002
+OK   Amber Ale 2 - Irish Red Ale                  <- 310318 Irish Red Ale                   ΔOG -0.0003 ΔFG -0.0001
+OK   Amber Ale 3 - Belgian Amber                  <- la come trappo                         ΔOG +0.0000 ΔFG -0.0005
+OK   Kölsch 1 - Traditional Kölsch                <- Angualasto Kolsch                      ΔOG -0.0004 ΔFG -0.0006
+OK   Kölsch 2 - Hoppy Kölsch                      <- BS_Kölsch                              ΔOG +0.0003 ΔFG -0.0002
+OK   Scottish Ale 1 - 60 Shilling                 <- Scottish                               ΔOG -0.0003 ΔFG +0.0002
+OK   Scottish Ale 2 - 80 Shilling                 <- 6600 Scottish Heavy. ( 100 ltrs)       ΔOG -0.0002 ΔFG +0.0002
+OK   Cream Ale 1 - Standard Cream Ale             <- CREAM ALE                              ΔOG +0.0001 ΔFG -0.0005
+OK   Cream Ale 2 - Vanilla Cream Ale              <- Cream?                                 ΔOG -0.0002 ΔFG -0.0001
+OK   Witbier 1 - Traditional Witbier              <- Bluee Moon clone - BO                  ΔOG -0.0002 ΔFG +0.0000
+OK   Witbier 2 - Orange Coriander Wit             <- BS_Witbier                             ΔOG +0.0001 ΔFG -0.0005
+OK   Witbier 3 - Black Wit                        <- MERCEDITAS                             ΔOG -0.0001 ΔFG -0.0001
+OK   Marca - Sierra Nevada Pale Ale (Clon)        <- 2 APA  doble DH  Rodríguez Beer        ΔOG +0.0003 ΔFG -0.0004
+OK   Marca - Guinness Draught (Clon)              <- 920 Style #1 - Irish Stout - 500L      ΔOG -0.0001 ΔFG -0.0005
+OK   Marca - Pilsner Urquell (Clon)               <- Bohemian Pilsner                       ΔOG -0.0003 ΔFG -0.0006
+OK   Marca - Heineken (Clon)                      <- Birrucca Pils                          ΔOG +0.0002 ΔFG +0.0000
+OK   Marca - Stella Artois (Clon)                 <- German Pils Gringa                     ΔOG -0.0003 ΔFG +0.0003
+OK   Marca - Weihenstephaner Hefeweizen (Clon)    <- BS_WeissBier                           ΔOG -0.0002 ΔFG +0.0000
+OK   Marca - Duvel (Clon)                         <- BGSA belgastrong                       ΔOG +0.0003 ΔFG +0.0004
+OK   Marca - Stone IPA (Clon)                     <- 3ra IPA 2                              ΔOG +0.0004 ΔFG -0.0002
+OK   Marca - Brooklyn Lager (Clon)                <- Colorada Cocó                          ΔOG +0.0002 ΔFG +0.0003
+OK   Marca - Anchor Liberty Ale (Clon)            <- 60 Min Juana American Pale             ΔOG -0.0002 ΔFG +0.0003
+OK   Marca - Paulaner Salvator (Clon)             <- RBK - EISBOCK (La Cerveza del HIELO)   ΔOG +0.0003 ΔFG +0.0000
+OK   Marca - Corona Extra (Clon)                  <- Lager light tipo mejicana              ΔOG -0.0004 ΔFG -0.0003
+OK   Nueva - NEIPA Tropical Haze                  <- CITRA Single Hop Tommy NEIPA           ΔOG -0.0003 ΔFG -0.0003
+OK   Nueva - Gose de Frutos Rojos                 <- Gose de Prueba                         ΔOG +0.0002 ΔFG -0.0002
+OK   Nueva - Imperial Stout Café                  <- Choco Stout                            ΔOG +0.0004 ΔFG -0.0001
+OK   Nueva - Oktoberfest Festbier                 <- Birrucca Oktoberfest                   ΔOG -0.0002 ΔFG -0.0003

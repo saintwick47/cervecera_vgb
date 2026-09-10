@@ -13,7 +13,7 @@ profesional, sin suscripciones ni nube.
 | **Android (APK)** | Release → `CerveceraVGB.apk` (instalación directa) |
 | **Windows** | Release → `CerveceraVGB-Setup-*.exe` (instalador con acceso directo y logo en el escritorio) |
 | **Linux** | Release → `CerveceraVGB-*-x86_64.AppImage` |
-| **macOS** | Release → `CerveceraVGB-*-macos-intel.dmg` / `-arm64.dmg` |
+| **macOS** | Release → `CerveceraVGB-*-macos-arm64.dmg` |
 
 > Los instaladores de escritorio se generan automáticamente con GitHub
 > Actions (ver `.github/workflows/build-installers.yml`). Cada release
@@ -27,7 +27,23 @@ profesional, sin suscripciones ni nube.
   BU/GU, calorías, aguas con evaporación, pH entrada/maceración/
   post-hervor/final y corrección con ácido láctico.
 - Catálogo argentino de maltas, lúpulos, levaduras y aguas de Córdoba.
+- **Química del agua**: perfiles objetivo por estilo, sales (yeso, CaCl₂, epsom,
+  sal, bicarbonato), dilución con ósmosis inversa y relación SO₄:Cl.
 - Comparador BJCP 2021, inventario inteligente y exportación PDF/BeerXML.
+- Fórmulas elegibles: IBU Tinseth/Rager (con whirlpool real), FG Normal/Simple,
+  ABV Standard/Alternative, color Morey + EBC.
+
+## 📖 Recetario
+
+- **66 recetas** con su estilo BJCP y sus ingredientes reales.
+- Los números están **verificados contra Brew-o-Matic**: las 66 recetas se
+  recalcularon con nuestro motor y coinciden con las originales (desvío máximo
+  0,0009 en OG/FG).
+- La app **refresca sola** las recetas del recetario cuando mejoran, y **nunca**
+  toca las recetas creadas o editadas por el usuario.
+- En `herramientas/` están los scripts para importar recetas de Brew-o-Matic,
+  reemplazar las genéricas por reales y generar el catálogo descargable
+  (ver `herramientas/LEEME_importar_brewomatic.md`).
 
 ## 🗂️ Estructura del repositorio
 

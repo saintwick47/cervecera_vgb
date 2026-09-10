@@ -24,6 +24,7 @@ from catalogo_ar import (MALTAS_AR, LUPULOS_AR, LEVADURAS_AR,
 import tkinter.messagebox as mb
 from tkinter import filedialog
 import tkinter as tk  # Añadido para el manejo de iconos en Linux
+import hashlib
 import json
 import os
 import sys
@@ -46,10 +47,19 @@ DEF_LEVADURA      = "Fermentis US-05 (Ale Americana)"
 DEF_ALTITUD       = "Córdoba Capital"
 DEF_FORMATO       = "pellet"
 EVAPORACION_PCT   = 10.0  # evaporación por hora de hervor (%)
-APP_VERSION       = "1.4.0"  # versión instalada (para comprobar actualizaciones)
+APP_VERSION       = "1.4.1"  # versión instalada (para comprobar actualizaciones)
 RECETARIO_URL     = ("https://github.com/saintwick47/cervecera_vgb/"
                      "releases/latest/download/recetas_cervecera_vgb.json")
 RELEASE_API_URL   = "https://api.github.com/repos/saintwick47/cervecera_vgb/releases/latest"
+
+
+def _huella(obj):
+    """Huella del contenido de una receta: sirve para saber si cambió de verdad."""
+    try:
+        return hashlib.md5(json.dumps(obj, sort_keys=True,
+                                      ensure_ascii=False).encode()).hexdigest()[:12]
+    except Exception:
+        return ""
 
 
 def format_num(val):
@@ -1351,22 +1361,33 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
         """Descarga el recetario más reciente y lo fusiona. Devuelve (agregadas, omitidas)."""
         with urllib.request.urlopen(RECETARIO_URL, timeout=20) as r:
             recetas_json = json.load(r)
-        agregadas, omitidas = 0, 0
+        refrescables = self._recetas_refrescables(recetas_json)
+        agregadas, actualizadas, omitidas = 0, 0, 0
         for nombre, datos in recetas_json.items():
-            if self._guardar_desde_json(nombre, datos):
+            h = _huella(datos)
+            if self.db.recipe_exists(nombre):
+                # Solo se reescribe si el contenido del recetario cambió desde la última vez
+                if (nombre in refrescables and refrescables[nombre] != h
+                        and self._guardar_desde_json(nombre, datos, refrescar=True)):
+                    actualizadas += 1
+                    refrescables[nombre] = h
+                else:
+                    omitidas += 1
+            elif self._guardar_desde_json(nombre, datos):
                 agregadas += 1
-            else:
-                omitidas += 1
-        return agregadas, omitidas
+                refrescables[nombre] = h
+        self._guardar_refrescables(refrescables)
+        return agregadas, omitidas, actualizadas
 
     def actualizar_recetas_web(self):
         """Botón manual: busca y fusiona el recetario, mostrando el resultado."""
         try:
-            agregadas, omitidas = self._descargar_y_fusionar()
+            agregadas, omitidas, actualizadas = self._descargar_y_fusionar()
             self.cargar_lista_recetas()
             mb.showinfo("Recetas actualizadas",
                         f"Nuevas recetas agregadas: {agregadas}\n"
-                        f"Ya existían (se omitieron): {omitidas}\n\n"
+                        f"Recetas corregidas (genéricas -> reales): {actualizadas}\n"
+                        f"Sin cambios: {omitidas}\n\n"
                         "Listo, sin reinstalar nada.")
         except Exception as e:
             logger.error(f"actualizar_recetas_web: {e}")
@@ -1379,16 +1400,17 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
         """Al abrir la app: en segundo plano descarga y fusiona el recetario (silencioso)."""
         def tarea():
             try:
-                agregadas, omitidas = self._descargar_y_fusionar()
-                if agregadas:
-                    self.after(0, self._refrescar_tras_auto, agregadas)
+                agregadas, omitidas, actualizadas = self._descargar_y_fusionar()
+                if agregadas or actualizadas:
+                    self.after(0, self._refrescar_tras_auto, agregadas, actualizadas)
             except Exception as e:
                 logger.error(f"_auto_actualizar: {e}")
         threading.Thread(target=tarea, daemon=True).start()
 
-    def _refrescar_tras_auto(self, agregadas):
+    def _refrescar_tras_auto(self, agregadas, actualizadas=0):
         self.cargar_lista_recetas()
-        logger.info(f"Recetas auto-actualizadas al iniciar: {agregadas} nuevas.")
+        logger.info(f"Recetas auto-actualizadas al iniciar: {agregadas} nuevas, "
+                    f"{actualizadas} corregidas.")
         try:
             self.title("Cervecera VGB - By SaintWick (recetas actualizadas)")
         except Exception:
@@ -1444,19 +1466,28 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
             logger.error(f"comprobar_actualizaciones: {e}")
             mb.showerror("Error", f"No se pudo comprobar actualizaciones.\n{e}")
 
-    def _guardar_desde_json(self, nombre, datos):
+    def _guardar_desde_json(self, nombre, datos, refrescar=False):
         """Adapta una receta del JSON (formato móvil) y la guarda.
-        Si ya existe, no la intenta guardar (evita el 'IntegrityError' en el log)."""
-        if self.db.recipe_exists(nombre):
+        Si ya existe la actualiza SOLO si viene del recetario oficial (refrescar=True);
+        así se corrigen las recetas genéricas viejas sin tocar las del usuario."""
+        existe = self.db.recipe_exists(nombre)
+        if existe and not refrescar:
             return None
-        levadura_nombre = DEF_LEVADURA
-        levadura_datos = LEVADURAS_AR.get(levadura_nombre, {"atenuacion": 81.0, "tolerancia_abv": 12.0})
+        # Levadura: la de la receta importada si la trae; si no, la de por defecto
+        levs = datos.get('levaduras') or []
+        if levs:
+            levadura_nombre = levs[0].get('nombre') or DEF_LEVADURA
+            levadura_datos = {"atenuacion": float(levs[0].get('atenuacion') or 81.0),
+                              "tolerancia_abv": float(levs[0].get('tolerancia') or 12.0)}
+        else:
+            levadura_nombre = DEF_LEVADURA
+            levadura_datos = LEVADURAS_AR.get(levadura_nombre, {"atenuacion": 81.0, "tolerancia_abv": 12.0})
         receta = {
             'name': nombre, 'style': datos.get('style', 'Estilo Base'),
             'volume': datos.get('agua_vol', 20), 'efficiency': 0.75,
             'og_estimated': None, 'fg_estimated': datos.get('fg_estimada', 1.010),
             'ibu_estimated': None, 'srm_estimated': None,
-            'notes': '',
+            'notes': datos.get('notas', ''),
             'maltas': [{'nombre': m['nombre'], 'cantidad': m['cantidad'],
                         'extracto': m.get('extracto', 300), 'color': m.get('color', 2)}
                        for m in datos.get('maltas', [])],
@@ -1468,7 +1499,46 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
                            'atenuacion': levadura_datos['atenuacion'],
                            'tolerancia': levadura_datos['tolerancia_abv']}],
         }
+        if existe:
+            rid = self._id_receta(nombre)
+            return self.db.update_recipe(rid, receta) if rid else None
         return self.db.save_recipe(receta)
+
+    def _id_receta(self, nombre):
+        """Id de una receta guardada, buscándola por nombre."""
+        try:
+            for r in self.db.get_all_recipes_summary():
+                if r['name'] == nombre:
+                    return r['id']
+        except Exception as e:
+            logger.error(f"_id_receta({nombre}): {e}")
+        return None
+
+    def _recetas_refrescables(self, recetas_json):
+        """Nombres que la app puede refrescar desde el recetario.
+        La primera vez son los que ya existen y figuran en el recetario: esas son
+        justamente las recetas genéricas viejas que hay que corregir."""
+        guardado = self.db.get_setting('recetas_refrescables', None)
+        if guardado is not None:
+            try:
+                datos = json.loads(guardado)
+                if isinstance(datos, list):        # formato anterior (solo nombres)
+                    return {n: None for n in datos}
+                return dict(datos)
+            except Exception:
+                return {}
+        try:
+            existentes = {r['name'] for r in self.db.get_all_recipes_summary()}
+        except Exception:
+            existentes = set()
+        # Primera vez: los que ya existen y figuran en el recetario son los genéricos viejos
+        return {n: None for n in recetas_json if n in existentes}
+
+    def _guardar_refrescables(self, nombres):
+        try:
+            self.db.set_setting('recetas_refrescables', json.dumps(nombres, ensure_ascii=False))
+        except Exception as e:
+            logger.error(f"_guardar_refrescables: {e}")
 
     def _recolectar_datos_exportacion(self):
         resultados = self.calcular_y_mostrar()
