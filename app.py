@@ -261,7 +261,7 @@ class CerveceraApp(ctk.CTk):
 
         # Estilo BJCP
         ctk.CTkLabel(frame_datos, text="Estilo Objetivo:").grid(row=3, column=0, padx=5, pady=5, sticky="w")
-        self.combo_estilo_bjcp = ctk.CTkComboBox(frame_datos, values=get_style_list(), command=self._on_estilo_change)
+        self.combo_estilo_bjcp = ctk.CTkComboBox(frame_datos, values=get_style_list(), command=lambda e: self.calcular_y_mostrar())
         self.combo_estilo_bjcp.set("Auto (Sugerir)")
         self.combo_estilo_bjcp.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="ew")
 
@@ -316,23 +316,6 @@ class CerveceraApp(ctk.CTk):
         self.entry_ph_agua = ctk.CTkEntry(frame_agua, placeholder_text="7.0", width=55)
         self.entry_ph_agua.grid(row=1, column=7, padx=2, pady=2)
         self.entry_ph_agua.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
-
-        # Fase 3: sulfato, cloruro y agua objetivo (sales + ósmosis)
-        ctk.CTkLabel(frame_agua, text="Sulfato (SO4):").grid(row=2, column=0, padx=5, pady=2, sticky="w")
-        self.entry_so4 = ctk.CTkEntry(frame_agua, placeholder_text="0", width=60)
-        self.entry_so4.grid(row=2, column=1, padx=2, pady=2)
-        self.entry_so4.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
-
-        ctk.CTkLabel(frame_agua, text="Cloruro (Cl):").grid(row=2, column=2, padx=5, pady=2, sticky="w")
-        self.entry_cl = ctk.CTkEntry(frame_agua, placeholder_text="0", width=60)
-        self.entry_cl.grid(row=2, column=3, padx=2, pady=2)
-        self.entry_cl.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
-
-        ctk.CTkLabel(frame_agua, text="Agua objetivo:").grid(row=2, column=4, padx=5, pady=2, sticky="w")
-        self.combo_agua_obj = ctk.CTkComboBox(frame_agua, values=list(BrewEngine.PERFILES_AGUA_OBJETIVO.keys()),
-                                              command=lambda e: self.calcular_y_mostrar(), width=200)
-        self.combo_agua_obj.set("Balanceada (genérica)")
-        self.combo_agua_obj.grid(row=2, column=5, columnspan=3, padx=2, pady=2, sticky="ew")
 
         # ── 4. Maltas ────────────────────────────────────────────────────
         frame_maltas = ctk.CTkFrame(self.scroll_receta)
@@ -832,16 +815,6 @@ class CerveceraApp(ctk.CTk):
             return
         self.calcular_y_mostrar()
 
-    def _on_estilo_change(self, _=None):
-        """Al elegir estilo BJCP, sugerir el agua objetivo de esa familia."""
-        try:
-            familia = BrewEngine.familia_estilo(self.combo_estilo_bjcp.get())
-            if familia in BrewEngine.PERFILES_AGUA_OBJETIVO:
-                self.combo_agua_obj.set(familia)
-        except Exception:
-            pass
-        self.calcular_y_mostrar()
-
     def _leer_levadura(self):
         nombre = self.combo_levadura.get()
         levadura_datos = self._datos_insumo("Levadura", nombre) or {"atenuacion": 75.0, "tolerancia_abv": 12.0}
@@ -853,27 +826,8 @@ class CerveceraApp(ctk.CTk):
             "mg": _flotar(self.entry_mg.get(), 10),
             "hco3": _flotar(self.entry_hco3.get(), 150),
             "ph": _flotar(self.entry_ph_agua.get(), 7.0),
-            "so4": _flotar(self.entry_so4.get(), 0),
-            "cl": _flotar(self.entry_cl.get(), 0),
         }
 
-    def _texto_ajuste_agua(self, agua, volumen_agua):
-        """Texto con SO4/Cl, sales sugeridas y dilución con ósmosis (Fase 3)."""
-        objetivo_nombre = self.combo_agua_obj.get() or "Balanceada (genérica)"
-        objetivo = BrewEngine.PERFILES_AGUA_OBJETIVO.get(objetivo_nombre, {})
-        ratio, desc = BrewEngine.relacion_so4_cl(agua.get("so4", 0), agua.get("cl", 0))
-        s = BrewEngine.calcular_sales(agua, objetivo, volumen_agua)
-        lineas = [
-            f"\n🎯 AJUSTE DE AGUA (objetivo: {objetivo_nombre})",
-            f"SO4/Cl actual: {ratio} ({desc})",
-            f"Sales sugeridas: yeso {s['yeso_g']} g · CaCl2 {s['cacl2_g']} g · "
-            f"Epsom {s['epsom_g']} g · bicarbonato {s['bicarb_g']} g",
-        ]
-        if s["ro_pct"] > 0:
-            lineas.append(f"HCO3 alto: diluir {s['ro_pct']:.0f}% con agua de ósmosis")
-        lineas.append(f"Resultado estimado: Ca {s['ca_final']} · Mg {s['mg_final']} · "
-                      f"SO4 {s['so4_final']} · Cl {s['cl_final']} · HCO3 {s['hco3_final']} ppm")
-        return "\n".join(lineas)
 
     def _leer_parametros(self):
         volumen = _flotar(self.combo_volumen.get(), 20) or 20
@@ -952,7 +906,6 @@ Maceración       : {r['ph']:.2f} {ph_desc}
 Post-hervor      : {r['ph_hervor']:.2f}
 Final (lúpulo)   : {r['ph_final']:.2f}
 Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%)
-{self._texto_ajuste_agua(agua_datos, aguas['agua_maceracion'] + aguas['agua_lavado'])}
 
 ⚠️ {alerta_alcohol}
 
@@ -1037,11 +990,6 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
         self.entry_ca.delete(0, "end");   self.entry_ca.insert(0, format_num(ca_s if ca_s is not None else 50))
         self.entry_mg.delete(0, "end");   self.entry_mg.insert(0, format_num(mg_s if mg_s is not None else 10))
         self.entry_hco3.delete(0, "end"); self.entry_hco3.insert(0, format_num(hc_s if hc_s is not None else 150))
-        self.entry_so4.delete(0, "end"); self.entry_so4.insert(0, format_num(receta.get('agua_so4', 0) or 0))
-        self.entry_cl.delete(0, "end");  self.entry_cl.insert(0, format_num(receta.get('agua_cl', 0) or 0))
-        obj_guardado = receta.get('agua_objetivo') or "Balanceada (genérica)"
-        if obj_guardado in BrewEngine.PERFILES_AGUA_OBJETIVO:
-            self.combo_agua_obj.set(obj_guardado)
         ph_entrada = receta.get('agua_ph_entrada')
         if ph_entrada is not None:
             self.entry_ph_agua.delete(0, "end"); self.entry_ph_agua.insert(0, format_num(ph_entrada))
@@ -1080,9 +1028,6 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
         self.entry_absorcion.delete(0, "end"); self.entry_absorcion.insert(0, "1.0")
         self.entry_hervor.delete(0, "end");    self.entry_hervor.insert(0, "60")
         self.combo_agua.set(DEF_PERFIL_AGUA)
-        self.entry_so4.delete(0, "end"); self.entry_so4.insert(0, "0")
-        self.entry_cl.delete(0, "end");  self.entry_cl.insert(0, "0")
-        self.combo_agua_obj.set("Balanceada (genérica)")
         self._on_perfil_agua(None)
         self.texto_notas.delete("1.0", "end")
         self.texto_resultados.delete("1.0", "end")
@@ -1117,8 +1062,6 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
                            'tolerancia': levadura_datos['tolerancia_abv']}],
             'agua_ca': agua_datos['ca'], 'agua_mg': agua_datos['mg'],
             'agua_hco3': agua_datos['hco3'], 'agua_ph_entrada': agua_datos['ph'],
-            'agua_so4': agua_datos.get('so4', 0), 'agua_cl': agua_datos.get('cl', 0),
-            'agua_objetivo': self.combo_agua_obj.get() or '',
             'tiempo_hervor': tiempo_hervor,
             'ratio_maceracion': ratio, 'absorcion': absorcion,
             'altitud_name': self.combo_altitud.get() or DEF_ALTITUD,
