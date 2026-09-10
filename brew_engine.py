@@ -92,7 +92,7 @@ class BrewEngine:
     # ==========================================
     @staticmethod
     def calcular_ibu(lupulos, volumen_lote, og, altitud=400, formula="tinseth",
-                     hop_stand_min=15.0):
+                     hop_stand_min=15.0, hop_stand_temp=90.0):
         """
         IBU. (Fase 0)
         formula='tinseth' (default) o 'rager' (librería brauhaus).
@@ -103,6 +103,15 @@ class BrewEngine:
         """
         if volumen_lote <= 0: return 0.0
         ibu_total = 0.0
+        # Fase 5: factor de isomerización post-apagado según temperatura del hop stand
+        # (Hosom/alchemyoverlord: la utilización cae y se detiene ~82 C)
+        f_stand = 0.0
+        try:
+            t_std = float(hop_stand_temp if hop_stand_temp is not None else 90.0)
+            if t_std > 82.0:
+                f_stand = max(0.0, min(0.6, (t_std - 82.0) / 30.0))
+        except (TypeError, ValueError):
+            f_stand = 0.4
         temp_eb = 100 - (altitud / 300.0)
         fc_temp = math.exp(-0.04 * (100 - temp_eb)) if temp_eb < 100 else 1.0
         es_rager = str(formula).lower() == "rager"
@@ -115,7 +124,7 @@ class BrewEngine:
             factor_formato = 1.10 if formato == 'pellet' else 1.0
 
             if es_rager:
-                t = tiempo if tiempo > 0 else hop_stand_min * 0.5
+                t = tiempo if tiempo > 0 else float(hop_stand_min or 15.0) * (f_stand if f_stand > 0 else 0.5)
                 util_pct = 18.11 + 13.86 * math.tanh((t - 31.32) / 18.27)   # %
                 ajuste = max(0.0, (og - 1.050) / 0.2)
                 ibu_l = (cantidad_g / 1000.0) * 100 * util_pct * aa_pct / (volumen_lote * (1 + ajuste))
@@ -126,8 +135,8 @@ class BrewEngine:
                 if tiempo > 0:
                     utilizacion = factor_og * ((1 - math.exp(-0.04 * tiempo)) / 4.15)
                 else:
-                    f_stand = (1 - math.exp(-0.04 * float(hop_stand_min or 15.0))) / 4.15
-                    utilizacion = factor_og * f_stand * 0.5
+                    f_tiempo = (1 - math.exp(-0.04 * float(hop_stand_min or 15.0))) / 4.15
+                    utilizacion = factor_og * f_tiempo * f_stand
                 ibu_l = (cantidad_g * utilizacion * aa * 1000) / volumen_lote
                 ibu_total += ibu_l * fc_temp * factor_formato
         return round(ibu_total, 1)
@@ -343,6 +352,7 @@ class BrewEngine:
         formula_ibu = datos_receta.get('formula_ibu', 'tinseth')
         formula_abv = datos_receta.get('formula_abv', 'standard')
         hop_stand   = datos_receta.get('hop_stand_min', 15.0)
+        hop_stand_t = datos_receta.get('hop_stand_temp', 90.0)
         perdidas_l  = datos_receta.get('perdidas_l', 0.0)
         evap_l_h    = datos_receta.get('evaporacion_l_h')
 
@@ -358,7 +368,8 @@ class BrewEngine:
         calorias = BrewEngine.calcular_calorias(og, fg, abv)
         alerta_abv = abv > tolerancia_abv
 
-        ibu = BrewEngine.calcular_ibu(lupulos, volumen, og, altitud, formula_ibu, hop_stand)
+        ibu = BrewEngine.calcular_ibu(lupulos, volumen, og, altitud, formula_ibu,
+                                      hop_stand, hop_stand_t)
         srm = BrewEngine.calcular_srm(maltas, volumen)
         ebc = BrewEngine.srm_a_ebc(srm)
 

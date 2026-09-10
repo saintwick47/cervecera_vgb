@@ -133,7 +133,25 @@ class AyudaDialog(ctk.CTkToplevel):
 - Si algo falla, usá el botón "🧾 Ver log" (arriba) para ver la ruta del archivo
   de registro. Windows: %LOCALAPPDATA%\\Cervecera VGB\\cervecera_debug.log
 
-📧 8. CONTACTO: nicoweb45@proton.me (Asunto: beer_vgb)
+
+🔬 FUENTES DE LAS FÓRMULAS
+- OG/Extracto: potencial PPG x eficiencia (BeerSmith / Brewfather).
+- FG: atenuacion de levadura; modo Normal ajusta por temperatura de macerado
+  (beta-amilasa 60-65 C = mas fermentable; alfa-amilasa 67-72 C = mas dextrinas).
+- IBU: Tinseth (Glenn Tinseth) y Rager (libreria brauhaus). Para flameout/whirlpool
+  se estima la isomerizacion posterior al apagado (John-Paul Hosom - alchemyoverlord:
+  la utilizacion cae y se detiene ~82 C).
+- Color: Morey (MCU -> SRM). Conversion EBC = SRM x 1.97 (Brewfather).
+- ABV: Standard (OG-FG)x131.25 ; Alternative 76.08*(OG-FG)/(1.775-OG)*(FG/0.794)
+  (formulas documentadas por Brewfather).
+- Densimetro: correccion ASBC. pH: alcalinidad residual (Palmer) + acidez del grano.
+- Agua: referencia DM Riffe (homebrewingphysics) y Kai Troester (braukaiser).
+- Levadura: Kai Troester y Chris White. Refractometro: Petr Novotny.
+- Estilos: BJCP 2021 - Brewers Association - Norbrygg - SHBF.
+- Interoperabilidad: BeerXML (beerxml.com).
+Refs: docs.brewfather.app/settings.md - docs.brewfather.app/recipes/calculations.md
+
+📧 9. CONTACTO: nicoweb45@proton.me (Asunto: beer_vgb)
 """
         self.texto_ayuda.insert("1.0", mensaje)
         self.texto_ayuda.configure(state="disabled")
