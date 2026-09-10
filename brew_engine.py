@@ -32,16 +32,47 @@ class BrewEngine:
         return round(og, 4)
 
     @staticmethod
-    def calcular_fg(og, atenuacion_levadura=75.0):
-        """FG = 1 + (OG - 1) * (1 - %Atenuacion/100)"""
+    def calcular_fg(og, atenuacion_levadura=75.0, metodo="normal",
+                    temp_macerado=66.0, especiales_pct=0.0):
+        """
+        FG por atenuación. (Fase 0)
+        metodo='simple'  -> solo atenuación de la levadura (como antes)
+        metodo='normal'  -> ajusta la atenuación por TEMPERATURA DE MACERADO
+                            (beta-amilasa <65 C = más fermentable; alfa-amilasa
+                            >67 C = más dextrinas) y por maltas especiales.
+        Referencias: rangos enzimáticos (Brewfather - Mash & Lauter Science).
+        """
         if og <= 1.000 or atenuacion_levadura <= 0: return 1.000
-        fg = 1.0 + ((og - 1.0) * (1.0 - (atenuacion_levadura / 100.0)))
+        aa = float(atenuacion_levadura)
+        if str(metodo).lower() == "normal":
+            tabla = [(60, 1.08), (62, 1.06), (64, 1.03), (66, 1.00),
+                     (68, 0.96), (70, 0.91), (72, 0.86), (74, 0.82)]
+            t = min(max(float(temp_macerado or 66.0), 60.0), 74.0)
+            factor_t = 1.0
+            for i in range(len(tabla) - 1):
+                t0, f0 = tabla[i]; t1, f1 = tabla[i + 1]
+                if t0 <= t <= t1:
+                    factor_t = f0 + (f1 - f0) * (t - t0) / (t1 - t0)
+                    break
+            factor_esp = max(0.75, 1.0 - 0.25 * float(especiales_pct or 0.0))
+            aa = aa * factor_t * factor_esp
+        aa = min(max(aa, 40.0), 95.0)
+        fg = 1.0 + ((og - 1.0) * (1.0 - (aa / 100.0)))
         return round(fg, 4)
 
     @staticmethod
-    def calcular_abv(og, fg):
+    def calcular_abv(og, fg, formula="standard"):
+        """ABV: 'standard' (OG-FG)*131.25  |  'alternative' 76.08*(OG-FG)/(1.775-OG)*(FG/0.794)
+        (Fórmulas documentadas por Brewfather en Settings > Formulas)."""
         if og <= fg: return 0.0
-        return round(((og - fg) * 131.25), 2)
+        if str(formula).lower() == "alternative":
+            try:
+                abv = 76.08 * (og - fg) / (1.775 - og) * (fg / 0.794)
+            except ZeroDivisionError:
+                abv = (og - fg) * 131.25
+        else:
+            abv = (og - fg) * 131.25
+        return round(abv, 2)
 
     @staticmethod
     def calcular_atenuacion(og, fg):
@@ -60,31 +91,45 @@ class BrewEngine:
     # MÓDULO AMARGOR Y LÚPULOS (§3.A y §3.C)
     # ==========================================
     @staticmethod
-    def calcular_ibu(lupulos, volumen_lote, og, altitud=400):
+    def calcular_ibu(lupulos, volumen_lote, og, altitud=400, formula="tinseth",
+                     hop_stand_min=15.0):
+        """
+        IBU. (Fase 0)
+        formula='tinseth' (default) o 'rager' (librería brauhaus).
+        Flameout/whirlpool (tiempo=0): se estima la isomerización POSTERIOR al
+        apagado (Hosom/alchemyoverlord: la utilización continúa hasta ~82 C),
+        con una tasa ~50% durante el hop stand (hop_stand_min).
+        OJO: el dry-hop NO aporta IBU (no usar tiempo 0 para dry-hop).
+        """
         if volumen_lote <= 0: return 0.0
         ibu_total = 0.0
         temp_eb = 100 - (altitud / 300.0)
         fc_temp = math.exp(-0.04 * (100 - temp_eb)) if temp_eb < 100 else 1.0
+        es_rager = str(formula).lower() == "rager"
         for lupulo in lupulos:
             cantidad_g = lupulo.get('cantidad', 0)
-            aa = lupulo.get('aa', 0) / 100.0
+            aa_pct = lupulo.get('aa', 0)
             tiempo = lupulo.get('tiempo', 0)
-            formato = lupulo.get('formato', 'pellet').lower()
-            if aa <= 0 or cantidad_g <= 0: continue
-            factor_og = 1.65 * math.pow(0.000125, og - 1)
-            utilizacion = 0.0
-            if tiempo > 0:
-                factor_tiempo = (1 - math.exp(-0.04 * tiempo)) / 4.15
-                utilizacion = factor_og * factor_tiempo
-            elif tiempo == 0:
-                # Whirlpool / flameout: isomerización parcial (~10% de la máx).
-                # Nota: un lúpulo en seco (dry-hop) NO aporta IBU; no se debe
-                # usar tiempo 0 para dry-hop.
-                utilizacion = factor_og * 0.10
+            formato = (lupulo.get('formato') or 'pellet').lower()
+            if aa_pct <= 0 or cantidad_g <= 0: continue
             factor_formato = 1.10 if formato == 'pellet' else 1.0
-            ibu_lupulo = (cantidad_g * utilizacion * aa * 1000) / volumen_lote
-            ibu_lupulo *= fc_temp * factor_formato
-            ibu_total += ibu_lupulo
+
+            if es_rager:
+                t = tiempo if tiempo > 0 else hop_stand_min * 0.5
+                util_pct = 18.11 + 13.86 * math.tanh((t - 31.32) / 18.27)   # %
+                ajuste = max(0.0, (og - 1.050) / 0.2)
+                ibu_l = (cantidad_g / 1000.0) * 100 * util_pct * aa_pct / (volumen_lote * (1 + ajuste))
+                ibu_total += ibu_l * factor_formato * fc_temp
+            else:
+                aa = aa_pct / 100.0
+                factor_og = 1.65 * math.pow(0.000125, og - 1)
+                if tiempo > 0:
+                    utilizacion = factor_og * ((1 - math.exp(-0.04 * tiempo)) / 4.15)
+                else:
+                    f_stand = (1 - math.exp(-0.04 * float(hop_stand_min or 15.0))) / 4.15
+                    utilizacion = factor_og * f_stand * 0.5
+                ibu_l = (cantidad_g * utilizacion * aa * 1000) / volumen_lote
+                ibu_total += ibu_l * fc_temp * factor_formato
         return round(ibu_total, 1)
 
     # ==========================================
@@ -99,18 +144,24 @@ class BrewEngine:
             lovibond = malta.get('color', 2.0)
             mcu = (cantidad_kg * lovibond * 2.205) / (volumen_lote * 0.264)
             mcu_total += mcu
-        if mcu_total <= 7:
-            srm = mcu_total
-        else:
-            srm = 1.4922 * math.pow(mcu_total, 0.6859)
+        if mcu_total <= 0:
+            return 0.0
+        # Morey (BeerSmith / BrewWiki). Antes se usaba MCU directo por debajo de 7.
+        srm = 1.4922 * math.pow(mcu_total, 0.6859)
         return max(0, round(srm, 1))
+
+    @staticmethod
+    def srm_a_ebc(srm):
+        """Conversión estándar SRM -> EBC (Brewfather: EBC = SRM x 1.97)."""
+        return round(float(srm or 0) * 1.97, 1)
 
     # ==========================================
     # MÓDULO AGUAS Y pH
     # ==========================================
     @staticmethod
     def calcular_aguas(granos_kg, volumen_final, ratio_maceracion=3.0,
-                       absorcion_grano=1.0, evaporacion_pct=10.0, tiempo_hervor_min=60):
+                       absorcion_grano=1.0, evaporacion_pct=10.0, tiempo_hervor_min=60,
+                       perdidas_l=0.0, evaporacion_l_h=None):
         """
         Calcula agua de maceración y lavado.
         v3: Incorpora evaporación durante el hervor (típicamente 8-12% por hora).
@@ -118,12 +169,17 @@ class BrewEngine:
         """
         if granos_kg <= 0: return {'agua_maceracion': 0.0, 'agua_lavado': 0.0,
                                    'volumen_pre_hervor': 0.0, 'evaporacion_L': 0.0}
-        evaporacion_h = (evaporacion_pct / 100.0) * (tiempo_hervor_min / 60.0)
-        volumen_pre_hervor = volumen_final * (1 + evaporacion_h)
+        # Fase 4: usar evaporación en L/h del equipo si está definida; sumar pérdidas
+        if evaporacion_l_h:
+            evaporacion_l = float(evaporacion_l_h) * (float(tiempo_hervor_min or 60) / 60.0)
+        else:
+            evaporacion_h = (evaporacion_pct / 100.0) * (tiempo_hervor_min / 60.0)
+            evaporacion_l = volumen_final * evaporacion_h
+        volumen_pre_hervor = volumen_final + float(perdidas_l or 0.0) + evaporacion_l
         agua_maceracion = granos_kg * ratio_maceracion
         volumen_retenido = granos_kg * absorcion_grano
         agua_lavado = volumen_pre_hervor - agua_maceracion + volumen_retenido
-        evaporacion_L = volumen_pre_hervor - volumen_final
+        evaporacion_L = evaporacion_l
         return {
             'agua_maceracion': round(agua_maceracion, 2),
             'agua_lavado': max(0, round(agua_lavado, 2)),
@@ -282,20 +338,35 @@ class BrewEngine:
         absorcion = datos_receta.get('absorcion', 1.0)
         evaporacion_pct = datos_receta.get('evaporacion_pct', 10.0)
 
+        metodo_fg   = datos_receta.get('metodo_fg', 'normal')
+        temp_mac    = datos_receta.get('temp_macerado', 66.0)
+        formula_ibu = datos_receta.get('formula_ibu', 'tinseth')
+        formula_abv = datos_receta.get('formula_abv', 'standard')
+        hop_stand   = datos_receta.get('hop_stand_min', 15.0)
+        perdidas_l  = datos_receta.get('perdidas_l', 0.0)
+        evap_l_h    = datos_receta.get('evaporacion_l_h')
+
+        granos_total = sum(m.get('cantidad', 0) for m in maltas) or 0.0
+        especiales_kg = sum(m.get('cantidad', 0) for m in maltas if m.get('color', 2) > 20)
+        especiales_pct = (especiales_kg / granos_total) if granos_total > 0 else 0.0
+
         og = BrewEngine.calcular_og(maltas, volumen, eficiencia)
-        fg = BrewEngine.calcular_fg(og, atenuacion_levadura)
-        abv = BrewEngine.calcular_abv(og, fg)
+        fg = BrewEngine.calcular_fg(og, atenuacion_levadura, metodo_fg, temp_mac, especiales_pct)
+        abv = BrewEngine.calcular_abv(og, fg, formula_abv)
+        abv_alt = BrewEngine.calcular_abv(og, fg, "alternative")
         atenuacion_real = BrewEngine.calcular_atenuacion(og, fg)
         calorias = BrewEngine.calcular_calorias(og, fg, abv)
         alerta_abv = abv > tolerancia_abv
 
-        ibu = BrewEngine.calcular_ibu(lupulos, volumen, og, altitud)
+        ibu = BrewEngine.calcular_ibu(lupulos, volumen, og, altitud, formula_ibu, hop_stand)
         srm = BrewEngine.calcular_srm(maltas, volumen)
+        ebc = BrewEngine.srm_a_ebc(srm)
 
         granos_kg = sum(m.get('cantidad', 0) for m in maltas)
         tiempo_hervor = datos_receta.get('tiempo_hervor', 60)
         aguas = BrewEngine.calcular_aguas(granos_kg, volumen, ratio_mac,
-                                          absorcion, evaporacion_pct, tiempo_hervor)
+                                          absorcion, evaporacion_pct, tiempo_hervor,
+                                          perdidas_l, evap_l_h)
 
         ph_mash = BrewEngine.estimar_ph_maceracion(
             agua.get('ca', 50), agua.get('mg', 10), agua.get('hco3', 150), srm,
@@ -318,6 +389,8 @@ class BrewEngine:
             'acido_lactico_ml': acido_lactico_ml,
             'alerta_abv': alerta_abv,
             'srm_hex': BrewEngine.srm_a_color_hex(srm),
+            'ebc': ebc, 'abv_alt': abv_alt,
+            'metodo_fg': metodo_fg, 'formula_ibu': formula_ibu, 'formula_abv': formula_abv,
         }
 
     # ==========================================

@@ -170,6 +170,7 @@ class CerveceraApp(ctk.CTk):
         # Fase 2: cargar el catálogo de insumos en la BD la primera vez (luego es editable)
         try:
             self.db.seed_ingredients(MALTAS_AR, LUPULOS_AR, LEVADURAS_AR)
+            self.db.seed_equipment()
         except Exception as e:
             logger.warning(f"No se pudo sembrar el catálogo de insumos: {e}")
 
@@ -207,10 +208,12 @@ class CerveceraApp(ctk.CTk):
         self.tab_receta = self.tabview.add("🛠️ Receta")
         self.tab_inventario = self.tabview.add("📦 Inventario")
         self.tab_insumos = self.tabview.add("🧪 Insumos")
+        self.tab_equipos = self.tabview.add("⚙️ Equipos")
 
         self.setup_tab_receta()
         self.setup_tab_inventario()
         self.setup_tab_insumos()
+        self.setup_tab_equipos()
 
         self.cargar_lista_recetas()
         self.nueva_receta()
@@ -285,6 +288,32 @@ class CerveceraApp(ctk.CTk):
         self.entry_hervor = ctk.CTkEntry(frame_mac, placeholder_text="60", width=70)
         self.entry_hervor.grid(row=1, column=5, padx=2, pady=2)
         self.entry_hervor.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
+
+        # Fase 4: equipo + fórmulas (Fase 0)
+        ctk.CTkLabel(frame_mac, text="Equipo:").grid(row=2, column=0, padx=5, pady=2, sticky="w")
+        self.combo_equipo = ctk.CTkComboBox(frame_mac, values=self._nombres_equipos(),
+                                            command=self._on_equipo_change, width=210)
+        _eqs = self._nombres_equipos()
+        self.combo_equipo.set(_eqs[0] if _eqs else "")
+        self.combo_equipo.grid(row=2, column=1, columnspan=2, padx=2, pady=2, sticky="ew")
+
+        ctk.CTkLabel(frame_mac, text="Fórmula IBU:").grid(row=2, column=3, padx=5, pady=2, sticky="w")
+        self.combo_f_ibu = ctk.CTkComboBox(frame_mac, values=["Tinseth", "Rager"], width=110,
+                                           command=self._on_formula_change)
+        self.combo_f_ibu.set("Rager" if self.db.get_setting("formula_ibu", "tinseth") == "rager" else "Tinseth")
+        self.combo_f_ibu.grid(row=2, column=4, padx=2, pady=2, sticky="w")
+
+        ctk.CTkLabel(frame_mac, text="FG:").grid(row=3, column=0, padx=5, pady=2, sticky="w")
+        self.combo_f_fg = ctk.CTkComboBox(frame_mac, values=["Normal", "Simple"], width=110,
+                                          command=self._on_formula_change)
+        self.combo_f_fg.set("Simple" if self.db.get_setting("metodo_fg", "normal") == "simple" else "Normal")
+        self.combo_f_fg.grid(row=3, column=1, padx=2, pady=2, sticky="w")
+
+        ctk.CTkLabel(frame_mac, text="ABV:").grid(row=3, column=3, padx=5, pady=2, sticky="w")
+        self.combo_f_abv = ctk.CTkComboBox(frame_mac, values=["Standard", "Alternative"], width=130,
+                                           command=self._on_formula_change)
+        self.combo_f_abv.set("Alternative" if self.db.get_setting("formula_abv", "standard") == "alternative" else "Standard")
+        self.combo_f_abv.grid(row=3, column=4, padx=2, pady=2, sticky="w")
 
         # ── 3. Perfil del Agua ───────────────────────────────────────────
         frame_agua = ctk.CTkFrame(self.scroll_receta)
@@ -415,6 +444,121 @@ class CerveceraApp(ctk.CTk):
         self.lista_inventario_ui = ctk.CTkScrollableFrame(frame_lista_inv)
         self.lista_inventario_ui.pack(fill="both", expand=True, padx=10, pady=(0, 10))
         self.cargar_lista_inventario()
+
+
+    # ==========================================
+    # PERFILES DE EQUIPO (pestaña, Fase 4)
+    # ==========================================
+    def _nombres_equipos(self):
+        try:
+            return [e["name"] for e in self.db.get_equipment()]
+        except Exception:
+            return []
+
+    def _on_equipo_change(self, _=None):
+        """Al elegir equipo: aplicar volumen, eficiencia y temperatura de macerado."""
+        eq = self.db.get_equipment_by_name(self.combo_equipo.get())
+        if eq:
+            self.combo_volumen.set(format_num(eq.get("batch_volume") or 20))
+            self.volumen_base_receta = float(eq.get("batch_volume") or 20)
+            self.entry_eficiencia.delete(0, "end")
+            self.entry_eficiencia.insert(0, format_num(round((eq.get("eficiencia") or 0.75) * 100, 1)))
+        self.calcular_y_mostrar()
+
+    def _on_formula_change(self, _=None):
+        """Guarda las fórmulas elegidas (preferencia global, como Brewfather)."""
+        try:
+            self.db.set_setting("formula_ibu", "rager" if self.combo_f_ibu.get() == "Rager" else "tinseth")
+            self.db.set_setting("metodo_fg", "simple" if self.combo_f_fg.get() == "Simple" else "normal")
+            self.db.set_setting("formula_abv", "alternative" if self.combo_f_abv.get() == "Alternative" else "standard")
+        except Exception as e:
+            logger.warning(f"No se pudo guardar la preferencia de fórmula: {e}")
+        self.calcular_y_mostrar()
+
+    def setup_tab_equipos(self):
+        self.tab_equipos.grid_columnconfigure(0, weight=1)
+        c = ctk.CTkFrame(self.tab_equipos)
+        c.grid(row=0, column=0, padx=20, pady=(15, 8), sticky="ew")
+        c.grid_columnconfigure((1, 3, 5), weight=1)
+        ctk.CTkLabel(c, text="⚙️ Perfiles de equipo", font=ctk.CTkFont(size=16, weight="bold")
+                     ).grid(row=0, column=0, columnspan=6, sticky="w", padx=8, pady=(8, 4))
+        campos = [("name", "Nombre"), ("batch_volume", "Lote (L)"), ("kettle_volume", "Olla (L)"),
+                  ("perdidas_l", "Pérdidas (L)"), ("evaporacion_l_h", "Evap. (L/h)"),
+                  ("eficiencia_pct", "Eficiencia %"), ("temp_macerado", "Temp. macerado (C)"),
+                  ("notas", "Notas")]
+        self._eq_entries = {}
+        fila = 1
+        for i, (clave, etiqueta) in enumerate(campos):
+            col = (i % 3) * 2
+            if i > 0 and i % 3 == 0:
+                fila += 1
+            ctk.CTkLabel(c, text=f"{etiqueta}:").grid(row=fila, column=col, sticky="w", padx=6, pady=3)
+            e = ctk.CTkEntry(c, width=110)
+            e.grid(row=fila, column=col + 1, sticky="ew", padx=4, pady=3)
+            self._eq_entries[clave] = e
+        fila += 1
+        ctk.CTkButton(c, text="💾 Guardar / Actualizar", command=self._eq_guardar,
+                      fg_color="#059669", hover_color="#047857"
+                      ).grid(row=fila, column=0, columnspan=2, padx=6, pady=10, sticky="w")
+        ctk.CTkButton(c, text="🧹 Limpiar", command=lambda: [e.delete(0, "end") for e in self._eq_entries.values()],
+                      fg_color="#6B7280", hover_color="#4B5563").grid(row=fila, column=2, padx=6, pady=10, sticky="w")
+
+        fl = ctk.CTkFrame(self.tab_equipos)
+        fl.grid(row=1, column=0, padx=20, pady=(0, 20), sticky="nsew")
+        self.lista_equipos_ui = ctk.CTkScrollableFrame(fl)
+        self.lista_equipos_ui.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        self.cargar_lista_equipos()
+
+    def cargar_lista_equipos(self):
+        for w in self.lista_equipos_ui.winfo_children():
+            w.destroy()
+        for eq in self.db.get_equipment():
+            f = ctk.CTkFrame(self.lista_equipos_ui, fg_color="transparent")
+            f.pack(fill="x", pady=2)
+            txt_eq = (f"[Equipo] {eq['name']} — lote {format_num(eq['batch_volume'])} L · "
+                      f"olla {format_num(eq['kettle_volume'])} L · pérdidas {format_num(eq['perdidas_l'])} L · "
+                      f"evap {format_num(eq['evaporacion_l_h'])} L/h · ef {format_num(round(eq['eficiencia']*100,1))}% · "
+                      f"macerado {format_num(eq['temp_macerado'])} C")
+            ctk.CTkLabel(f, text=txt_eq, anchor="w").pack(side="left", padx=5, fill="x", expand=True)
+            ctk.CTkButton(f, text="✏️", width=34, fg_color="#2563EB", hover_color="#1D4ED8",
+                          command=lambda n=eq['name']: self._eq_editar(n)).pack(side="right", padx=3)
+            ctk.CTkButton(f, text="🗑️", width=34, fg_color="#DC2626", hover_color="#991B1B",
+                          command=lambda n=eq['name']: self._eq_borrar(n)).pack(side="right", padx=3)
+
+    def _eq_editar(self, nombre):
+        eq = self.db.get_equipment_by_name(nombre) or {}
+        for clave, e in self._eq_entries.items():
+            e.delete(0, "end")
+            if clave == "eficiencia_pct":
+                e.insert(0, format_num(round((eq.get("eficiencia") or 0.75) * 100, 1)))
+            elif eq.get(clave) not in (None, ""):
+                e.insert(0, format_num(eq.get(clave)))
+
+    def _eq_borrar(self, nombre):
+        if mb.askyesno("Eliminar equipo", f"¿Eliminar '{nombre}'?"):
+            self.db.delete_equipment(nombre)
+            self.cargar_lista_equipos()
+            self.combo_equipo.configure(values=self._nombres_equipos())
+
+    def _eq_guardar(self):
+        def num(k, d=0.0):
+            try:
+                v = self._eq_entries[k].get().strip()
+                return float(v.replace(",", ".")) if v else d
+            except ValueError:
+                return d
+        nombre = self._eq_entries["name"].get().strip()
+        if not nombre:
+            mb.showwarning("Atención", "Escribí el nombre del equipo."); return
+        self.db.add_equipment(nombre, batch_volume=num("batch_volume", 20),
+                              kettle_volume=num("kettle_volume", 30), perdidas_l=num("perdidas_l", 2),
+                              evaporacion_l_h=num("evaporacion_l_h", 2),
+                              eficiencia=num("eficiencia_pct", 75) / 100.0,
+                              temp_macerado=num("temp_macerado", 66),
+                              notas=self._eq_entries["notas"].get().strip())
+        self.cargar_lista_equipos()
+        self.combo_equipo.configure(values=self._nombres_equipos())
+        mb.showinfo("Equipos", f"Equipo guardado:\n{nombre}")
 
     # ==========================================
     # CATÁLOGO DE INSUMOS (pestaña, Fase 2)
@@ -854,6 +998,7 @@ class CerveceraApp(ctk.CTk):
                     "1.0", "\n\n   👉 Añade maltas y lúpulos o selecciona una receta de la izquierda.")
                 return None
 
+            eq = self.db.get_equipment_by_name(self.combo_equipo.get()) or {}
             datos_calculo = {
                 'maltas': maltas, 'lupulos': lupulos, 'agua_vol': volumen,
                 'agua': agua_datos, 'tiempo_hervor': tiempo_hervor,
@@ -861,12 +1006,21 @@ class CerveceraApp(ctk.CTk):
                 'evaporacion_pct': EVAPORACION_PCT,
                 'atenuacion_levadura': levadura_datos['atenuacion'],
                 'tolerancia_abv': levadura_datos['tolerancia_abv'],
+                # Fase 0: fórmulas seleccionables
+                'metodo_fg': "simple" if self.combo_f_fg.get() == "Simple" else "normal",
+                'temp_macerado': eq.get("temp_macerado", 66.0),
+                'formula_ibu': "rager" if self.combo_f_ibu.get() == "Rager" else "tinseth",
+                'formula_abv': "alternative" if self.combo_f_abv.get() == "Alternative" else "standard",
+                # Fase 4: equipo
+                'perdidas_l': eq.get("perdidas_l", 0.0),
+                'evaporacion_l_h': eq.get("evaporacion_l_h"),
             }
             r = BrewEngine.calcular_receta_completa(datos_calculo, eficiencia, altitud)
 
             granos_kg = sum(m.get('cantidad', 0) for m in maltas)
             aguas = BrewEngine.calcular_aguas(granos_kg, volumen, ratio, absorcion,
-                                              EVAPORACION_PCT, tiempo_hervor)
+                                              EVAPORACION_PCT, tiempo_hervor,
+                                              eq.get("perdidas_l", 0.0), eq.get("evaporacion_l_h"))
 
             alerta_alcohol = ("🚨 ¡ALERTA! Saturación de levadura (ABV > Tolerancia)"
                               if r.get('alerta_abv') else "✅ Levadura apta para este ABV")
@@ -889,8 +1043,8 @@ class CerveceraApp(ctk.CTk):
 🧪 PARÁMETROS CALCULADOS (Para {volumen} L | Altitud: {altitud}m)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 OG : {r['og']:.3f}   FG : {r['fg']:.3f}   (Auto. Levadura: {levadura_nombre})   [1.000 = agua destilada]
-ABV: {r['abv']}%   Atenuación: {r['atenuacion']}%
-IBU: {r['ibu']} ({amargor_desc})   SRM: {r['srm']} ({color_desc})
+ABV: {r['abv']}% (alt. {r.get('abv_alt', r['abv'])}%)   Atenuación: {r['atenuacion']}%
+IBU: {r['ibu']} ({amargor_desc})   SRM: {r['srm']} ({color_desc})   EBC: {r.get('ebc', 0)}
 BU/GU: {r.get('bugu', 0)}   Calorías: {r['calorias']} kcal/355ml
 
 💧 AGUA (evap. {EVAPORACION_PCT}%/h, hervor {tiempo_hervor} min)
@@ -963,6 +1117,9 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
         alt_nombre = receta.get('altitud_name') or DEF_ALTITUD
         if alt_nombre in ALTITUDES_CORDOBA:
             self.combo_altitud.set(alt_nombre)
+        eq_nombre = receta.get('equipo') or ''
+        if eq_nombre and eq_nombre in self._nombres_equipos():
+            self.combo_equipo.set(eq_nombre)
         self.entry_ratio.delete(0, "end")
         self.entry_ratio.insert(0, format_num(receta.get('ratio_maceracion', 3.0)))
         self.entry_absorcion.delete(0, "end")

@@ -65,6 +65,7 @@ class DatabaseManager:
             ('agua_so4',       'REAL DEFAULT 0'),
             ('agua_cl',        'REAL DEFAULT 0'),
             ('agua_objetivo',  "TEXT DEFAULT ''"),
+            ('equipo',         "TEXT DEFAULT ''"),
             ('tiempo_hervor',  'REAL DEFAULT 60'),
             ('ratio_maceracion','REAL DEFAULT 3.0'),
             ('absorcion',      'REAL DEFAULT 1.0'),
@@ -129,6 +130,29 @@ class DatabaseManager:
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_hops_recipe ON recipe_hops(recipe_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_yeasts_recipe ON recipe_yeasts(recipe_id)")
 
+
+
+        # Preferencias globales (fórmulas de cálculo — como Brewfather Settings > Formulas)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS settings (
+                key TEXT PRIMARY KEY,
+                value TEXT
+            )
+        ''')
+        # Perfiles de EQUIPO (Fase 4)
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS equipment (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT UNIQUE NOT NULL,
+                batch_volume REAL DEFAULT 20,
+                kettle_volume REAL DEFAULT 30,
+                perdidas_l REAL DEFAULT 2,
+                evaporacion_l_h REAL DEFAULT 2,
+                eficiencia REAL DEFAULT 0.75,
+                temp_macerado REAL DEFAULT 66,
+                notas TEXT DEFAULT ''
+            )
+        ''')
         # Catálogo de INSUMOS editable (Fase 2): maltas, lúpulos y levaduras
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS ingredients (
@@ -163,9 +187,9 @@ class DatabaseManager:
             cursor.execute('''
                 INSERT INTO recipes (name, style, volume, efficiency, og_estimated, fg_estimated,
                     ibu_estimated, srm_estimated, notes, agua_ca, agua_mg, agua_hco3,
-                    agua_ph_entrada, agua_so4, agua_cl, agua_objetivo,
+                    agua_ph_entrada, agua_so4, agua_cl, agua_objetivo, equipo,
                     tiempo_hervor, ratio_maceracion, absorcion, altitud_name)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 recipe_data['name'], recipe_data.get('style', ''), recipe_data['volume'],
                 recipe_data.get('efficiency', 0.75),
@@ -175,7 +199,7 @@ class DatabaseManager:
                 recipe_data.get('agua_ca', 50), recipe_data.get('agua_mg', 10),
                 recipe_data.get('agua_hco3', 150), recipe_data.get('agua_ph_entrada'),
                 recipe_data.get('agua_so4', 0), recipe_data.get('agua_cl', 0),
-                recipe_data.get('agua_objetivo', ''),
+                recipe_data.get('agua_objetivo', ''), recipe_data.get('equipo', ''),
                 recipe_data.get('tiempo_hervor', 60),
                 recipe_data.get('ratio_maceracion', 3.0),
                 recipe_data.get('absorcion', 1.0),
@@ -205,7 +229,7 @@ class DatabaseManager:
             cursor = self.conn.cursor()
             cursor.execute('''UPDATE recipes SET name=?, style=?, volume=?, efficiency=?,
                 og_estimated=?, fg_estimated=?, ibu_estimated=?, srm_estimated=?, notes=?,
-                agua_ca=?, agua_mg=?, agua_hco3=?, agua_ph_entrada=?, agua_so4=?, agua_cl=?, agua_objetivo=?, tiempo_hervor=?,
+                agua_ca=?, agua_mg=?, agua_hco3=?, agua_ph_entrada=?, agua_so4=?, agua_cl=?, agua_objetivo=?, equipo=?, tiempo_hervor=?,
                 ratio_maceracion=?, absorcion=?, altitud_name=?
                 WHERE id=?''',
             (recipe_data['name'], recipe_data.get('style', ''), recipe_data['volume'],
@@ -215,7 +239,7 @@ class DatabaseManager:
              recipe_data.get('agua_ca', 50), recipe_data.get('agua_mg', 10),
              recipe_data.get('agua_hco3', 150), recipe_data.get('agua_ph_entrada'),
              recipe_data.get('agua_so4', 0), recipe_data.get('agua_cl', 0),
-             recipe_data.get('agua_objetivo', ''),
+             recipe_data.get('agua_objetivo', ''), recipe_data.get('equipo', ''),
              recipe_data.get('tiempo_hervor', 60),
              recipe_data.get('ratio_maceracion', 3.0),
              recipe_data.get('absorcion', 1.0),
@@ -272,6 +296,67 @@ class DatabaseManager:
         cursor.execute("SELECT * FROM recipe_yeasts WHERE recipe_id = ?", (recipe_id,))
         recipe['levaduras'] = [dict(row) for row in cursor.fetchall()]
         return recipe
+
+
+
+    # ==========================================
+    # PREFERENCIAS (settings) — fórmulas globales
+    # ==========================================
+    def get_setting(self, key, default=None):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT value FROM settings WHERE key=?", (key,))
+        row = cursor.fetchone()
+        return row["value"] if row else default
+
+    def set_setting(self, key, value):
+        cursor = self.conn.cursor()
+        cursor.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)", (key, str(value)))
+        self.conn.commit()
+
+    # ==========================================
+    # PERFILES DE EQUIPO (Fase 4)
+    # ==========================================
+    def get_equipment(self):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM equipment ORDER BY name")
+        return [dict(r) for r in cursor.fetchall()]
+
+    def get_equipment_by_name(self, name):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM equipment WHERE name=?", (name,))
+        row = cursor.fetchone()
+        return dict(row) if row else None
+
+    def add_equipment(self, name, **campos):
+        cursor = self.conn.cursor()
+        vals = (name, campos.get("batch_volume", 20), campos.get("kettle_volume", 30),
+                campos.get("perdidas_l", 2), campos.get("evaporacion_l_h", 2),
+                campos.get("eficiencia", 0.75), campos.get("temp_macerado", 66),
+                campos.get("notas", ""))
+        try:
+            cursor.execute("""INSERT INTO equipment
+                (name, batch_volume, kettle_volume, perdidas_l, evaporacion_l_h,
+                 eficiencia, temp_macerado, notas) VALUES (?,?,?,?,?,?,?,?)""", vals)
+            self.conn.commit()
+            return cursor.lastrowid
+        except sqlite3.IntegrityError:
+            cursor.execute("""UPDATE equipment SET batch_volume=?, kettle_volume=?, perdidas_l=?,
+                evaporacion_l_h=?, eficiencia=?, temp_macerado=?, notas=? WHERE name=?""",
+                (vals[1], vals[2], vals[3], vals[4], vals[5], vals[6], vals[7], name))
+            self.conn.commit()
+            return True
+
+    def delete_equipment(self, name):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM equipment WHERE name=?", (name,))
+        self.conn.commit()
+
+    def seed_equipment(self):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM equipment")
+        if cursor.fetchone()[0] == 0:
+            self.add_equipment("Equipo por defecto (20 L)", batch_volume=20, kettle_volume=30,
+                               perdidas_l=2, evaporacion_l_h=2, eficiencia=0.75, temp_macerado=66)
 
     # ==========================================
     # CATÁLOGO DE INSUMOS (editable) — Fase 2
