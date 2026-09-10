@@ -46,7 +46,7 @@ DEF_LEVADURA      = "Fermentis US-05 (Ale Americana)"
 DEF_ALTITUD       = "Córdoba Capital"
 DEF_FORMATO       = "pellet"
 EVAPORACION_PCT   = 10.0  # evaporación por hora de hervor (%)
-APP_VERSION       = "1.1.1"  # versión instalada (para comprobar actualizaciones)
+APP_VERSION       = "1.2.0"  # versión instalada (para comprobar actualizaciones)
 RECETARIO_URL     = ("https://github.com/saintwick47/cervecera_vgb/"
                      "releases/latest/download/recetas_cervecera_vgb.json")
 RELEASE_API_URL   = "https://api.github.com/repos/saintwick47/cervecera_vgb/releases/latest"
@@ -167,6 +167,11 @@ class CerveceraApp(ctk.CTk):
 
         self.db = DatabaseManager()
         self.receta_actual_id = None
+        # Fase 2: cargar el catálogo de insumos en la BD la primera vez (luego es editable)
+        try:
+            self.db.seed_ingredients(MALTAS_AR, LUPULOS_AR, LEVADURAS_AR)
+        except Exception as e:
+            logger.warning(f"No se pudo sembrar el catálogo de insumos: {e}")
 
         self.volumen_base_receta = 20.0
 
@@ -201,9 +206,11 @@ class CerveceraApp(ctk.CTk):
 
         self.tab_receta = self.tabview.add("🛠️ Receta")
         self.tab_inventario = self.tabview.add("📦 Inventario")
+        self.tab_insumos = self.tabview.add("🧪 Insumos")
 
         self.setup_tab_receta()
         self.setup_tab_inventario()
+        self.setup_tab_insumos()
 
         self.cargar_lista_recetas()
         self.nueva_receta()
@@ -246,9 +253,10 @@ class CerveceraApp(ctk.CTk):
 
         # Levadura (define FG por atenuación + tolerancia ABV) — paridad móvil
         ctk.CTkLabel(frame_datos, text="Levadura:").grid(row=2, column=2, padx=5, pady=5, sticky="w")
-        self.combo_levadura = ctk.CTkComboBox(frame_datos, values=sorted(LEVADURAS_AR.keys()),
+        _levs = self._opciones_insumo("Levadura")
+        self.combo_levadura = ctk.CTkComboBox(frame_datos, values=_levs,
                                               command=lambda e: self.calcular_y_mostrar(), width=230)
-        self.combo_levadura.set(DEF_LEVADURA if DEF_LEVADURA in LEVADURAS_AR else sorted(LEVADURAS_AR.keys())[0])
+        self.combo_levadura.set(DEF_LEVADURA if DEF_LEVADURA in _levs else (_levs[0] if _levs else ""))
         self.combo_levadura.grid(row=2, column=3, padx=5, pady=5)
 
         # Estilo BJCP
@@ -316,6 +324,12 @@ class CerveceraApp(ctk.CTk):
         header_maltas.pack(fill="x", padx=5, pady=5)
         ctk.CTkLabel(header_maltas, text="🌾 Maltas y Adjuntos (Kg)", font=ctk.CTkFont(weight="bold")).pack(side="left")
         ctk.CTkButton(header_maltas, text="+ Añadir Malta", width=100, command=lambda: self.add_fila_malta()).pack(side="right")
+        # Encabezados de columna (para saber qué es cada valor)
+        enc_m = ctk.CTkFrame(frame_maltas, fg_color="transparent")
+        enc_m.pack(fill="x", padx=5)
+        for etiqueta, ancho in [("Malta", 210), ("Kg", 60), ("Ext", 55), ("Color", 55), ("", 30)]:
+            ctk.CTkLabel(enc_m, text=etiqueta, width=ancho, anchor="w",
+                         font=ctk.CTkFont(size=11), text_color="#9CA3AF").pack(side="left", padx=2)
         self.frame_lista_maltas = ctk.CTkFrame(frame_maltas, fg_color="transparent")
         self.frame_lista_maltas.pack(fill="x")
 
@@ -326,6 +340,12 @@ class CerveceraApp(ctk.CTk):
         header_lupulos.pack(fill="x", padx=5, pady=5)
         ctk.CTkLabel(header_lupulos, text="🌿 Lúpulos (Mezclas y Escalonados)", font=ctk.CTkFont(weight="bold")).pack(side="left")
         ctk.CTkButton(header_lupulos, text="+ Añadir Lúpulo", width=100, command=lambda: self.add_fila_lupulo()).pack(side="right")
+        # Encabezados de columna
+        enc_l = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
+        enc_l.pack(fill="x", padx=5)
+        for etiqueta, ancho in [("Lúpulo", 185), ("g", 55), ("AA%", 50), ("Min", 50), ("Formato", 75), ("", 30)]:
+            ctk.CTkLabel(enc_l, text=etiqueta, width=ancho, anchor="w",
+                         font=ctk.CTkFont(size=11), text_color="#9CA3AF").pack(side="left", padx=2)
         self.frame_lista_lupulos = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
         self.frame_lista_lupulos.pack(fill="x")
 
@@ -395,6 +415,129 @@ class CerveceraApp(ctk.CTk):
         self.lista_inventario_ui = ctk.CTkScrollableFrame(frame_lista_inv)
         self.lista_inventario_ui.pack(fill="both", expand=True, padx=10, pady=(0, 10))
         self.cargar_lista_inventario()
+
+    # ==========================================
+    # CATÁLOGO DE INSUMOS (pestaña, Fase 2)
+    # ==========================================
+    def setup_tab_insumos(self):
+        self.tab_insumos.grid_columnconfigure(0, weight=1)
+        card_ing = ctk.CTkFrame(self.tab_insumos)
+        card_ing.grid(row=0, column=0, padx=20, pady=(15, 8), sticky="ew")
+        card_ing.grid_columnconfigure((1, 3, 5), weight=1)
+
+        ctk.CTkLabel(card_ing, text="🧪 Catálogo de insumos (editable)",
+                     font=ctk.CTkFont(size=16, weight="bold")
+                     ).grid(row=0, column=0, columnspan=6, sticky="w", padx=8, pady=(8, 4))
+
+        ctk.CTkLabel(card_ing, text="Tipo:").grid(row=1, column=0, sticky="w", padx=6, pady=3)
+        self.combo_ing_tipo = ctk.CTkComboBox(card_ing, values=["Malta", "Lúpulo", "Levadura"], width=130)
+        self.combo_ing_tipo.set("Malta")
+        self.combo_ing_tipo.grid(row=1, column=1, sticky="w", padx=4, pady=3)
+
+        ctk.CTkLabel(card_ing, text="Nombre:").grid(row=1, column=2, sticky="w", padx=6, pady=3)
+        self.e_ing_nombre = ctk.CTkEntry(card_ing, placeholder_text="Ej: Mi Malta Local")
+        self.e_ing_nombre.grid(row=1, column=3, columnspan=3, sticky="ew", padx=4, pady=3)
+
+        campos = [("origin", "Origen"), ("supplier", "Proveedor/Lab"), ("category", "Categoría"),
+                  ("color", "Color (Lovi)"), ("extract", "Extracto"), ("ppg", "PPG"),
+                  ("yield_pct", "Rend. %"), ("diastatic", "Diastático"), ("alpha", "AA %"),
+                  ("form", "Formato"), ("attenuation", "Atenuación %"), ("abv_tolerance", "Tol. ABV"),
+                  ("temp_range", "Temp (ºC)"), ("notes", "Notas")]
+        self._ing_entries = {}
+        fila = 2
+        for i, (clave, etiqueta) in enumerate(campos):
+            col = (i % 3) * 2
+            if i > 0 and i % 3 == 0:
+                fila += 1
+            ctk.CTkLabel(card_ing, text=f"{etiqueta}:").grid(row=fila, column=col, sticky="w", padx=6, pady=3)
+            e = ctk.CTkEntry(card_ing, width=90)
+            e.grid(row=fila, column=col + 1, sticky="ew", padx=4, pady=3)
+            self._ing_entries[clave] = e
+
+        fila += 1
+        ctk.CTkButton(card_ing, text="💾 Guardar / Actualizar", command=self._ing_guardar,
+                      fg_color="#059669", hover_color="#047857").grid(row=fila, column=0, columnspan=2, padx=6, pady=10, sticky="w")
+        ctk.CTkButton(card_ing, text="🧹 Limpiar", command=self._ing_limpiar,
+                      fg_color="#6B7280", hover_color="#4B5563").grid(row=fila, column=2, padx=6, pady=10, sticky="w")
+        ctk.CTkLabel(card_ing, text="Completá solo los campos que apliquen al tipo elegido.",
+                     text_color="#9CA3AF").grid(row=fila, column=3, columnspan=3, sticky="w", padx=6)
+
+        frame_lista = ctk.CTkFrame(self.tab_insumos)
+        frame_lista.grid(row=1, column=0, padx=20, pady=(0, 20), sticky="nsew")
+        ctk.CTkLabel(frame_lista, text="Insumos cargados", font=ctk.CTkFont(size=15, weight="bold")).pack(pady=8)
+        self.lista_insumos_ui = ctk.CTkScrollableFrame(frame_lista)
+        self.lista_insumos_ui.pack(fill="both", expand=True, padx=10, pady=(0, 10))
+        self.cargar_lista_insumos()
+
+    def cargar_lista_insumos(self):
+        for w in self.lista_insumos_ui.winfo_children():
+            w.destroy()
+        for ing in self.db.get_ingredients():
+            fila = ctk.CTkFrame(self.lista_insumos_ui, fg_color="transparent")
+            fila.pack(fill="x", pady=2)
+            det = []
+            if ing.get("extract"): det.append(f"Ext {format_num(ing['extract'])}")
+            if ing.get("color"): det.append(f"Color {format_num(ing['color'])}")
+            if ing.get("alpha"): det.append(f"AA {format_num(ing['alpha'])}%")
+            if ing.get("form"): det.append(f"{ing['form']}")
+            if ing.get("attenuation"): det.append(f"Aten. {format_num(ing['attenuation'])}%")
+            if ing.get("abv_tolerance"): det.append(f"ABV {format_num(ing['abv_tolerance'])}%")
+            if ing.get("origin"): det.append(f"{ing['origin']}")
+            if ing.get("supplier"): det.append(f"{ing['supplier']}")
+            texto = f"[{ing['type']}] {ing['name']}" + (f" — {' · '.join(det)}" if det else "")
+            ctk.CTkLabel(fila, text=texto, anchor="w").pack(side="left", padx=5, fill="x", expand=True)
+            ctk.CTkButton(fila, text="✏️", width=34, fg_color="#2563EB", hover_color="#1D4ED8",
+                          command=lambda t=ing['type'], n=ing['name']: self._ing_editar(t, n)).pack(side="right", padx=3)
+            ctk.CTkButton(fila, text="🗑️", width=34, fg_color="#DC2626", hover_color="#991B1B",
+                          command=lambda t=ing['type'], n=ing['name']: self._ing_borrar(t, n)).pack(side="right", padx=3)
+
+    def _ing_limpiar(self):
+        self.e_ing_nombre.delete(0, "end")
+        for e in self._ing_entries.values():
+            e.delete(0, "end")
+
+    def _ing_editar(self, tipo, nombre):
+        ing = self.db.get_ingredient(tipo, nombre) or {}
+        self.combo_ing_tipo.set(tipo)
+        self.e_ing_nombre.delete(0, "end"); self.e_ing_nombre.insert(0, nombre)
+        for clave, e in self._ing_entries.items():
+            e.delete(0, "end")
+            v = ing.get(clave)
+            if v not in (None, "", 0):
+                e.insert(0, format_num(v))
+
+    def _ing_borrar(self, tipo, nombre):
+        if mb.askyesno("Eliminar insumo", f"¿Eliminar '{nombre}' ({tipo}) del catálogo?"):
+            self.db.delete_ingredient(tipo, nombre)
+            self.cargar_lista_insumos()
+
+    def _ing_guardar(self):
+        tipo = self.combo_ing_tipo.get()
+        nombre = self.e_ing_nombre.get().strip()
+        if not nombre:
+            mb.showwarning("Atención", "Escribí el nombre del insumo."); return
+        def num(clave):
+            try:
+                v = self._ing_entries[clave].get().strip()
+                return float(v) if v else None
+            except ValueError:
+                return None
+        campos = {
+            "origin": self._ing_entries["origin"].get().strip(),
+            "supplier": self._ing_entries["supplier"].get().strip(),
+            "category": self._ing_entries["category"].get().strip(),
+            "notes": self._ing_entries["notes"].get().strip(),
+            "temp_range": self._ing_entries["temp_range"].get().strip(),
+            "form": self._ing_entries["form"].get().strip(),
+            "color": num("color"), "extract": num("extract"), "ppg": num("ppg"),
+            "yield_pct": num("yield_pct"), "diastatic": num("diastatic"),
+            "alpha": num("alpha"), "attenuation": num("attenuation"),
+            "abv_tolerance": num("abv_tolerance"),
+        }
+        campos = {k: v for k, v in campos.items() if v not in (None, "")}
+        self.db.add_ingredient(tipo, nombre, **campos)
+        self.cargar_lista_insumos()
+        mb.showinfo("Catálogo", f"Insumo guardado:\n{tipo} · {nombre}")
 
     # ==========================================
     # LÓGICA DE INVENTARIO
@@ -479,11 +622,47 @@ class CerveceraApp(ctk.CTk):
             except Exception:
                 pass
 
+    # ── Catálogo de insumos desde la BD (Fase 2) ────────────────────────────
+    def _opciones_insumo(self, tipo):
+        """Nombres de insumos: los de la BD (editables) + los del catálogo base."""
+        nombres = set()
+        try:
+            nombres |= set(self.db.ingredient_names(tipo))
+        except Exception:
+            pass
+        base = {"Malta": MALTAS_AR, "Lúpulo": LUPULOS_AR, "Levadura": LEVADURAS_AR}.get(tipo, {})
+        nombres |= set(base.keys())
+        return sorted(nombres)
+
+    def _datos_insumo(self, tipo, nombre):
+        """Devuelve los datos del insumo (primero la BD editable, luego el catálogo)."""
+        try:
+            ing = self.db.get_ingredient(tipo, nombre)
+        except Exception:
+            ing = None
+        if ing:
+            if tipo == "Malta":
+                return {"extracto": ing.get("extract") or 300, "color": ing.get("color") or 2}
+            if tipo == "Lúpulo":
+                return {"aa": ing.get("alpha") or 5, "formato": ing.get("form") or DEF_FORMATO}
+            if tipo == "Levadura":
+                return {"atenuacion": ing.get("attenuation") or 75.0,
+                        "tolerancia_abv": ing.get("abv_tolerance") or 12.0}
+        base = {"Malta": MALTAS_AR, "Lúpulo": LUPULOS_AR, "Levadura": LEVADURAS_AR}.get(tipo, {})
+        d = base.get(nombre)
+        if not d:
+            return None
+        if tipo == "Malta":
+            return {"extracto": d.get("extracto", 300), "color": d.get("color", 2)}
+        if tipo == "Lúpulo":
+            return {"aa": d.get("aa", 5), "formato": d.get("formato", DEF_FORMATO)}
+        return {"atenuacion": d.get("atenuacion", 75.0), "tolerancia_abv": d.get("tolerancia_abv", 12.0)}
+
     def add_fila_malta(self, datos=None):
         fila = ctk.CTkFrame(self.frame_lista_maltas, fg_color="transparent")
         fila.pack(fill="x", pady=2)
 
-        lista_maltas = sorted(MALTAS_AR.keys())
+        lista_maltas = self._opciones_insumo("Malta")
         nombre = datos.get('nombre', '') if datos else ''
         combo_valores = ([nombre] + lista_maltas) if (nombre and nombre not in lista_maltas) else lista_maltas
         c_nombre = ctk.CTkComboBox(fila, values=combo_valores, width=210)
@@ -520,9 +699,10 @@ class CerveceraApp(ctk.CTk):
     def _on_malta_seleccion(self, fila):
         def cb(_=None):
             nombre = fila.c_nombre.get()
-            if nombre in MALTAS_AR:
-                fila.e_extracto.delete(0, "end"); fila.e_extracto.insert(0, str(MALTAS_AR[nombre]["extracto"]))
-                fila.e_color.delete(0, "end");    fila.e_color.insert(0, str(MALTAS_AR[nombre]["color"]))
+            d = self._datos_insumo("Malta", nombre)
+            if d:
+                fila.e_extracto.delete(0, "end"); fila.e_extracto.insert(0, format_num(d["extracto"]))
+                fila.e_color.delete(0, "end");    fila.e_color.insert(0, format_num(d["color"]))
             self.calcular_y_mostrar()
         return cb
 
@@ -530,7 +710,7 @@ class CerveceraApp(ctk.CTk):
         fila = ctk.CTkFrame(self.frame_lista_lupulos, fg_color="transparent")
         fila.pack(fill="x", pady=2)
 
-        lista_lupulos = sorted(LUPULOS_AR.keys())
+        lista_lupulos = self._opciones_insumo("Lúpulo")
         nombre = datos.get('nombre', '') if datos else ''
         combo_valores = ([nombre] + lista_lupulos) if (nombre and nombre not in lista_lupulos) else lista_lupulos
         c_nombre = ctk.CTkComboBox(fila, values=combo_valores, width=185)
@@ -573,9 +753,10 @@ class CerveceraApp(ctk.CTk):
     def _on_lupulo_seleccion(self, fila):
         def cb(_=None):
             nombre = fila.c_nombre.get()
-            if nombre in LUPULOS_AR:
-                fila.e_aa.delete(0, "end"); fila.e_aa.insert(0, str(LUPULOS_AR[nombre]["aa"]))
-                fila.c_formato.set(LUPULOS_AR[nombre].get("formato", DEF_FORMATO))
+            d = self._datos_insumo("Lúpulo", nombre)
+            if d:
+                fila.e_aa.delete(0, "end"); fila.e_aa.insert(0, format_num(d["aa"]))
+                fila.c_formato.set(d.get("formato") or DEF_FORMATO)
             self.calcular_y_mostrar()
         return cb
 
@@ -635,9 +816,9 @@ class CerveceraApp(ctk.CTk):
         self.calcular_y_mostrar()
 
     def _leer_levadura(self):
-        levadura_datos = LEVADURAS_AR.get(self.combo_levadura.get(),
-                                          {"atenuacion": 75.0, "tolerancia_abv": 12.0})
-        return self.combo_levadura.get(), levadura_datos
+        nombre = self.combo_levadura.get()
+        levadura_datos = self._datos_insumo("Levadura", nombre) or {"atenuacion": 75.0, "tolerancia_abv": 12.0}
+        return nombre, levadura_datos
 
     def _leer_agua_ui(self):
         return {
@@ -706,7 +887,7 @@ class CerveceraApp(ctk.CTk):
             texto = f"""
 🧪 PARÁMETROS CALCULADOS (Para {volumen} L | Altitud: {altitud}m)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
-OG : {r['og']:.4f}   FG : {r['fg']:.4f}   (Auto. Levadura: {levadura_nombre})
+OG : {r['og']:.3f}   FG : {r['fg']:.3f}   (Auto. Levadura: {levadura_nombre})   [1.000 = agua destilada]
 ABV: {r['abv']}%   Atenuación: {r['atenuacion']}%
 IBU: {r['ibu']} ({amargor_desc})   SRM: {r['srm']} ({color_desc})
 BU/GU: {r.get('bugu', 0)}   Calorías: {r['calorias']} kcal/355ml

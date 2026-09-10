@@ -125,6 +125,30 @@ class DatabaseManager:
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_fermentables_recipe ON recipe_fermentables(recipe_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_hops_recipe ON recipe_hops(recipe_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_yeasts_recipe ON recipe_yeasts(recipe_id)")
+
+        # Catálogo de INSUMOS editable (Fase 2): maltas, lúpulos y levaduras
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS ingredients (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                type TEXT NOT NULL,             -- 'Malta' | 'Lúpulo' | 'Levadura'
+                name TEXT NOT NULL,
+                origin TEXT DEFAULT '',
+                supplier TEXT DEFAULT '',
+                category TEXT DEFAULT '',
+                notes TEXT DEFAULT '',
+                color REAL DEFAULT 0,           -- color (Lovi) / EBC informativo
+                extract REAL DEFAULT 0,         -- extracto (puntos, base 300)
+                ppg REAL DEFAULT 0,
+                yield_pct REAL DEFAULT 0,
+                diastatic REAL DEFAULT 0,
+                alpha REAL DEFAULT 0,           -- %AA (lúpulo)
+                form TEXT DEFAULT '',           -- pellet / flor (lúpulo)
+                attenuation REAL DEFAULT 0,     -- % atenuación (levadura)
+                abv_tolerance REAL DEFAULT 0,   -- tolerancia ABV (levadura)
+                temp_range TEXT DEFAULT '',
+                UNIQUE(type, name)
+            )
+        ''')
         self.conn.commit()
 
     # ==========================================
@@ -240,6 +264,92 @@ class DatabaseManager:
         cursor.execute("SELECT * FROM recipe_yeasts WHERE recipe_id = ?", (recipe_id,))
         recipe['levaduras'] = [dict(row) for row in cursor.fetchall()]
         return recipe
+
+    # ==========================================
+    # CATÁLOGO DE INSUMOS (editable) — Fase 2
+    # ==========================================
+    CAMPOS_INSUMO = ("origin", "supplier", "category", "notes", "color", "extract",
+                     "ppg", "yield_pct", "diastatic", "alpha", "form",
+                     "attenuation", "abv_tolerance", "temp_range")
+
+    def get_ingredients(self, tipo=None):
+        """Lista de insumos (dicts), opcionalmente filtrada por tipo."""
+        cursor = self.conn.cursor()
+        if tipo:
+            cursor.execute("SELECT * FROM ingredients WHERE type=? ORDER BY name", (tipo,))
+        else:
+            cursor.execute("SELECT * FROM ingredients ORDER BY type, name")
+        return [dict(r) for r in cursor.fetchall()]
+
+    def get_ingredient(self, tipo, name):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM ingredients WHERE type=? AND name=?", (tipo, name))
+        row = cursor.fetchone()
+        return dict(row) if row else None
+
+    def ingredient_names(self, tipo):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT name FROM ingredients WHERE type=? ORDER BY name", (tipo,))
+        return [r["name"] for r in cursor.fetchall()]
+
+    def add_ingredient(self, tipo, name, **campos):
+        """Agrega un insumo. Si ya existe (mismo tipo+nombre), lo actualiza."""
+        datos = {c: campos.get(c) for c in self.CAMPOS_INSUMO}
+        cursor = self.conn.cursor()
+        try:
+            cursor.execute(
+                """INSERT INTO ingredients (type, name, origin, supplier, category, notes,
+                       color, extract, ppg, yield_pct, diastatic, alpha, form,
+                       attenuation, abv_tolerance, temp_range)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (tipo, name, datos["origin"] or "", datos["supplier"] or "",
+                 datos["category"] or "", datos["notes"] or "",
+                 datos["color"] or 0, datos["extract"] or 0, datos["ppg"] or 0,
+                 datos["yield_pct"] or 0, datos["diastatic"] or 0,
+                 datos["alpha"] or 0, datos["form"] or "",
+                 datos["attenuation"] or 0, datos["abv_tolerance"] or 0,
+                 datos["temp_range"] or ""))
+            self.conn.commit()
+            return cursor.lastrowid
+        except sqlite3.IntegrityError:
+            return self.update_ingredient(tipo, name, **campos)
+
+    def update_ingredient(self, tipo, name, **campos):
+        sets, vals = [], []
+        for c in self.CAMPOS_INSUMO:
+            if c in campos and campos[c] is not None:
+                sets.append(f"{c}=?")
+                vals.append(campos[c])
+        if not sets:
+            return True
+        vals += [tipo, name]
+        cursor = self.conn.cursor()
+        cursor.execute(f"UPDATE ingredients SET {', '.join(sets)} WHERE type=? AND name=?", vals)
+        self.conn.commit()
+        return True
+
+    def delete_ingredient(self, tipo, name):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM ingredients WHERE type=? AND name=?", (tipo, name))
+        self.conn.commit()
+
+    def seed_ingredients(self, maltas, lupulos, levaduras):
+        """Carga el catálogo base en la BD la primera vez (luego es editable)."""
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM ingredients")
+        if cursor.fetchone()[0] > 0:
+            return 0
+        n = 0
+        for nombre, d in (maltas or {}).items():
+            self.add_ingredient("Malta", nombre, extract=d.get("extracto", 300),
+                                color=d.get("color", 2)); n += 1
+        for nombre, d in (lupulos or {}).items():
+            self.add_ingredient("Lúpulo", nombre, alpha=d.get("aa", 5),
+                                form=d.get("formato", "pellet")); n += 1
+        for nombre, d in (levaduras or {}).items():
+            self.add_ingredient("Levadura", nombre, attenuation=d.get("atenuacion", 75),
+                                abv_tolerance=d.get("tolerancia_abv", 12)); n += 1
+        return n
 
     # ==========================================
     # MÉTODOS DE INVENTARIO
