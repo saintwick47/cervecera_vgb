@@ -76,6 +76,11 @@ nicoweb45@proton.me (Asunto: beer_vgb)
 
 ## 📝 Historial de cambios (CHANGELOG)
 
+### 2026-09-17 13:05 — fix: database.py v4 - duplicados de receta a logger.debug (silencia spam de warnings)
+
+- Archivos: app.py, brew_engine.py, catalogo_ar.py, test_cervecera.py, database.py, README.md, "archivos proyecto y comandos..txt", build.bat, build.sh, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, recetario_vgb.json, recetas_base_genericas.json, subir_github.py
+
+
 ### 2026-09-17 13:03 — fix: database.py v4 - duplicados de receta a logger.debug (silencia spam de warnings)
 
 - Archivos: app.py, brew_engine.py, catalogo_ar.py, test_cervecera.py, README.md, database.py, "archivos proyecto y comandos..txt", build.bat, build.sh, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, recetario_vgb.json, recetas_base_genericas.json, subir_github.py
