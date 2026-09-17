@@ -1,0 +1,921 @@
+{
+  "Fernet 1 - Clásico Artesanal": {
+    "tipo": "fernet",
+    "rendimiento_litros": 1.25,
+    "alcohol_base": {
+      "nombre": "Vodka",
+      "volumen_ml": 250,
+      "graduacion_aprox": 40
+    },
+    "infusion": {
+      "agua_ml": 1000,
+      "temperatura_coccion_C": 60,
+      "tiempo_coccion_min": 15,
+      "reposo_min": 30,
+      "macerado_meses": 3
+    },
+    "botanicos_g": [
+      {
+        "nombre": "Laurel",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Muña muña",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Carqueja",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Manzanilla",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Cardamomo",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Menta seca",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Mirra en lágrimas",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Cedrón",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Genciana",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Quinina",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Clavos de olor",
+        "cantidad_g": 3
+      },
+      {
+        "nombre": "Azafrán",
+        "cantidad_g": 1
+      }
+    ],
+    "endulzantes": [
+      {
+        "nombre": "Caramelo líquido",
+        "cantidad_ml": 50
+      }
+    ],
+    "notas": "Receta base de Cocineros Argentinos. Mínimo 3 meses de macerado, a mayor tiempo mejor sabor."
+  },
+  "Fernet 2 - Estilo Cordobés (Hierbas Extendidas)": {
+    "tipo": "fernet",
+    "rendimiento_litros": 1.25,
+    "alcohol_base": {
+      "nombre": "Vodka",
+      "volumen_ml": 250,
+      "graduacion_aprox": 40
+    },
+    "infusion": {
+      "agua_ml": 1000,
+      "temperatura_coccion_C": 60,
+      "tiempo_coccion_min": 15,
+      "reposo_min": 30,
+      "macerado_meses": 3
+    },
+    "botanicos_g": [
+      {
+        "nombre": "Laurel",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Muña muña",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Carqueja",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Manzanilla",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Cardamomo",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Menta seca",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Cedrón",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Nencia",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Palo amargo",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Alcachofa hoja",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Romero",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Tomillo",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Enebro bayas",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Jengibre seco",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Clavos de olor",
+        "cantidad_g": 4
+      },
+      {
+        "nombre": "Azafrán",
+        "cantidad_g": 1
+      }
+    ],
+    "endulzantes": [
+      {
+        "nombre": "Azúcar mascabado",
+        "cantidad_g": 50
+      }
+    ],
+    "extras": [
+      {
+        "nombre": "Chips de roble tostado medio",
+        "cantidad_g": 20
+      }
+    ],
+    "notas": "Versión ampliada con 14+ hierbas. Los chips de roble simulan el añejamiento en barrica. El azúcar mascabado aporta complejidad vs caramelo."
+  },
+  "Fernet 3 - Macerado en Frío (Sin Cocción)": {
+    "tipo": "fernet",
+    "rendimiento_litros": 1.5,
+    "alcohol_base": {
+      "nombre": "Alcohol alimentario 60°",
+      "volumen_ml": 600,
+      "graduacion_aprox": 60
+    },
+    "infusion": {
+      "agua_ml": 900,
+      "temperatura_coccion_C": null,
+      "tiempo_coccion_min": 0,
+      "reposo_dias": 15,
+      "macerado_meses": 2,
+      "metodo": "maceración en frío: botanicos en alcohol durante 15 días, luego filtrar, mezclar con agua y reposar 2 meses en recipiente hermético oscuro"
+    },
+    "botanicos_g": [
+      {
+        "nombre": "Laurel",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Muña muña",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Manzanilla",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Cardamomo",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Menta seca",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Genciana raíz",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Cedrón",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Regaliz raíz",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Canela",
+        "cantidad_g": 3
+      },
+      {
+        "nombre": "Clavos de olor",
+        "cantidad_g": 3
+      },
+      {
+        "nombre": "Nuez moscada",
+        "cantidad_g": 2
+      },
+      {
+        "nombre": "Cáscara de naranja seca",
+        "cantidad_g": 5
+      },
+      {
+        "nombre": "Azafrán",
+        "cantidad_g": 1
+      }
+    ],
+    "endulzantes": [
+      {
+        "nombre": "Caramelo oscuro (azúcar quemado)",
+        "cantidad_g": 120
+      }
+    ],
+    "extras": [
+      {
+        "nombre": "Colorante caramelo E150d",
+        "cantidad_ml": 5
+      }
+    ],
+    "notas": "Maceración en frío preserva mejor los aromas volátiles. Caramelo oscuro aporta el color y notas amargas adicionales características del fernet industrial."
+  },
+  "Vermut 1 - Blanco Clásico": {
+    "tipo": "vermut",
+    "rendimiento_litros": 1.0,
+    "base": {
+      "nombre": "Vino blanco seco joven",
+      "volumen_ml": 750
+    },
+    "fortificante": {
+      "nombre": "Vodka o aguardiente seco",
+      "volumen_ml": 15,
+      "graduacion_aprox": 40
+    },
+    "macerado_semanas": 4,
+    "temperatura": "lugar oscuro, fresco y seco",
+    "botanicos": [
+      {
+        "nombre": "Ajenjo seco",
+        "cantidad": "1/2 cda sopera"
+      },
+      {
+        "nombre": "Canela de Ceilán",
+        "cantidad": "1/2 palito"
+      },
+      {
+        "nombre": "Manzanilla seca",
+        "cantidad": "1 cdita"
+      },
+      {
+        "nombre": "Cáscara de naranja",
+        "cantidad": "1 unidad"
+      },
+      {
+        "nombre": "Cáscara de limón",
+        "cantidad": "1 unidad"
+      },
+      {
+        "nombre": "Bayas de enebro",
+        "cantidad": "1/2 cda sopera"
+      },
+      {
+        "nombre": "Cardamomo vainas",
+        "cantidad": "1/2 cda sopera"
+      },
+      {
+        "nombre": "Cilantro semillas",
+        "cantidad": "1/3 cdita"
+      },
+      {
+        "nombre": "Salvia seca",
+        "cantidad": "1/3 cdita"
+      }
+    ],
+    "endulzantes": [
+      {
+        "nombre": "Azúcar moreno caramelizado",
+        "cantidad": "3 cdas soperas"
+      }
+    ],
+    "notas": "Receta base española. El ajenjo es imprescindible e imposta amargor. Macerar en bolsa de gasa para facilitar el filtrado."
+  },
+  "Vermut 2 - Rojo Italiano": {
+    "tipo": "vermut",
+    "rendimiento_litros": 1.0,
+    "base": {
+      "nombre": "Vino tinto joven suave",
+      "volumen_ml": 750
+    },
+    "fortificante": {
+      "nombre": "Brandy",
+      "volumen_ml": 50,
+      "graduacion_aprox": 38
+    },
+    "macerado_semanas": 4,
+    "temperatura": "lugar oscuro, fresco y seco",
+    "botanicos": [
+      {
+        "nombre": "Ajenjo seco",
+        "cantidad": "1/2 cda sopera"
+      },
+      {
+        "nombre": "Canela",
+        "cantidad": "1 palito"
+      },
+      {
+        "nombre": "Clavo de olor",
+        "cantidad": "4 unidades"
+      },
+      {
+        "nombre": "Anís estrellado",
+        "cantidad": "2 unidades"
+      },
+      {
+        "nombre": "Genciana raíz",
+        "cantidad": "1/4 cdita"
+      },
+      {
+        "nombre": "Cáscara de naranja seca",
+        "cantidad": "1 unidad"
+      },
+      {
+        "nombre": "Vainilla vaina",
+        "cantidad": "1/2 vaina"
+      },
+      {
+        "nombre": "Cardamomo",
+        "cantidad": "1/2 cda sopera"
+      },
+      {
+        "nombre": "Manzanilla",
+        "cantidad": "1 cdita"
+      },
+      {
+        "nombre": "Regaliz raíz",
+        "cantidad": "1/4 cdita"
+      }
+    ],
+    "endulzantes": [
+      {
+        "nombre": "Azúcar caramelizado oscuro",
+        "cantidad": "4 cdas soperas"
+      }
+    ],
+    "notas": "La genciana debe usarse en cantidad mínima: sabor muy fuerte. El brandy y el azúcar caramelizado oscuro dan el perfil dulce-amargo típico del vermut rojo italiano."
+  },
+  "Vermut 3 - Floral Aromático": {
+    "tipo": "vermut",
+    "rendimiento_litros": 1.0,
+    "base": {
+      "nombre": "Vino blanco aromático (Moscatel o Torrontés)",
+      "volumen_ml": 750
+    },
+    "fortificante": {
+      "nombre": "Vodka",
+      "volumen_ml": 15,
+      "graduacion_aprox": 40
+    },
+    "macerado_semanas": 3,
+    "temperatura": "lugar oscuro, fresco y seco",
+    "botanicos": [
+      {
+        "nombre": "Ajenjo seco",
+        "cantidad": "1/3 cdita"
+      },
+      {
+        "nombre": "Flores de manzanilla",
+        "cantidad": "2 cditas"
+      },
+      {
+        "nombre": "Flores de lavanda",
+        "cantidad": "1 cdita"
+      },
+      {
+        "nombre": "Flores de aciano",
+        "cantidad": "1 cdita"
+      },
+      {
+        "nombre": "Flor de saúco",
+        "cantidad": "1/2 cda sopera"
+      },
+      {
+        "nombre": "Orégano",
+        "cantidad": "1/2 cdita"
+      },
+      {
+        "nombre": "Tomillo",
+        "cantidad": "1/2 cdita"
+      },
+      {
+        "nombre": "Canela",
+        "cantidad": "1/2 palito"
+      },
+      {
+        "nombre": "Cardamomo",
+        "cantidad": "1/3 cdita"
+      },
+      {
+        "nombre": "Cáscara de naranja",
+        "cantidad": "1 unidad"
+      },
+      {
+        "nombre": "Bayas de enebro",
+        "cantidad": "1/3 cdita"
+      },
+      {
+        "nombre": "Genciana raíz",
+        "cantidad": "1 pizca"
+      }
+    ],
+    "endulzantes": [
+      {
+        "nombre": "Azúcar moreno",
+        "cantidad": "2 cdas soperas"
+      }
+    ],
+    "notas": "Perfil floral y aromático, menos amargo. La base de moscatel o torrontés aporta notas frutales que complementan las flores. Ideal frío con naranja."
+  },
+  "Vermut 4 - Seco Estilo Francés": {
+    "tipo": "vermut",
+    "rendimiento_litros": 1.0,
+    "base": {
+      "nombre": "Vino blanco seco y ácido",
+      "volumen_ml": 750
+    },
+    "fortificante": {
+      "nombre": "Orujo o vodka",
+      "volumen_ml": 15,
+      "graduacion_aprox": 40
+    },
+    "macerado_semanas": 5,
+    "temperatura": "lugar oscuro, fresco y seco",
+    "botanicos": [
+      {
+        "nombre": "Ajenjo seco",
+        "cantidad": "1/2 cda sopera"
+      },
+      {
+        "nombre": "Genciana raíz",
+        "cantidad": "1/4 cdita"
+      },
+      {
+        "nombre": "Angélica raíz",
+        "cantidad": "1/3 cdita"
+      },
+      {
+        "nombre": "Corteza de quina",
+        "cantidad": "1/4 cdita"
+      },
+      {
+        "nombre": "Manzanilla",
+        "cantidad": "1 cdita"
+      },
+      {
+        "nombre": "Canela",
+        "cantidad": "1/3 palito"
+      },
+      {
+        "nombre": "Cilantro semillas",
+        "cantidad": "1/2 cdita"
+      },
+      {
+        "nombre": "Cáscara de limón",
+        "cantidad": "1 unidad"
+      },
+      {
+        "nombre": "Cáscara de naranja amarga",
+        "cantidad": "1/2 unidad"
+      },
+      {
+        "nombre": "Bayas de enebro",
+        "cantidad": "1/3 cdita"
+      }
+    ],
+    "endulzantes": [
+      {
+        "nombre": "Azúcar blanco caramelizado",
+        "cantidad": "1 cda sopera"
+      }
+    ],
+    "notas": "Estilo francés: más amargo, menos dulce. Mínimo de azúcar. Muy adecuado para coctelería (Martini, Negroni). Mayor proporción de hierbas amargas."
+  },
+  "Vermut 5 - Rosado de Verano": {
+    "tipo": "vermut",
+    "rendimiento_litros": 1.0,
+    "base": {
+      "nombre": "Vino rosado seco joven",
+      "volumen_ml": 750
+    },
+    "fortificante": {
+      "nombre": "Vodka",
+      "volumen_ml": 15,
+      "graduacion_aprox": 40
+    },
+    "macerado_semanas": 3,
+    "temperatura": "nevera (verano) o lugar fresco oscuro",
+    "botanicos": [
+      {
+        "nombre": "Ajenjo seco",
+        "cantidad": "1/3 cdita"
+      },
+      {
+        "nombre": "Canela",
+        "cantidad": "1/2 palito"
+      },
+      {
+        "nombre": "Cáscara de naranja",
+        "cantidad": "1 unidad"
+      },
+      {
+        "nombre": "Cáscara de limón",
+        "cantidad": "1 unidad"
+      },
+      {
+        "nombre": "Jengibre fresco",
+        "cantidad": "1 rodaja 5mm"
+      },
+      {
+        "nombre": "Manzanilla",
+        "cantidad": "1 cdita"
+      },
+      {
+        "nombre": "Hibisco pétalos secos",
+        "cantidad": "1 cdita"
+      },
+      {
+        "nombre": "Frutillas/fresas deshidratadas",
+        "cantidad": "5 unidades"
+      },
+      {
+        "nombre": "Bayas de enebro",
+        "cantidad": "1/4 cdita"
+      },
+      {
+        "nombre": "Cardamomo",
+        "cantidad": "1/3 cdita"
+      }
+    ],
+    "endulzantes": [
+      {
+        "nombre": "Miel",
+        "cantidad": "2 cdas soperas"
+      }
+    ],
+    "notas": "Perfil frutal y fresco. El hibisco y las frutillas refuerzan el color rosado y aportan acidez. La miel suaviza sin caramelizar. Servir muy frío con soda y naranja."
+  },
+  "Licor 1 - Naranja Clásico (Triple Seco Casero)": {
+    "tipo": "licor",
+    "sabor": "naranja",
+    "rendimiento_litros": 1.0,
+    "alcohol_base": {
+      "nombre": "Alcohol alimentario 96°",
+      "volumen_ml": 250
+    },
+    "macerado_dias": 7,
+    "ingredientes": [
+      {
+        "nombre": "Cáscara de naranja (sin parte blanca)",
+        "cantidad": "4 naranjas"
+      },
+      {
+        "nombre": "Cáscara de naranja amarga seca",
+        "cantidad_g": 10
+      },
+      {
+        "nombre": "Clavos de olor",
+        "cantidad": "3 unidades"
+      },
+      {
+        "nombre": "Canela",
+        "cantidad": "1 palito"
+      },
+      {
+        "nombre": "Agua",
+        "cantidad_ml": 500
+      },
+      {
+        "nombre": "Azúcar blanco",
+        "cantidad_g": 300
+      }
+    ],
+    "elaboracion": "Macerar cáscaras y especias en alcohol 7 días, agitando cada tanto. Preparar almíbar con agua y azúcar, enfriar. Filtrar macerado, mezclar con almíbar, reposar 1 semana más.",
+    "graduacion_aprox": 25,
+    "notas": "Equivalente casero al Triple Sec/Cointreau. Usar cáscaras sin la parte blanca amarga para un sabor limpio."
+  },
+  "Licor 2 - Mandarina (Estilo Siciliano)": {
+    "tipo": "licor",
+    "sabor": "mandarina",
+    "rendimiento_litros": 0.8,
+    "alcohol_base": {
+      "nombre": "Ron blanco o vodka 40°",
+      "volumen_ml": 500
+    },
+    "macerado_dias": 12,
+    "ingredientes": [
+      {
+        "nombre": "Cáscara de mandarina (sin parte blanca)",
+        "cantidad": "10 mandarinas"
+      },
+      {
+        "nombre": "Agua",
+        "cantidad_ml": 200
+      },
+      {
+        "nombre": "Azúcar blanco",
+        "cantidad_g": 200
+      }
+    ],
+    "elaboracion": "Macerar cáscaras en alcohol 10-12 días en frasco hermético, lugar oscuro. Preparar almíbar, enfriar. Filtrar y mezclar. Reposar 2 semanas más refrigerado.",
+    "graduacion_aprox": 30,
+    "notas": "Digestivo estilo Mandarinetto siciliano. Refrigerado dura hasta 1 mes. Excelente regalo."
+  },
+  "Licor 3 - Chocolate (Crème de Cacao)": {
+    "tipo": "licor",
+    "sabor": "chocolate",
+    "rendimiento_litros": 0.75,
+    "alcohol_base": {
+      "nombre": "Vodka 40°",
+      "volumen_ml": 375
+    },
+    "macerado_dias": 14,
+    "ingredientes": [
+      {
+        "nombre": "Cacao amargo en polvo",
+        "cantidad_g": 60
+      },
+      {
+        "nombre": "Chocolate negro 70% picado",
+        "cantidad_g": 50
+      },
+      {
+        "nombre": "Vainilla vaina",
+        "cantidad": "1 vaina"
+      },
+      {
+        "nombre": "Café expreso frío",
+        "cantidad_ml": 30
+      },
+      {
+        "nombre": "Agua",
+        "cantidad_ml": 250
+      },
+      {
+        "nombre": "Azúcar blanco",
+        "cantidad_g": 250
+      }
+    ],
+    "elaboracion": "Infusionar cacao, chocolate y vainilla en vodka 14 días. Filtrar bien con papel de filtro. Preparar almíbar con agua y azúcar, enfriar. Mezclar con el extracto y el café. Reposar 1 semana.",
+    "graduacion_aprox": 20,
+    "notas": "Doble filtrado para remover grasas del cacao. El café potencia las notas amargas del chocolate. Similar al Crème de Cacao oscuro."
+  },
+  "Licor 4 - Huevo (Advocaat / Crema de Huevo)": {
+    "tipo": "licor",
+    "sabor": "huevo",
+    "rendimiento_litros": 0.75,
+    "alcohol_base": {
+      "nombre": "Brandy o coñac",
+      "volumen_ml": 200
+    },
+    "macerado_dias": 0,
+    "ingredientes": [
+      {
+        "nombre": "Yemas de huevo",
+        "cantidad": "6 unidades"
+      },
+      {
+        "nombre": "Azúcar impalpable",
+        "cantidad_g": 150
+      },
+      {
+        "nombre": "Leche condensada",
+        "cantidad_ml": 200
+      },
+      {
+        "nombre": "Crema de leche",
+        "cantidad_ml": 100
+      },
+      {
+        "nombre": "Esencia de vainilla",
+        "cantidad_ml": 5
+      },
+      {
+        "nombre": "Pizca de sal",
+        "cantidad_g": 1
+      }
+    ],
+    "elaboracion": "Batir yemas con azúcar hasta blanquear. Agregar leche condensada, crema y vainilla, batir. Incorporar brandy en hilo fino mientras se bate. Pasteurizar a baño María 70°C por 5 min sin hervir. Embotellar caliente y refrigerar.",
+    "graduacion_aprox": 14,
+    "conservacion": "Refrigerado hasta 4 semanas. Agitar antes de servir.",
+    "notas": "Estilo Advocaat holandés. Pasteurizar es clave para seguridad alimentaria. No usar claras."
+  },
+  "Licor 5 - Frutilla (Strawberry Liqueur)": {
+    "tipo": "licor",
+    "sabor": "frutilla",
+    "rendimiento_litros": 0.8,
+    "alcohol_base": {
+      "nombre": "Vodka 40°",
+      "volumen_ml": 500
+    },
+    "macerado_dias": 10,
+    "ingredientes": [
+      {
+        "nombre": "Frutillas frescas maduras",
+        "cantidad_g": 500
+      },
+      {
+        "nombre": "Agua",
+        "cantidad_ml": 200
+      },
+      {
+        "nombre": "Azúcar blanco",
+        "cantidad_g": 250
+      },
+      {
+        "nombre": "Jugo de limón",
+        "cantidad_ml": 15
+      },
+      {
+        "nombre": "Vainilla esencia",
+        "cantidad_ml": 3
+      }
+    ],
+    "elaboracion": "Macerar frutillas limpias y cortadas en vodka 7-10 días, refrigerado. Presionar y filtrar. Preparar almíbar con agua, azúcar y jugo de limón. Enfriar y mezclar con el macerado y la vainilla. Reposar 1 semana.",
+    "graduacion_aprox": 22,
+    "notas": "El limón fija el color rojo y equilibra el dulzor. Refrigerado durante el macerado evita fermentación. Usar frutillas en su punto de madurez máxima."
+  },
+  "Licor 6 - Limón (Limoncello)": {
+    "tipo": "licor",
+    "sabor": "limón",
+    "rendimiento_litros": 1.0,
+    "alcohol_base": {
+      "nombre": "Alcohol alimentario 96°",
+      "volumen_ml": 500
+    },
+    "macerado_dias": 10,
+    "ingredientes": [
+      {
+        "nombre": "Cáscara de limón (sin parte blanca)",
+        "cantidad": "8 limones"
+      },
+      {
+        "nombre": "Agua",
+        "cantidad_ml": 700
+      },
+      {
+        "nombre": "Azúcar blanco",
+        "cantidad_g": 600
+      }
+    ],
+    "elaboracion": "Macerar cáscaras en alcohol 10 días en frasco hermético oscuro. Preparar almíbar caliente, enfriar completamente. Filtrar macerado y mezclar con almíbar. Reposar 1 mes. Servir muy frío o congelado.",
+    "graduacion_aprox": 28,
+    "notas": "Clásico italiano. El reposo de 1 mes en freezer suaviza el alcohol y redondea el sabor. Clave: usar limones orgánicos y no incluir nada de la parte blanca."
+  },
+  "Licor 7 - Menta (Crème de Menthe)": {
+    "tipo": "licor",
+    "sabor": "menta",
+    "rendimiento_litros": 0.75,
+    "alcohol_base": {
+      "nombre": "Vodka 40°",
+      "volumen_ml": 375
+    },
+    "macerado_dias": 7,
+    "ingredientes": [
+      {
+        "nombre": "Hojas de menta fresca",
+        "cantidad_g": 80
+      },
+      {
+        "nombre": "Agua",
+        "cantidad_ml": 250
+      },
+      {
+        "nombre": "Azúcar blanco",
+        "cantidad_g": 300
+      },
+      {
+        "nombre": "Colorante verde alimentario",
+        "cantidad": "opcional, unas gotas"
+      }
+    ],
+    "elaboracion": "Macerar menta en vodka 7 días refrigerado. Filtrar y exprimir hojas. Preparar almíbar, enfriar. Mezclar. Añadir colorante si se desea el verde típico.",
+    "graduacion_aprox": 20,
+    "notas": "Usar menta fresca tipo spearmint para notas más suaves, o peppermint para más intensidad. Base de stinger y grasshopper."
+  },
+  "Licor 8 - Café (Kahlúa Casero)": {
+    "tipo": "licor",
+    "sabor": "café",
+    "rendimiento_litros": 0.75,
+    "alcohol_base": {
+      "nombre": "Vodka 40°",
+      "volumen_ml": 375
+    },
+    "macerado_dias": 3,
+    "ingredientes": [
+      {
+        "nombre": "Café molido espresso fino",
+        "cantidad_g": 80
+      },
+      {
+        "nombre": "Agua caliente",
+        "cantidad_ml": 300
+      },
+      {
+        "nombre": "Azúcar moreno",
+        "cantidad_g": 300
+      },
+      {
+        "nombre": "Vainilla vaina",
+        "cantidad": "1 vaina"
+      },
+      {
+        "nombre": "Cacao amargo en polvo",
+        "cantidad_g": 10
+      }
+    ],
+    "elaboracion": "Preparar café concentrado con agua caliente y cacao. Disolver azúcar mientras está caliente. Enfriar completamente. Mezclar con vodka y vainilla. Reposar 48-72hs.",
+    "graduacion_aprox": 18,
+    "notas": "Más económico y rápido que otros licores. El cacao aporta profundidad. Ideal para White Russian, Espresso Martini y postres."
+  },
+  "Licor 9 - Durazno (Peach Schnapps)": {
+    "tipo": "licor",
+    "sabor": "durazno",
+    "rendimiento_litros": 0.8,
+    "alcohol_base": {
+      "nombre": "Vodka 40°",
+      "volumen_ml": 400
+    },
+    "macerado_dias": 14,
+    "ingredientes": [
+      {
+        "nombre": "Duraznos maduros pelados y troceados",
+        "cantidad_g": 600
+      },
+      {
+        "nombre": "Agua",
+        "cantidad_ml": 200
+      },
+      {
+        "nombre": "Azúcar blanco",
+        "cantidad_g": 250
+      },
+      {
+        "nombre": "Jugo de limón",
+        "cantidad_ml": 10
+      },
+      {
+        "nombre": "Almendra amarga (2-3 pepas de durazno limpias)",
+        "cantidad": "opcional"
+      }
+    ],
+    "elaboracion": "Macerar duraznos en vodka 14 días refrigerado, agitando cada 2 días. Filtrar y exprimir. Preparar almíbar, enfriar. Mezclar todo. Reposar 2 semanas más.",
+    "graduacion_aprox": 20,
+    "notas": "Las pepas de durazno (solo 2-3) aportan nota almendrada característica del schnapps. No exceder esa cantidad."
+  },
+  "Licor 10 - Anís (Anisette Casero)": {
+    "tipo": "licor",
+    "sabor": "anís",
+    "rendimiento_litros": 0.75,
+    "alcohol_base": {
+      "nombre": "Vodka o alcohol 60°",
+      "volumen_ml": 375
+    },
+    "macerado_dias": 7,
+    "ingredientes": [
+      {
+        "nombre": "Anís estrellado",
+        "cantidad_g": 20
+      },
+      {
+        "nombre": "Semillas de anís verde",
+        "cantidad_g": 15
+      },
+      {
+        "nombre": "Hinojo semillas",
+        "cantidad_g": 10
+      },
+      {
+        "nombre": "Agua",
+        "cantidad_ml": 300
+      },
+      {
+        "nombre": "Azúcar blanco",
+        "cantidad_g": 300
+      }
+    ],
+    "elaboracion": "Machacar levemente los botanicos y macerar en alcohol 7 días. Filtrar. Preparar almíbar, enfriar. Mezclar. Reposar 2 semanas en botella cerrada.",
+    "graduacion_aprox": 22,
+    "notas": "Combinación anís verde + estrellado + hinojo da la trinidad aromática del anisado. Al agregar agua se produce el efecto louche (turbidez) normal en este estilo."
+  }
+}
