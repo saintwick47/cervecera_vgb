@@ -1,17 +1,19 @@
 # brew_engine.py
-# /home/saintwick/Escritorio/beer_vgb/brew_engine.py
-# 2024-05-17 (Actualizado v3 - Cumple Informe Técnico)
+# 2024-05-17 (Actualizado v4 - Calibración Dry Irish Stout + Auto-amargor)
 # Autor: saintwick
 """
 Motor de cálculos cerveceros profesionales.
 Implementa fórmulas estándar: PPG (OG), Tinseth (IBU), Morey/Daniels (SRM), Palmer (pH).
 Incluye correcciones por altitud, formatos de lúpulo y automatización de levaduras.
-
 v3: Añade Strike Water (Informe §2.B), Corrección Densímetro ASBC (§4.DíaCocción),
-    y tasa de evaporación en cálculo de aguas.
+y tasa de evaporación en cálculo de aguas.
+v4: Añade calcular_gramos_para_ibu() (inversa de Tinseth/Rager para el botón
+🎯 Auto-amargor) y calibra el pH: la acidez del grano tostado SATURA (tope 0.30),
+validado contra la ficha Dry Irish Stout (pH 5.4-5.5 con HCO3 100-180).
 """
 import math
 from logger import logger
+
 
 class BrewEngine:
     """Motor de cálculos técnicos de elaboración de cerveza."""
@@ -122,7 +124,6 @@ class BrewEngine:
             formato = (lupulo.get('formato') or 'pellet').lower()
             if aa_pct <= 0 or cantidad_g <= 0: continue
             factor_formato = 1.10 if formato == 'pellet' else 1.0
-
             if es_rager:
                 t = tiempo if tiempo > 0 else float(hop_stand_min or 15.0) * (f_stand if f_stand > 0 else 0.5)
                 util_pct = 18.11 + 13.86 * math.tanh((t - 31.32) / 18.27)   # %
@@ -140,6 +141,37 @@ class BrewEngine:
                 ibu_l = (cantidad_g * utilizacion * aa * 1000) / volumen_lote
                 ibu_total += ibu_l * fc_temp * factor_formato
         return round(ibu_total, 1)
+
+    @staticmethod
+    def calcular_gramos_para_ibu(ibu_objetivo, volumen_lote, og, aa_pct, tiempo=60,
+                                 altitud=400, formula="tinseth", formato="pellet"):
+        """
+        🎯 AUTO-AMARGOR (v4): inversa exacta de calcular_ibu() para UNA adición
+        de hervor (tiempo > 0). Devuelve los gramos necesarios para alcanzar
+        ibu_objetivo con la fórmula elegida ('tinseth' o 'rager'), considerando
+        altitud (punto de ebullición) y formato (pellet x1.10).
+        Uso: botón 🎯 Auto-amargor de la UI (pedido Stephan 15/9).
+        """
+        if ibu_objetivo <= 0 or volumen_lote <= 0 or aa_pct <= 0 or tiempo <= 0:
+            return 0.0
+        factor_formato = 1.10 if str(formato).lower() == 'pellet' else 1.0
+        temp_eb = 100 - (altitud / 300.0)
+        fc_temp = math.exp(-0.04 * (100 - temp_eb)) if temp_eb < 100 else 1.0
+        if fc_temp <= 0 or factor_formato <= 0:
+            return 0.0
+        if str(formula).lower() == "rager":
+            util_pct = 18.11 + 13.86 * math.tanh((tiempo - 31.32) / 18.27)   # %
+            if util_pct <= 0: return 0.0
+            ajuste = max(0.0, (og - 1.050) / 0.2)
+            gramos = (ibu_objetivo * volumen_lote * (1 + ajuste)) / \
+                     (0.1 * util_pct * aa_pct * factor_formato * fc_temp)
+        else:
+            factor_og = 1.65 * math.pow(0.000125, og - 1)
+            utilizacion = factor_og * ((1 - math.exp(-0.04 * tiempo)) / 4.15)
+            if utilizacion <= 0: return 0.0
+            gramos = (ibu_objetivo * volumen_lote) / \
+                     (utilizacion * (aa_pct / 100.0) * 1000 * fc_temp * factor_formato)
+        return round(max(0.0, gramos), 1)
 
     # ==========================================
     # MÓDULO COLOR (SRM)
@@ -200,11 +232,12 @@ class BrewEngine:
     def estimar_ph_maceracion(ca_ppm, mg_ppm, hco3_ppm, srm, ph_agua=None):
         """
         Estima el pH de maceración (modelo empírico documentado).
-
         Alcalinidad residual (RA) según Kolbach, en ppm como CaCO3:
             RA = (HCO3/61 - (Ca/20 + Mg/12) / 2) * 50
         El pH baja con maltas oscuras (SRM) y se ajusta levemente según el
         pH del agua de entrada (desviación respecto de 7.0).
+        v4: la acidez del grano tostado SATURA (tope 0.30 de caída): validado
+        contra ficha Dry Irish Stout (pH 5.4-5.5 con HCO3 100-180, SRM ~34).
         Es una ESTIMACIÓN de diseño: en la práctica siempre medir con pHmetro.
         """
         hco3_mmol = max(0.0, hco3_ppm) / 61.0
@@ -212,7 +245,7 @@ class BrewEngine:
         mg_mmol   = max(0.0, mg_ppm)   / 12.0
         ra_mmol   = hco3_mmol - (ca_mmol + mg_mmol) / 2.0
         ra_ppm    = ra_mmol * 50.0  # ppm como CaCO3
-        ph = 5.6 + ra_ppm * 0.0030 - max(0.0, srm - 5.0) * 0.02
+        ph = 5.6 + ra_ppm * 0.0030 - min(max(0.0, srm - 5.0) * 0.02, 0.30)
         if ph_agua:  # influencia del pH del agua de entrada (acotada ±0.2)
             ph += max(-0.2, min(0.2, (ph_agua - 7.0) * 0.05))
         return round(max(4.0, min(8.0, ph)), 2)
@@ -242,10 +275,8 @@ class BrewEngine:
         """
         Calcula la temperatura del agua de mezcla (Strike Water) para alcanzar
         la temperatura de maceración objetivo.
-
         Fórmula Informe §2.B:
             T_agua = T_objetivo + (0.4/R) * (T_objetivo - T_grano) + FC
-
         :param temp_objetivo: Temperatura deseada del macerado (°C, típicamente 65-68)
         :param temp_grano:    Temperatura actual del grano (°C, usualmente ambiente)
         :param ratio:         Relación de empaste en L/kg
@@ -264,7 +295,6 @@ class BrewEngine:
         """
         Corrige la gravedad leída por el densímetro a la temperatura de calibración (20°C)
         usando la fórmula ASBC (American Society of Brewing Chemists).
-
         :param gravedad_leida: Gravedad específica leída (ej. 1.050)
         :param temp_medicion_c: Temperatura real del mosto al medir (°C)
         :return: Gravedad corregida a 20°C
@@ -346,7 +376,6 @@ class BrewEngine:
         ratio_mac = datos_receta.get('ratio_maceracion', 3.0)
         absorcion = datos_receta.get('absorcion', 1.0)
         evaporacion_pct = datos_receta.get('evaporacion_pct', 10.0)
-
         metodo_fg   = datos_receta.get('metodo_fg', 'normal')
         temp_mac    = datos_receta.get('temp_macerado', 66.0)
         formula_ibu = datos_receta.get('formula_ibu', 'tinseth')
@@ -355,11 +384,9 @@ class BrewEngine:
         hop_stand_t = datos_receta.get('hop_stand_temp', 90.0)
         perdidas_l  = datos_receta.get('perdidas_l', 0.0)
         evap_l_h    = datos_receta.get('evaporacion_l_h')
-
         granos_total = sum(m.get('cantidad', 0) for m in maltas) or 0.0
         especiales_kg = sum(m.get('cantidad', 0) for m in maltas if m.get('color', 2) > 20)
         especiales_pct = (especiales_kg / granos_total) if granos_total > 0 else 0.0
-
         og = BrewEngine.calcular_og(maltas, volumen, eficiencia)
         fg = BrewEngine.calcular_fg(og, atenuacion_levadura, metodo_fg, temp_mac, especiales_pct)
         abv = BrewEngine.calcular_abv(og, fg, formula_abv)
@@ -367,30 +394,25 @@ class BrewEngine:
         atenuacion_real = BrewEngine.calcular_atenuacion(og, fg)
         calorias = BrewEngine.calcular_calorias(og, fg, abv)
         alerta_abv = abv > tolerancia_abv
-
         ibu = BrewEngine.calcular_ibu(lupulos, volumen, og, altitud, formula_ibu,
                                       hop_stand, hop_stand_t)
         srm = BrewEngine.calcular_srm(maltas, volumen)
         ebc = BrewEngine.srm_a_ebc(srm)
-
         granos_kg = sum(m.get('cantidad', 0) for m in maltas)
         tiempo_hervor = datos_receta.get('tiempo_hervor', 60)
         aguas = BrewEngine.calcular_aguas(granos_kg, volumen, ratio_mac,
                                           absorcion, evaporacion_pct, tiempo_hervor,
                                           perdidas_l, evap_l_h)
-
         ph_mash = BrewEngine.estimar_ph_maceracion(
             agua.get('ca', 50), agua.get('mg', 10), agua.get('hco3', 150), srm,
             agua.get('ph')  # pH del agua de entrada (opcional)
         )
         ph_hervor = BrewEngine.estimar_ph_post_hervor(ph_mash, tiempo_hervor)
         ph_final  = BrewEngine.estimar_ph_post_lupulo(ph_hervor, lupulos, volumen)
-
         ph_objetivo = 5.3
         acido_lactico_ml = 0.0
         if ph_mash > ph_objetivo:
             acido_lactico_ml = BrewEngine.calcular_acido_lactico(ph_mash, ph_objetivo, granos_kg)
-
         bugu = round(ibu / ((og - 1) * 1000), 2) if og > 1 else 0
         return {
             'og': og, 'fg': fg, 'ibu': ibu, 'srm': srm, 'abv': abv,
@@ -419,7 +441,6 @@ class BrewEngine:
         "Trigo / Weissbier":      {"ca": 50,  "mg": 8,  "so4": 60,  "cl": 70,  "hco3": 40},
         "Balanceada (genérica)":  {"ca": 70,  "mg": 8,  "so4": 100, "cl": 80,  "hco3": 60},
     }
-
     # ppm que aporta 1 gramo de sal disuelto en 1 litro
     APORTE_SALES = {
         "yeso":   {"ca": 232.8, "so4": 557.7},   # CaSO4.2H2O
@@ -469,7 +490,6 @@ class BrewEngine:
         ap = {k: float(agua_actual.get(k, 0) or 0) for k in claves}
         ob = {k: float(objetivo.get(k, 0) or 0) for k in claves}
         A = BrewEngine.APORTE_SALES
-
         # 1) Dilución con ósmosis si el bicarbonato actual supera el objetivo
         ro_pct = 0.0
         if ap["hco3"] > ob["hco3"] and ap["hco3"] > 0:
@@ -481,12 +501,10 @@ class BrewEngine:
             if v <= 0 or aporte <= 0:
                 return 0.0
             return max(0.0, deficit) * v / aporte
-
         g_yeso   = gramos(ob["so4"] - ap_eff["so4"], A["yeso"]["so4"])
         g_cacl2  = gramos(ob["cl"] - ap_eff["cl"], A["cacl2"]["cl"])
         g_epsom  = gramos(ob["mg"] - ap_eff["mg"], A["epsom"]["mg"])
         g_bicarb = gramos(ob["hco3"] - ap_eff["hco3"], A["bicarb"]["hco3"])
-
         if v > 0:
             ca_f   = ap_eff["ca"] + g_yeso * A["yeso"]["ca"] / v + g_cacl2 * A["cacl2"]["ca"] / v
             so4_f  = ap_eff["so4"] + g_yeso * A["yeso"]["so4"] / v + g_epsom * A["epsom"]["so4"] / v
@@ -496,7 +514,6 @@ class BrewEngine:
         else:
             ca_f, so4_f, cl_f, mg_f, hco3_f = (ap_eff["ca"], ap_eff["so4"], ap_eff["cl"],
                                                ap_eff["mg"], ap_eff["hco3"])
-
         return {
             "yeso_g": round(g_yeso, 1), "cacl2_g": round(g_cacl2, 1),
             "epsom_g": round(g_epsom, 1), "bicarb_g": round(g_bicarb, 1),
