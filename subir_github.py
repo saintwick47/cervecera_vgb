@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-# subir_github.py — Sube archivos modificados a GitHub vía API REST
-# Uso: python subir_github.py "mensaje del commit"
-import os, sys, json, subprocess, base64, urllib.request, urllib.error
+# subir_github.py — Sube archivos modificados usando token desde config
+import os, sys, json, base64, urllib.request, urllib.error
 from datetime import datetime
 from pathlib import Path
 
@@ -25,7 +24,7 @@ def cargar_token():
     # 3) Pedir una vez y guardar
     t = input("Pegá tu token de GitHub (ghp_...): ").strip()
     if not t:
-        sys.exit("❌ Sin token. Revocá los viejos y generá uno nuevo en https://github.com/settings/tokens/new")
+        sys.exit("❌ Sin token. Generá uno en https://github.com/settings/tokens/new")
     TOKEN_FILE.parent.mkdir(parents=True, exist_ok=True)
     TOKEN_FILE.write_text(t, encoding="utf-8")
     try: os.chmod(TOKEN_FILE, 0o600)
@@ -60,6 +59,7 @@ def sha_actual(token, ruta):
 
 
 def archivos_modificados():
+    import subprocess
     out = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True).stdout
     items = []
     for linea in out.splitlines():
@@ -105,8 +105,8 @@ def main():
 
     token = cargar_token()
 
-    # Archivos que SÍ o SÍ subimos (los 4 corregidos)
-    archivos_fijos = ["app.py", "brew_engine.py", "catalogo_ar.py", "test_cervecera.py"]
+    # Archivos que SÍ o SÍ subimos
+    archivos_fijos = ["app.py", "brew_engine.py", "catalogo_ar.py", "test_cervecera.py", "database.py"]
     faltantes = [a for a in archivos_fijos if not Path(a).exists()]
     if faltantes:
         sys.exit(f"❌ Faltan archivos: {', '.join(faltantes)}")
@@ -115,19 +115,19 @@ def main():
     mods_extra = [a for a in archivos_modificados() if a not in archivos_fijos]
     mods = archivos_fijos + mods_extra
 
-    print(f"📤 Subiendo {len(mods)} archivo(s):")
+    print(f"📤 Subiendo {len(mods)} archivo(s) a GitHub:")
     for m in mods: print(f"  · {m}")
 
     editar_readme(mensaje, mods)
     if README not in mods: mods.append(README)
 
-    print("\n🚀 Enviando a GitHub vía API REST...")
+    print("\n🚀 Enviando vía API REST...")
     for ruta in mods:
         if not Path(ruta).exists(): continue
         sha = sha_actual(token, ruta)
         subir_archivo(ruta, token, mensaje, sha)
 
-    print(f"\n✅ Listo. Ver commits: https://github.com/{OWNER}/{REPO}/commits/{BRANCH}")
+    print(f"\n✅ Listo. Ver: https://github.com/{OWNER}/{REPO}/commits/{BRANCH}")
 
 
 if __name__ == "__main__":
