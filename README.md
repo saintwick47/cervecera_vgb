@@ -73,3 +73,19 @@ instaladores al release desde GitHub Actions).
 
 ## 📧 Soporte
 nicoweb45@proton.me (Asunto: beer_vgb)
+
+## 📝 Historial de cambios (CHANGELOG)
+
+### 2026-09-17 12:19 — feat: auto-amargor (Tinseth/Rager) + calibración Dry Irish Stout + layout v16.1
+
+- Archivos: app.py, brew_engine.py, catalogo_ar.py, test_cervecera.py, "archivos proyecto y comandos..txt", build.bat, build.sh, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, recetario_vgb.json, recetas_base_genericas.json, subir_github.py
+
+
+### 2026-09-17 12:14 — feat: auto-amargor (Tinseth/Rager) + calibración Dry Irish Stout + layout v16.1
+
+- Archivos: README.md, comitgit.py
+
+
+### 2026-09-17 12:03 — feat: auto-amargor (Tinseth/Rager) + calibración Dry Irish Stout + layout v16.1
+
+- Archivos: .github/workflows/build-installers.yml, README.md, app.py, brew_engine.py, catalogo_ar.py, comitgit.py, test_cervecera.py
