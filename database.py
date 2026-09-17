@@ -1,19 +1,20 @@
 # database.py
-# /home/saintwick/Escritorio/beer_vgb/database.py
-# 2024-05-17 (Actualizado v3)
+# 2024-05-17 (Actualizado v4)
 # Autor: SaintWick
 """
 Gestor de Base de Datos SQLite relacional y portátil.
 Guarda todo en una carpeta local './data/' para garantizar la portabilidad.
 Incluye CRUD completo, Sistema de Inventario, Levaduras y Migraciones.
-
 v3 FIX: Acepta data_dir inyectable para compatibilidad con Flet mobile (Android).
+v4 FIX: Silencia IntegrityError en save_recipe (logger.debug) — los duplicados
+        son comportamiento esperado al re-sembrar el catálogo o importar recetas.
 """
 import sqlite3
 import os
 import sys
 from logger import logger
 from app_paths import get_data_dir
+
 
 class DatabaseManager:
     def __init__(self, db_name="cervecera_vgb.db", data_dir=None):
@@ -129,9 +130,6 @@ class DatabaseManager:
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_fermentables_recipe ON recipe_fermentables(recipe_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_hops_recipe ON recipe_hops(recipe_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_yeasts_recipe ON recipe_yeasts(recipe_id)")
-
-
-
         # Preferencias globales (fórmulas de cálculo — como Brewfather Settings > Formulas)
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS settings (
@@ -218,7 +216,9 @@ class DatabaseManager:
             self.conn.commit()
             return recipe_id
         except sqlite3.IntegrityError as e:
-            logger.warning(f"IntegrityError guardando receta: {e}")
+            # v4: silencio — los duplicados son comportamiento esperado
+            # (re-sembrado del catálogo, re-importación del mismo JSON, etc.)
+            logger.debug(f"Receta duplicada (no guardada): {recipe_data.get('name', '?')}")
             return None
         except Exception as e:
             logger.error(f"Error guardando receta: {e}")
@@ -296,8 +296,6 @@ class DatabaseManager:
         cursor.execute("SELECT * FROM recipe_yeasts WHERE recipe_id = ?", (recipe_id,))
         recipe['levaduras'] = [dict(row) for row in cursor.fetchall()]
         return recipe
-
-
 
     # ==========================================
     # PREFERENCIAS (settings) — fórmulas globales
