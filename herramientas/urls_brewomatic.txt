@@ -1,0 +1,4 @@
+# Pegá acá las direcciones de Brew-o-Matic, UNA POR LÍNEA.
+# Las líneas que empiezan con # se ignoran.
+# Ejemplo (ya importada):
+https://www.brew-o-matic.com.ar/#/recipe/clone/RBKSourJunio2026Jabalinum-5bb3fd021c1071000401038a-1782315265480
