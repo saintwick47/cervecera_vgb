@@ -35,6 +35,8 @@ import tkinter as tk  # Añadido para el manejo de iconos en Linux
 import hashlib
 import json
 import os
+import re
+import difflib
 import sys
 import subprocess
 import threading
@@ -48,6 +50,59 @@ ctk.set_default_color_theme("blue")
 
 VOLUMENES_PRESET = ["5", "10", "20", "50", "100", "250", "500", "750", "1000", "1200", "1500", "2000", "3000", "5000", "10000"]
 TIPOS_INVENTARIO = ["Malta", "Lúpulo", "Levadura", "Otro"]
+
+_RE_CANTIDAD_UNIDAD = re.compile(
+    r"(?P<cantidad>\d+(?:[.,]\d+)?)\s*(?P<unidad>kgs?|gr?s?|gramos?|lts?|litros?|uds?|unidades?|u|l|g)\b",
+    re.IGNORECASE,
+)
+_UNIDADES_NORM = {"kg": "Kg", "kgs": "Kg", "g": "g", "gr": "g", "grs": "g", "gramos": "g",
+                  "l": "L", "lt": "L", "lts": "L", "litros": "L",
+                  "u": "Uds", "ud": "Uds", "uds": "Uds", "unidad": "Uds", "unidades": "Uds"}
+
+
+def parsear_texto_productos(texto: str, catalogo: dict[str, tuple[str, str]]) -> list[dict[str, str | float]]:
+    """Extrae productos (tipo, nombre, cantidad, unidad) de texto pegado en bruto
+    (una línea por producto: factura, lista de proveedor, etc.), al estilo del
+    matching automático de BrewersFriend contra su catálogo de insumos.
+    `catalogo`: {nombre_en_minuscula: (tipo, nombre_original)} ya cargado desde la base.
+    """
+    nombres_catalogo = list(catalogo.keys())
+    productos: list[dict[str, str | float]] = []
+    for linea in texto.splitlines():
+        linea = linea.strip(" \t-–—•*")
+        if not linea:
+            continue
+        # Soporta también líneas separadas por coma/tab (pegado desde planilla/factura)
+        partes = re.split(r"\t|;", linea)
+        linea_norm = partes[0] if len(partes) > 1 else linea
+        m = _RE_CANTIDAD_UNIDAD.search(linea_norm)
+        if m:
+            cantidad = float(m.group("cantidad").replace(",", "."))
+            unidad = _UNIDADES_NORM.get(m.group("unidad").lower(), "Kg")
+            nombre = (linea_norm[:m.start()] + linea_norm[m.end():]).strip(" \t-–—:.,x×*")
+        else:
+            cantidad, unidad, nombre = 1.0, "Uds", linea_norm.strip()
+        # si el resto de la línea trae cantidad/unidad sueltas (formato CSV), las tomamos
+        for extra in partes[1:]:
+            extra = extra.strip()
+            if not extra:
+                continue
+            if re.fullmatch(r"\d+(?:[.,]\d+)?", extra):
+                cantidad = float(extra.replace(",", "."))
+            else:
+                me = _RE_CANTIDAD_UNIDAD.fullmatch(extra)
+                if me:
+                    cantidad = float(me.group("cantidad").replace(",", "."))
+                    unidad = _UNIDADES_NORM.get(me.group("unidad").lower(), unidad)
+        if not nombre:
+            continue
+        match = difflib.get_close_matches(nombre.lower(), nombres_catalogo, n=1, cutoff=0.6)
+        if match:
+            tipo, nombre = catalogo[match[0]]
+        else:
+            tipo = "Otro"
+        productos.append({"tipo": tipo, "nombre": nombre, "cantidad": cantidad, "unidad": unidad})
+    return productos
 
 # Valores por defecto (paridad con beer_vgb_mobile)
 DEF_PERFIL_AGUA   = "Córdoba Capital (Agua de Red) "
@@ -212,18 +267,23 @@ class CerveceraApp(ctk.CTk):
         # --- BARRA SUPERIOR ---
         frame_top = ctk.CTkFrame(self, height=40, corner_radius=0, fg_color="#2c2c2c")
         frame_top.grid(row=0, column=0, columnspan=2, sticky="ew")
-        ctk.CTkButton(frame_top, text="📂 Importar JSON", command=self.importar_json_ui, fg_color="#2563EB", hover_color="#1D4ED8", height=32).pack(side="left", padx=10, pady=5)
-        ctk.CTkButton(frame_top, text="🔄 Buscar recetas nuevas", command=self.actualizar_recetas_web, fg_color="#0D9488", hover_color="#0F766E", height=32).pack(side="left", padx=10, pady=5)
-        ctk.CTkButton(frame_top, text="⬆️ Comprobar actualizaciones", command=self.comprobar_actualizaciones, fg_color="#7C3AED", hover_color="#6D28D9", height=32).pack(side="left", padx=10, pady=5)
-        ctk.CTkButton(frame_top, text="💾 Exportar PDF", command=self.exportar_pdf_ui, fg_color="#D97706", hover_color="#B45309", height=32).pack(side="left", padx=10, pady=5)
-        ctk.CTkButton(frame_top, text="💾 Exportar BeerXML", command=self.exportar_xml_ui, fg_color="#7C3AED", hover_color="#6D28D9", height=32).pack(side="left", padx=10, pady=5)
+        self._menu_popup = None
+        self.btn_menu = ctk.CTkButton(frame_top, text="☰ Menú", command=self.abrir_menu_acciones,
+                                      fg_color="#2563EB", hover_color="#1D4ED8", height=32)
+        self.btn_menu.pack(side="left", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="❓ Manual de Usuario", command=self.mostrar_ayuda, fg_color="#6B7280", hover_color="#4B5563", height=32).pack(side="right", padx=10, pady=5)
         ctk.CTkButton(frame_top, text="🧾 Ver log", command=self.mostrar_log, fg_color="#475569", hover_color="#334155", height=32).pack(side="right", padx=10, pady=5)
         # --- COLUMNA IZQUIERDA (Recetas) ---
         self.frame_izquierdo = ctk.CTkFrame(self, width=300, corner_radius=0)
         self.frame_izquierdo.grid(row=1, column=0, sticky="nsew")
         self.frame_izquierdo.grid_rowconfigure(1, weight=1)
-        ctk.CTkLabel(self.frame_izquierdo, text="🍺 Mis Recetas", font=ctk.CTkFont(size=20, weight="bold")).grid(row=0, column=0, padx=20, pady=(20, 10))
+        self._recetas_visibles = True
+        self.btn_toggle_recetas = ctk.CTkButton(self.frame_izquierdo, text="🍺 Mis Recetas  ▾",
+                                                fg_color="transparent", hover_color="#2c2c2c",
+                                                text_color=("gray10", "gray90"),
+                                                font=ctk.CTkFont(size=20, weight="bold"),
+                                                command=self.toggle_lista_recetas)
+        self.btn_toggle_recetas.grid(row=0, column=0, padx=20, pady=(20, 10))
         self.lista_recetas = ctk.CTkScrollableFrame(self.frame_izquierdo)
         self.lista_recetas.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
         ctk.CTkButton(self.frame_izquierdo, text="+ Crear Receta Manual", command=self.nueva_receta).grid(row=2, column=0, padx=20, pady=20)
@@ -231,11 +291,9 @@ class CerveceraApp(ctk.CTk):
         self.tabview = ctk.CTkTabview(self, corner_radius=0)
         self.tabview.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
         self.tab_receta = self.tabview.add("🛠️ Receta")
-        self.tab_inventario = self.tabview.add("📦 Inventario")
-        self.tab_insumos = self.tabview.add("🧪 Insumos")
+        self.tab_insumos = self.tabview.add("🧪 Insumos e Inventario")
         self.tab_equipos = self.tabview.add("⚙️ Equipos")
         self.setup_tab_receta()
-        self.setup_tab_inventario()
         self.setup_tab_insumos()
         self.setup_tab_equipos()
         self.cargar_lista_recetas()
@@ -572,11 +630,15 @@ class CerveceraApp(ctk.CTk):
     # ==========================================
     # CONFIGURACIÓN PESTAÑA INVENTARIO
     # ==========================================
-    def setup_tab_inventario(self):
-        self.tab_inventario.grid_columnconfigure(0, weight=1)
-        frame_add = ctk.CTkFrame(self.tab_inventario)
-        frame_add.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
-        ctk.CTkLabel(frame_add, text="➕ Añadir / Sumar Stock", font=ctk.CTkFont(size=16, weight="bold")).grid(row=0, column=0, columnspan=4, pady=10, padx=10, sticky="w")
+    def setup_tab_inventario(self, parent):
+        frame_add = ctk.CTkFrame(parent)
+        frame_add.grid(row=2, column=0, padx=20, pady=(8, 8), sticky="ew")
+        cab = ctk.CTkFrame(frame_add, fg_color="transparent")
+        cab.grid(row=0, column=0, columnspan=4, sticky="ew", padx=10, pady=10)
+        cab.grid_columnconfigure(0, weight=1)
+        ctk.CTkLabel(cab, text="📦 Inventario — Añadir / Sumar Stock", font=ctk.CTkFont(size=16, weight="bold")).grid(row=0, column=0, sticky="w")
+        ctk.CTkButton(cab, text="📋 Pegar productos", command=self.abrir_dialogo_pegar_productos,
+                      fg_color="#0D9488", hover_color="#0F766E").grid(row=0, column=1, sticky="e")
         ctk.CTkLabel(frame_add, text="Tipo:").grid(row=1, column=0, padx=5, pady=5)
         self.combo_tipo_inv = ctk.CTkComboBox(frame_add, values=TIPOS_INVENTARIO, width=120)
         self.combo_tipo_inv.set("Malta")
@@ -592,10 +654,10 @@ class CerveceraApp(ctk.CTk):
         self.combo_unidad_inv.set("Kg")
         self.combo_unidad_inv.grid(row=2, column=3, padx=5, pady=5)
         ctk.CTkButton(frame_add, text="Añadir al Inventario", command=self.agregar_inventario_ui, fg_color="#059669", hover_color="#047857").grid(row=3, column=0, columnspan=4, pady=15)
-        frame_lista_inv = ctk.CTkFrame(self.tab_inventario)
-        frame_lista_inv.grid(row=1, column=0, padx=20, pady=(0, 20), sticky="nsew")
+        frame_lista_inv = ctk.CTkFrame(parent)
+        frame_lista_inv.grid(row=3, column=0, padx=20, pady=(0, 20), sticky="nsew")
         ctk.CTkLabel(frame_lista_inv, text="📦 Stock Disponible", font=ctk.CTkFont(size=16, weight="bold")).pack(pady=10)
-        self.lista_inventario_ui = ctk.CTkScrollableFrame(frame_lista_inv)
+        self.lista_inventario_ui = ctk.CTkScrollableFrame(frame_lista_inv, height=220)
         self.lista_inventario_ui.pack(fill="both", expand=True, padx=10, pady=(0, 10))
         self.cargar_lista_inventario()
 
@@ -717,7 +779,11 @@ class CerveceraApp(ctk.CTk):
     # ==========================================
     def setup_tab_insumos(self):
         self.tab_insumos.grid_columnconfigure(0, weight=1)
-        card_ing = ctk.CTkFrame(self.tab_insumos)
+        self.tab_insumos.grid_rowconfigure(0, weight=1)
+        scroll = ctk.CTkScrollableFrame(self.tab_insumos, fg_color="transparent")
+        scroll.grid(row=0, column=0, sticky="nsew")
+        scroll.grid_columnconfigure(0, weight=1)
+        card_ing = ctk.CTkFrame(scroll)
         card_ing.grid(row=0, column=0, padx=20, pady=(15, 8), sticky="ew")
         card_ing.grid_columnconfigure((1, 3, 5), weight=1)
         ctk.CTkLabel(card_ing, text="🧪 Catálogo de insumos (editable)",
@@ -752,12 +818,14 @@ class CerveceraApp(ctk.CTk):
                       fg_color="#6B7280", hover_color="#4B5563").grid(row=fila, column=2, padx=6, pady=10, sticky="w")
         ctk.CTkLabel(card_ing, text="Completá solo los campos que apliquen al tipo elegido.",
                      text_color="#9CA3AF").grid(row=fila, column=3, columnspan=3, sticky="w", padx=6)
-        frame_lista = ctk.CTkFrame(self.tab_insumos)
-        frame_lista.grid(row=1, column=0, padx=20, pady=(0, 20), sticky="nsew")
+        frame_lista = ctk.CTkFrame(scroll)
+        frame_lista.grid(row=1, column=0, padx=20, pady=(0, 8), sticky="nsew")
         ctk.CTkLabel(frame_lista, text="Insumos cargados", font=ctk.CTkFont(size=15, weight="bold")).pack(pady=8)
-        self.lista_insumos_ui = ctk.CTkScrollableFrame(frame_lista)
+        self.lista_insumos_ui = ctk.CTkScrollableFrame(frame_lista, height=220)
         self.lista_insumos_ui.pack(fill="both", expand=True, padx=10, pady=(0, 10))
         self.cargar_lista_insumos()
+        ctk.CTkFrame(scroll, height=2, fg_color="#374151").grid(row=2, column=0, sticky="ew", padx=20, pady=6)
+        self.setup_tab_inventario(scroll)
 
     def cargar_lista_insumos(self):
         for w in self.lista_insumos_ui.winfo_children():
@@ -854,6 +922,85 @@ class CerveceraApp(ctk.CTk):
         self.db.delete_inventory_item(item_id)
         self.cargar_lista_inventario()
         self.calcular_y_mostrar()
+
+    # ------------------------------------------
+    # Pegar productos → auto-detección (tipo BrewersFriend: matchea contra catálogo)
+    # ------------------------------------------
+    def _catalogo_para_matching(self) -> dict[str, tuple[str, str]]:
+        return {ing["name"].lower(): (ing["type"], ing["name"]) for ing in self.db.get_ingredients()}
+
+    def abrir_dialogo_pegar_productos(self):
+        dialogo = ctk.CTkToplevel(self)
+        dialogo.title("Pegar productos")
+        dialogo.geometry("720x560")
+        dialogo.transient(self)
+        dialogo.grab_set()
+        ctk.CTkLabel(dialogo, text="Pegá el texto con los productos (uno por línea): factura, lista de "
+                     "proveedor o planilla. Se detecta nombre, cantidad, unidad y tipo automáticamente.",
+                     wraplength=680, justify="left").pack(padx=15, pady=(15, 5), anchor="w")
+        txt = ctk.CTkTextbox(dialogo, height=140)
+        txt.pack(fill="x", padx=15, pady=5)
+        frame_preview = ctk.CTkScrollableFrame(dialogo, label_text="Vista previa (revisá y confirmá)")
+        frame_preview.pack(fill="both", expand=True, padx=15, pady=10)
+        filas_preview: list[dict] = []
+
+        def analizar():
+            for w in frame_preview.winfo_children():
+                w.destroy()
+            filas_preview.clear()
+            productos = parsear_texto_productos(txt.get("1.0", "end"), self._catalogo_para_matching())
+            if not productos:
+                ctk.CTkLabel(frame_preview, text="No se detectaron productos en el texto.").pack(pady=10)
+                return
+            for p in productos:
+                fila = ctk.CTkFrame(frame_preview, fg_color="transparent")
+                fila.pack(fill="x", pady=2)
+                var_incluir = ctk.BooleanVar(value=True)
+                ctk.CTkCheckBox(fila, text="", variable=var_incluir, width=20).pack(side="left", padx=(2, 6))
+                c_tipo = ctk.CTkComboBox(fila, values=TIPOS_INVENTARIO, width=100)
+                c_tipo.set(p["tipo"] if p["tipo"] in TIPOS_INVENTARIO else "Otro")
+                c_tipo.pack(side="left", padx=3)
+                e_nombre = ctk.CTkEntry(fila, width=220)
+                e_nombre.insert(0, p["nombre"])
+                e_nombre.pack(side="left", padx=3, fill="x", expand=True)
+                e_cant = ctk.CTkEntry(fila, width=70)
+                e_cant.insert(0, format_num(p["cantidad"]))
+                e_cant.pack(side="left", padx=3)
+                c_unidad = ctk.CTkComboBox(fila, values=["Kg", "g", "Uds", "L"], width=80)
+                c_unidad.set(p["unidad"])
+                c_unidad.pack(side="left", padx=3)
+                filas_preview.append({"incluir": var_incluir, "tipo": c_tipo, "nombre": e_nombre,
+                                       "cantidad": e_cant, "unidad": c_unidad})
+
+        def confirmar():
+            agregados = 0
+            for f in filas_preview:
+                if not f["incluir"].get():
+                    continue
+                nombre = f["nombre"].get().strip()
+                if not nombre:
+                    continue
+                try:
+                    cantidad = float(f["cantidad"].get().replace(",", "."))
+                    if cantidad <= 0:
+                        continue
+                except ValueError:
+                    continue
+                self.db.add_inventory_item(f["tipo"].get(), nombre, cantidad, f["unidad"].get())
+                agregados += 1
+            self.cargar_lista_inventario()
+            self.calcular_y_mostrar()
+            dialogo.destroy()
+            mb.showinfo("Inventario", f"{agregados} producto(s) importado(s) al inventario.")
+
+        frame_botones = ctk.CTkFrame(dialogo, fg_color="transparent")
+        frame_botones.pack(fill="x", padx=15, pady=(0, 15))
+        ctk.CTkButton(frame_botones, text="🔍 Analizar", command=analizar,
+                      fg_color="#2563EB", hover_color="#1D4ED8").pack(side="left")
+        ctk.CTkButton(frame_botones, text="✅ Importar seleccionados", command=confirmar,
+                      fg_color="#059669", hover_color="#047857").pack(side="right")
+        ctk.CTkButton(frame_botones, text="Cancelar", command=dialogo.destroy,
+                      fg_color="#6B7280", hover_color="#4B5563").pack(side="right", padx=8)
 
     def cargar_lista_inventario(self):
         for w in self.lista_inventario_ui.winfo_children():
@@ -1652,6 +1799,59 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
             mb.showinfo("Éxito", f"BeerXML guardado en:\n{filepath}")
         else:
             mb.showerror("Error", "No se pudo generar el BeerXML.")
+
+    def abrir_menu_acciones(self):
+        """Despliega/oculta un dropdown propio bajo el botón Menú (se cierra al elegir
+        una opción o al perder el foco; no queda pegado como el tk.Menu nativo)."""
+        if self._menu_popup is not None and self._menu_popup.winfo_exists():
+            self._cerrar_menu_acciones()
+            return
+        x = self.btn_menu.winfo_rootx()
+        y = self.btn_menu.winfo_rooty() + self.btn_menu.winfo_height() + 2
+        popup = ctk.CTkToplevel(self)
+        popup.overrideredirect(True)
+        popup.geometry(f"+{x}+{y}")
+        popup.attributes("-topmost", True)
+        frame = ctk.CTkFrame(popup, fg_color="#2c2c2c", corner_radius=6, border_width=1,
+                             border_color="#475569")
+        frame.pack(fill="both", expand=True)
+        opciones = (
+            ("📂 Importar JSON", self.importar_json_ui),
+            ("🔄 Buscar recetas nuevas", self.actualizar_recetas_web),
+            ("⬆️ Comprobar actualizaciones", self.comprobar_actualizaciones),
+            ("💾 Exportar PDF", self.exportar_pdf_ui),
+            ("💾 Exportar BeerXML", self.exportar_xml_ui),
+        )
+        for texto, accion in opciones:
+            ctk.CTkButton(frame, text=texto, anchor="w", fg_color="transparent",
+                         hover_color="#374151", height=30,
+                         command=lambda a=accion: self._ejecutar_accion_menu(a)
+                         ).pack(fill="x", padx=4, pady=2)
+        popup.bind("<FocusOut>", lambda e: self._cerrar_menu_acciones())
+        self._menu_popup = popup
+        popup.after(10, popup.focus_force)
+
+    def _ejecutar_accion_menu(self, accion):
+        self._cerrar_menu_acciones()
+        accion()
+
+    def _cerrar_menu_acciones(self):
+        if self._menu_popup is not None:
+            try:
+                self._menu_popup.destroy()
+            except Exception:
+                pass
+            self._menu_popup = None
+
+    def toggle_lista_recetas(self):
+        """Muestra u oculta la lista de recetas al presionar 'Mis Recetas'."""
+        if self._recetas_visibles:
+            self.lista_recetas.grid_remove()
+            self.btn_toggle_recetas.configure(text="🍺 Mis Recetas  ▸")
+        else:
+            self.lista_recetas.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
+            self.btn_toggle_recetas.configure(text="🍺 Mis Recetas  ▾")
+        self._recetas_visibles = not self._recetas_visibles
 
     def mostrar_ayuda(self):
         AyudaDialog(self)
