@@ -10,6 +10,7 @@ v4 FIX: Silencia IntegrityError en save_recipe (logger.debug) — los duplicados
         son comportamiento esperado al re-sembrar el catálogo o importar recetas.
 """
 import sqlite3
+import json
 import os
 import sys
 from logger import logger
@@ -71,6 +72,7 @@ class DatabaseManager:
             ('ratio_maceracion','REAL DEFAULT 3.0'),
             ('absorcion',      'REAL DEFAULT 1.0'),
             ('altitud_name',   "TEXT DEFAULT 'Córdoba Capital'"),
+            ('compartida',     'INTEGER DEFAULT 0'),
         ]:
             if col not in columns:
                 try:
@@ -127,6 +129,29 @@ class DatabaseManager:
                 UNIQUE(type, name)
             )
         ''')
+        cursor.execute("PRAGMA table_info(inventory)")
+        inv_columns = [col[1] for col in cursor.fetchall()]
+        for col, definition in [('costo_unitario', 'REAL DEFAULT 0'),
+                                ('minimo',         'REAL DEFAULT 0'),
+                                ('vencimiento',    "TEXT DEFAULT ''")]:
+            if col not in inv_columns:
+                cursor.execute(f"ALTER TABLE inventory ADD COLUMN {col} {definition}")
+        # Kardex de movimientos de inventario (entradas/salidas/mermas/ajustes).
+        # Se denormaliza nombre/tipo del insumo para que el historial sobreviva
+        # aunque el ítem se borre o se agote del todo.
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS inventory_movimientos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                item_id INTEGER,
+                item_name TEXT NOT NULL,
+                item_type TEXT NOT NULL,
+                fecha TEXT NOT NULL,
+                tipo TEXT NOT NULL,
+                cantidad REAL NOT NULL,
+                motivo TEXT DEFAULT ''
+            )
+        ''')
+        cursor.execute("CREATE INDEX IF NOT EXISTS idx_movimientos_fecha ON inventory_movimientos(id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_fermentables_recipe ON recipe_fermentables(recipe_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_hops_recipe ON recipe_hops(recipe_id)")
         cursor.execute("CREATE INDEX IF NOT EXISTS idx_yeasts_recipe ON recipe_yeasts(recipe_id)")
@@ -151,6 +176,10 @@ class DatabaseManager:
                 notas TEXT DEFAULT ''
             )
         ''')
+        cursor.execute("PRAGMA table_info(equipment)")
+        eq_columns = [col[1] for col in cursor.fetchall()]
+        if 'extra_params' not in eq_columns:
+            cursor.execute("ALTER TABLE equipment ADD COLUMN extra_params TEXT DEFAULT '{}'")
         # Catálogo de INSUMOS editable (Fase 2): maltas, lúpulos y levaduras
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS ingredients (
@@ -283,6 +312,11 @@ class DatabaseManager:
         cursor.execute("SELECT 1 FROM recipes WHERE name = ?", (name,))
         return cursor.fetchone() is not None
 
+    def mark_recipe_compartida(self, recipe_id):
+        cursor = self.conn.cursor()
+        cursor.execute("UPDATE recipes SET compartida=1 WHERE id=?", (recipe_id,))
+        self.conn.commit()
+
     def get_full_recipe(self, recipe_id):
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM recipes WHERE id = ?", (recipe_id,))
@@ -347,6 +381,24 @@ class DatabaseManager:
     def delete_equipment(self, name):
         cursor = self.conn.cursor()
         cursor.execute("DELETE FROM equipment WHERE name=?", (name,))
+        self.conn.commit()
+
+    def get_equipo_extra(self, name):
+        """Parámetros extendidos del equipo (maceración, mermas, pH) guardados como JSON."""
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT extra_params FROM equipment WHERE name=?", (name,))
+        row = cursor.fetchone()
+        if not row or not row["extra_params"]:
+            return {}
+        try:
+            return json.loads(row["extra_params"])
+        except Exception:
+            return {}
+
+    def set_equipo_extra(self, name, datos: dict):
+        cursor = self.conn.cursor()
+        cursor.execute("UPDATE equipment SET extra_params=? WHERE name=?",
+                       (json.dumps(datos, ensure_ascii=False), name))
         self.conn.commit()
 
     def seed_equipment(self):
@@ -445,41 +497,74 @@ class DatabaseManager:
     # ==========================================
     # MÉTODOS DE INVENTARIO
     # ==========================================
-    def add_inventory_item(self, item_type, name, amount, unit):
+    def add_inventory_item(self, item_type, name, amount, unit, motivo="Ingreso"):
         cursor = self.conn.cursor()
         try:
             cursor.execute('''INSERT INTO inventory (type, name, amount, unit) VALUES (?, ?, ?, ?)''',
                            (item_type, name, amount, unit))
             self.conn.commit()
+            self.add_inventory_movimiento(cursor.lastrowid, name, item_type, "Entrada", amount, motivo)
             return True
         except sqlite3.IntegrityError:
             cursor.execute('''UPDATE inventory SET amount = amount + ? WHERE type=? AND name=?''',
                            (amount, item_type, name))
             self.conn.commit()
+            cursor.execute("SELECT id FROM inventory WHERE type=? AND name=?", (item_type, name))
+            row = cursor.fetchone()
+            self.add_inventory_movimiento(row["id"] if row else None, name, item_type,
+                                          "Entrada", amount, motivo)
             return True
         except Exception as e:
             logger.error(f"Error añadiendo inventario: {e}")
             return False
 
-    def subtract_inventory_item(self, item_type, name, amount):
+    def subtract_inventory_item(self, item_type, name, amount, tipo="Salida", motivo=""):
         cursor = self.conn.cursor()
         try:
-            cursor.execute("SELECT amount FROM inventory WHERE type=? AND LOWER(name)=?", (item_type, name.lower()))
+            cursor.execute("SELECT id, amount FROM inventory WHERE type=? AND LOWER(name)=?", (item_type, name.lower()))
             row = cursor.fetchone()
             if not row:
                 return False
-            current_amount = row["amount"]
+            item_id, current_amount = row["id"], row["amount"]
             new_amount = current_amount - amount
             if new_amount <= 0:
-                cursor.execute("DELETE FROM inventory WHERE type=? AND LOWER(name)=?", (item_type, name.lower()))
+                cursor.execute("DELETE FROM inventory WHERE id=?", (item_id,))
             else:
-                cursor.execute("UPDATE inventory SET amount = ? WHERE type=? AND LOWER(name)=?",
-                               (new_amount, item_type, name.lower()))
+                cursor.execute("UPDATE inventory SET amount = ? WHERE id=?", (new_amount, item_id))
             self.conn.commit()
+            self.add_inventory_movimiento(item_id, name, item_type, tipo, amount, motivo)
             return True
         except Exception as e:
             logger.error(f"Error restando inventario: {e}")
             return False
+
+    def update_inventory_details(self, item_id, costo_unitario=None, minimo=None, vencimiento=None):
+        sets, vals = [], []
+        if costo_unitario is not None:
+            sets.append("costo_unitario=?"); vals.append(costo_unitario)
+        if minimo is not None:
+            sets.append("minimo=?"); vals.append(minimo)
+        if vencimiento is not None:
+            sets.append("vencimiento=?"); vals.append(vencimiento)
+        if not sets:
+            return
+        vals.append(item_id)
+        cursor = self.conn.cursor()
+        cursor.execute(f"UPDATE inventory SET {', '.join(sets)} WHERE id=?", vals)
+        self.conn.commit()
+
+    def add_inventory_movimiento(self, item_id, item_name, item_type, tipo, cantidad, motivo=""):
+        cursor = self.conn.cursor()
+        cursor.execute("""INSERT INTO inventory_movimientos
+                           (item_id, item_name, item_type, fecha, tipo, cantidad, motivo)
+                           VALUES (?, ?, ?, datetime('now','localtime'), ?, ?, ?)""",
+                       (item_id, item_name, item_type, tipo, cantidad, motivo))
+        self.conn.commit()
+
+    def get_inventory_movimientos(self, limit=15):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM inventory_movimientos ORDER BY id DESC LIMIT ?", (limit,))
+        return [dict(r) for r in cursor.fetchall()]
 
     def delete_inventory_item(self, item_id):
         cursor = self.conn.cursor()
