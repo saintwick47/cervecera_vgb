@@ -76,6 +76,11 @@ nicoweb45@proton.me (Asunto: beer_vgb)
 
 ## 📝 Historial de cambios (CHANGELOG)
 
+### 2026-09-20 11:06 — version nueva con funciones mejoradas
+
+- Archivos: app.py, brew_engine.py, catalogo_ar.py, test_cervecera.py, database.py, .gitignore, README.md, "Tema brewtk.json", app_gestion.py, "archivos proyecto y comandos..txt", beer_vgb.png, build.bat, build.sh, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, packaging/icons/linux/logo-512.png, packaging/icons/logo-128.png, packaging/icons/logo-16.png, packaging/icons/logo-256.png, packaging/icons/logo-32.png, packaging/icons/logo-48.png, packaging/icons/logo-512.png, packaging/icons/logo-64.png, recetario_vgb.json, recetas_base_genericas.json
+
+
 ### 2026-09-19 19:16 — reestructuracion y nuevas funciones
 
 - Archivos: app.py, brew_engine.py, catalogo_ar.py, test_cervecera.py, database.py, .gitignore, README.md, app_gestion.py, "archivos proyecto y comandos..txt", beer_vgb.png, build.bat, build.sh, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, packaging/icons/linux/logo-512.png, packaging/icons/logo-128.png, packaging/icons/logo-16.png, packaging/icons/logo-256.png, packaging/icons/logo-32.png, packaging/icons/logo-48.png, packaging/icons/logo-512.png, packaging/icons/logo-64.png, recetario_vgb.json, recetas_base_genericas.json
