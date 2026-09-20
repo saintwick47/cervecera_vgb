@@ -13,6 +13,7 @@ import json
 from brew_engine import BrewEngine
 from database import DatabaseManager
 from bjcp_styles import comparar_con_estilo, get_style_list
+from app_gestion import parsear_texto_productos
 
 
 class TestBrewEngine(unittest.TestCase):
@@ -243,6 +244,50 @@ class TestDatabase(unittest.TestCase):
             if self.db.save_recipe(receta_adaptada): importadas += 1
         self.assertEqual(importadas, len(recetas_json))
 
+    def test_receta_marcar_compartida(self):
+        receta = {'name': 'Receta Comunidad', 'volume': 20.0, 'efficiency': 0.75,
+                  'notes': '', 'maltas': [], 'lupulos': []}
+        recipe_id = self.db.save_recipe(receta)
+        self.assertEqual(self.db.get_full_recipe(recipe_id).get('compartida'), 0)
+        self.db.mark_recipe_compartida(recipe_id)
+        self.assertEqual(self.db.get_full_recipe(recipe_id).get('compartida'), 1)
+
+    def test_equipo_extra_params_roundtrip(self):
+        self.db.add_equipment('Equipo Test Extra', batch_volume=20)
+        self.assertEqual(self.db.get_equipo_extra('Equipo Test Extra'), {})
+        self.db.set_equipo_extra('Equipo Test Extra', {'temp_grano': 22.0, 'ph_mash': 5.3})
+        extra = self.db.get_equipo_extra('Equipo Test Extra')
+        self.assertEqual(extra['temp_grano'], 22.0)
+        self.assertEqual(extra['ph_mash'], 5.3)
+
+    def test_inventario_costo_minimo_vencimiento(self):
+        self.db.add_inventory_item('Malta', 'Pilsen', 10.0, 'Kg')
+        item = self.db.get_inventory_item_by_name('Malta', 'Pilsen')
+        self.db.update_inventory_details(item['id'], costo_unitario=1500.0,
+                                         minimo=5.0, vencimiento='2026-12-01')
+        item = self.db.get_inventory_item_by_name('Malta', 'Pilsen')
+        self.assertEqual(item['costo_unitario'], 1500.0)
+        self.assertEqual(item['minimo'], 5.0)
+        self.assertEqual(item['vencimiento'], '2026-12-01')
+
+    def test_inventario_kardex_registra_movimientos(self):
+        self.db.add_inventory_item('Lúpulo', 'Citra', 100.0, 'g', motivo='Compra inicial')
+        self.db.subtract_inventory_item('Lúpulo', 'Citra', 30.0, tipo='Salida', motivo='Cocción #1')
+        movimientos = self.db.get_inventory_movimientos(limit=5)
+        tipos = [m['tipo'] for m in movimientos if m['item_name'] == 'Citra']
+        self.assertIn('Entrada', tipos)
+        self.assertIn('Salida', tipos)
+
+    def test_inventario_kardex_sobrevive_a_item_borrado(self):
+        # Al vaciar el stock el ítem se borra de `inventory`, pero el Kardex
+        # debe conservar el historial (no usa FK con ON DELETE CASCADE).
+        self.db.add_inventory_item('Lúpulo', 'Mosaic', 20.0, 'g')
+        self.db.subtract_inventory_item('Lúpulo', 'Mosaic', 20.0, tipo='Salida', motivo='Consumo total')
+        self.assertIsNone(self.db.get_inventory_item_by_name('Lúpulo', 'Mosaic'))
+        movimientos = self.db.get_inventory_movimientos(limit=10)
+        nombres = [m['item_name'] for m in movimientos]
+        self.assertIn('Mosaic', nombres)
+
 
 class TestBJCP(unittest.TestCase):
     """Tests para el motor de comparación BJCP"""
@@ -266,6 +311,45 @@ class TestBJCP(unittest.TestCase):
         self.assertIsInstance(lista, list)
         self.assertGreater(len(lista), 80)  # Tenemos +80 estilos
         self.assertEqual(lista[0], "Auto (Sugerir)")  # El primer elemento debe ser Auto
+
+
+class TestParserPegarProductos(unittest.TestCase):
+    """Tests del parser de 'Pegar productos' (Insumos/Inventario, app_gestion.py)."""
+    def setUp(self):
+        # Catálogo mínimo de matching: {nombre_lower: (tipo, nombre_original)}
+        self.catalogo = {
+            "cascade argentino": ("Lúpulo", "Cascade Argentino"),
+            "mosaic (usa)": ("Lúpulo", "Mosaic (USA)"),
+            "pale ale (ba-malt)": ("Malta", "Pale Ale (Ba-Malt)"),
+        }
+
+    def test_formato_combinado_nombre_cantidad_unidad(self):
+        productos = parsear_texto_productos("Pale Ale (Ba-Malt) 25 kg", self.catalogo)
+        self.assertEqual(len(productos), 1)
+        p = productos[0]
+        self.assertEqual(p['tipo'], 'Malta')
+        self.assertEqual(p['nombre'], 'Pale Ale (Ba-Malt)')
+        self.assertEqual(p['cantidad'], 25.0)
+        self.assertEqual(p['unidad'], 'Kg')
+
+    def test_formato_csv_con_unidad_en_columna_separada(self):
+        # Regresión: cantidad y unidad en columnas separadas (factura/planilla)
+        productos = parsear_texto_productos("Mosaic;200;g", self.catalogo)
+        self.assertEqual(len(productos), 1)
+        p = productos[0]
+        self.assertEqual(p['tipo'], 'Lúpulo')
+        self.assertEqual(p['nombre'], 'Mosaic (USA)')
+        self.assertEqual(p['cantidad'], 200.0)
+        self.assertEqual(p['unidad'], 'g')
+
+    def test_sin_match_en_catalogo_tipo_otro(self):
+        productos = parsear_texto_productos("Ingrediente Desconocido XYZ 3 kg", self.catalogo)
+        self.assertEqual(productos[0]['tipo'], 'Otro')
+
+    def test_multiples_lineas(self):
+        texto = "Pale Ale (Ba-Malt) 25 kg\nCascade Argentino 500g\n"
+        productos = parsear_texto_productos(texto, self.catalogo)
+        self.assertEqual(len(productos), 2)
 
 
 if __name__ == '__main__':
