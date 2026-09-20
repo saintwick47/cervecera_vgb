@@ -33,6 +33,7 @@ from tkinter import simpledialog
 import tkinter as tk  # Añadido para el manejo de iconos en Linux
 import os
 import sys
+import math
 import threading
 from logger import logger
 from app_paths import get_data_dir
@@ -41,7 +42,10 @@ from app_gestion import (GestionMixin, format_num, resource_path, _flotar,
                          DEF_ALTITUD, DEF_FORMATO, EVAPORACION_PCT)
 
 ctk.set_appearance_mode("dark")
-ctk.set_default_color_theme("blue")
+try:
+    ctk.set_default_color_theme(resource_path("tema_brewtk.json"))
+except Exception:
+    ctk.set_default_color_theme("blue")
 
 
 class CerveceraApp(GestionMixin, ctk.CTk):
@@ -116,15 +120,35 @@ class CerveceraApp(GestionMixin, ctk.CTk):
     # CONFIGURACIÓN PESTAÑA RECETA (v16: inputs izq. | resultados der. | procesos abajo)
     # ==========================================
     def setup_tab_receta(self):
-        # ── Layout tipo Brewomatic: inputs izquierda, resultados derecha ──
+        # ── Layout tipo Brewomatic: sub-pestañas izquierda, resultados derecha ──
         self.tab_receta.grid_columnconfigure(0, weight=2)
         self.tab_receta.grid_columnconfigure(1, weight=1)
         self.tab_receta.grid_rowconfigure(0, weight=1)
-        # ── COLUMNA IZQUIERDA: INPUTS (con scroll) ──
-        self.scroll_receta = ctk.CTkScrollableFrame(self.tab_receta)
-        self.scroll_receta.grid(row=0, column=0, sticky="nsew", padx=(0, 5))
+        # ── COLUMNA IZQUIERDA: sub-pestañas (Receta/Agua/Macerado/Hervido/Fermentación/Embotellado) ──
+        self.subtabs_receta = ctk.CTkTabview(self.tab_receta)
+        self.subtabs_receta.grid(row=0, column=0, sticky="nsew", padx=(0, 5))
+        tab_general = self.subtabs_receta.add("📝 Receta")
+        tab_agua_sub = self.subtabs_receta.add("💧 Agua")
+        tab_mac_sub = self.subtabs_receta.add("🌾 Macerado")
+        tab_herv_sub = self.subtabs_receta.add("🌿 Hervido")
+        tab_ferm_sub = self.subtabs_receta.add("🧫 Fermentación")
+        tab_embot_sub = self.subtabs_receta.add("🍾 Embotellado")
+
+        self.scroll_receta = ctk.CTkScrollableFrame(tab_general, fg_color="transparent")
+        self.scroll_receta.pack(fill="both", expand=True)
         self.scroll_receta.grid_columnconfigure(0, weight=1)
-        # ── 1. Datos Básicos ─────────────────────────────────────────────
+        scroll_agua = ctk.CTkScrollableFrame(tab_agua_sub, fg_color="transparent")
+        scroll_agua.pack(fill="both", expand=True)
+        scroll_mac = ctk.CTkScrollableFrame(tab_mac_sub, fg_color="transparent")
+        scroll_mac.pack(fill="both", expand=True)
+        scroll_herv = ctk.CTkScrollableFrame(tab_herv_sub, fg_color="transparent")
+        scroll_herv.pack(fill="both", expand=True)
+        scroll_ferm = ctk.CTkScrollableFrame(tab_ferm_sub, fg_color="transparent")
+        scroll_ferm.pack(fill="both", expand=True)
+        scroll_embot = ctk.CTkScrollableFrame(tab_embot_sub, fg_color="transparent")
+        scroll_embot.pack(fill="both", expand=True)
+
+        # ── 1. Datos Básicos (pestaña "Receta") ───────────────────────────
         frame_datos = ctk.CTkFrame(self.scroll_receta)
         frame_datos.grid(row=0, column=0, padx=20, pady=10, sticky="ew")
         frame_datos.grid_columnconfigure((0, 1, 2, 3), weight=1)
@@ -157,48 +181,59 @@ class CerveceraApp(GestionMixin, ctk.CTk):
         self.combo_estilo_bjcp = ctk.CTkComboBox(frame_datos, values=get_style_list(), command=lambda e: self.calcular_y_mostrar())
         self.combo_estilo_bjcp.set("Auto (Sugerir)")
         self.combo_estilo_bjcp.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="ew")
-        # ── 2. Maceración y Hervor ───────────────────────────────────────
-        frame_mac = ctk.CTkFrame(self.scroll_receta)
-        frame_mac.grid(row=1, column=0, padx=20, pady=5, sticky="ew")
-        frame_mac.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1)
-        ctk.CTkLabel(frame_mac, text="🪣 Maceración y Hervor", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=6, sticky="w", padx=5, pady=5)
-        ctk.CTkLabel(frame_mac, text="Ratio (L/Kg):", anchor="w").grid(row=1, column=0, padx=5, pady=2, sticky="w")
-        self.entry_ratio = ctk.CTkEntry(frame_mac, placeholder_text="3.0", width=60)
-        self.entry_ratio.grid(row=1, column=1, padx=2, pady=2)
-        self.entry_ratio.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
-        ctk.CTkLabel(frame_mac, text="Absorción (L/Kg):", anchor="w").grid(row=1, column=2, padx=5, pady=2, sticky="w")
-        self.entry_absorcion = ctk.CTkEntry(frame_mac, placeholder_text="1.0", width=60)
-        self.entry_absorcion.grid(row=1, column=3, padx=2, pady=2)
-        self.entry_absorcion.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
-        ctk.CTkLabel(frame_mac, text="Hervor (min):", anchor="w").grid(row=1, column=4, padx=5, pady=2, sticky="w")
-        self.entry_hervor = ctk.CTkEntry(frame_mac, placeholder_text="60", width=60)
-        self.entry_hervor.grid(row=1, column=5, padx=2, pady=2)
-        self.entry_hervor.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
-        # Fase 4: equipo + fórmulas (Fase 0)
-        ctk.CTkLabel(frame_mac, text="Equipo:", anchor="w").grid(row=2, column=0, padx=5, pady=2, sticky="w")
-        self.combo_equipo = ctk.CTkComboBox(frame_mac, values=self._nombres_equipos(),
-                                            command=self._on_equipo_change, width=190)
-        _eqs = self._nombres_equipos()
-        self.combo_equipo.set(_eqs[0] if _eqs else "")
-        self.combo_equipo.grid(row=2, column=1, columnspan=2, padx=2, pady=2, sticky="ew")
-        ctk.CTkLabel(frame_mac, text="Fórmula IBU:", anchor="w").grid(row=2, column=3, padx=5, pady=2, sticky="w")
-        self.combo_f_ibu = ctk.CTkComboBox(frame_mac, values=["Tinseth", "Rager"], width=100,
-                                           command=self._on_formula_change)
-        self.combo_f_ibu.set("Rager" if self.db.get_setting("formula_ibu", "tinseth") == "rager" else "Tinseth")
-        self.combo_f_ibu.grid(row=2, column=4, padx=2, pady=2, sticky="w")
-        ctk.CTkLabel(frame_mac, text="FG:", anchor="w").grid(row=3, column=0, padx=5, pady=2, sticky="w")
-        self.combo_f_fg = ctk.CTkComboBox(frame_mac, values=["Normal", "Simple"], width=100,
-                                          command=self._on_formula_change)
-        self.combo_f_fg.set("Simple" if self.db.get_setting("metodo_fg", "normal") == "simple" else "Normal")
-        self.combo_f_fg.grid(row=3, column=1, padx=2, pady=2, sticky="w")
-        ctk.CTkLabel(frame_mac, text="ABV:", anchor="w").grid(row=3, column=3, padx=5, pady=2, sticky="w")
-        self.combo_f_abv = ctk.CTkComboBox(frame_mac, values=["Standard", "Alternative"], width=110,
-                                           command=self._on_formula_change)
-        self.combo_f_abv.set("Alternative" if self.db.get_setting("formula_abv", "standard") == "alternative" else "Standard")
-        self.combo_f_abv.grid(row=3, column=4, padx=2, pady=2, sticky="w")
-        # ── 3. Perfil del Agua ───────────────────────────────────────────
-        frame_agua = ctk.CTkFrame(self.scroll_receta)
-        frame_agua.grid(row=2, column=0, padx=20, pady=5, sticky="ew")
+        # ── 4. Maltas ────────────────────────────────────────────────────
+        frame_maltas = ctk.CTkFrame(self.scroll_receta)
+        frame_maltas.grid(row=1, column=0, padx=20, pady=10, sticky="ew")
+        header_maltas = ctk.CTkFrame(frame_maltas, fg_color="transparent")
+        header_maltas.pack(fill="x", padx=5, pady=5)
+        ctk.CTkLabel(header_maltas, text="🌾 Maltas y Adjuntos (Kg)", font=ctk.CTkFont(weight="bold")).pack(side="left")
+        ctk.CTkButton(header_maltas, text="+ Añadir Malta", width=100, command=lambda: self.add_fila_malta()).pack(side="right")
+        # Encabezados de columna (para saber qué es cada valor)
+        enc_m = ctk.CTkFrame(frame_maltas, fg_color="transparent")
+        enc_m.pack(fill="x", padx=5)
+        for etiqueta, ancho in [("Malta", 190), ("Kg", 55), ("Ext", 50), ("Color", 50), ("", 28)]:
+            ctk.CTkLabel(enc_m, text=etiqueta, width=ancho, anchor="w",
+                         font=ctk.CTkFont(size=11), text_color="#9CA3AF").pack(side="left", padx=2)
+        self.frame_lista_maltas = ctk.CTkFrame(frame_maltas, fg_color="transparent")
+        self.frame_lista_maltas.pack(fill="x")
+        # ── 5. Lúpulos ───────────────────────────────────────────────────
+        frame_lupulos = ctk.CTkFrame(self.scroll_receta)
+        frame_lupulos.grid(row=2, column=0, padx=20, pady=10, sticky="ew")
+        header_lupulos = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
+        header_lupulos.pack(fill="x", padx=5, pady=5)
+        ctk.CTkLabel(header_lupulos, text="🌿 Lúpulos (Mezclas y Escalonados)", font=ctk.CTkFont(weight="bold")).pack(side="left")
+        ctk.CTkButton(header_lupulos, text="+ Añadir Lúpulo", width=100, command=lambda: self.add_fila_lupulo()).pack(side="right")
+        # v17: auto-amargor (usa la fórmula activa Tinseth/Rager)
+        ctk.CTkButton(header_lupulos, text="🎯 Auto-amargor", width=110,
+                      fg_color="#0D9488", hover_color="#0F766E",
+                      command=self.auto_amargor).pack(side="right", padx=(0, 5))
+        # Encabezados de columna
+        enc_l = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
+        enc_l.pack(fill="x", padx=5)
+        for etiqueta, ancho in [("Lúpulo", 170), ("g", 50), ("AA%", 45), ("Min", 45), ("Formato", 70), ("", 28)]:
+            ctk.CTkLabel(enc_l, text=etiqueta, width=ancho, anchor="w",
+                         font=ctk.CTkFont(size=11), text_color="#9CA3AF").pack(side="left", padx=2)
+        self.frame_lista_lupulos = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
+        self.frame_lista_lupulos.pack(fill="x")
+        # ── 6. Notas ─────────────────────────────────────────────────────
+        frame_notas = ctk.CTkFrame(self.scroll_receta)
+        frame_notas.grid(row=3, column=0, padx=20, pady=10, sticky="ew")
+        ctk.CTkLabel(frame_notas, text="📝 Notas del Cocinero", font=ctk.CTkFont(weight="bold")).pack(anchor="w", padx=5, pady=5)
+        self.texto_notas = ctk.CTkTextbox(frame_notas, height=50, font=ctk.CTkFont(size=12))
+        self.texto_notas.pack(fill="x", padx=5, pady=(0, 5))
+        # ── 7. Acciones ──────────────────────────────────────────────────
+        frame_acciones = ctk.CTkFrame(self.scroll_receta, fg_color="transparent")
+        frame_acciones.grid(row=4, column=0, padx=20, pady=10, sticky="ew")
+        ctk.CTkButton(frame_acciones, text="🔢 Calcular", command=self.calcular_y_mostrar, fg_color="#D97706", hover_color="#B45309").pack(side="left", padx=10)
+        ctk.CTkButton(frame_acciones, text="💾 Guardar / Modificar", command=self.guardar_receta, fg_color="#059669", hover_color="#047857").pack(side="left", padx=10)
+        ctk.CTkButton(frame_acciones, text="🗑️ Eliminar Receta", command=self.eliminar_receta, fg_color="#DC2626", hover_color="#991B1B").pack(side="left", padx=10)
+        self.var_compartir_comunidad = ctk.BooleanVar(value=False)
+        ctk.CTkCheckBox(frame_acciones, text="🌐 Compartir con la comunidad al guardar",
+                        variable=self.var_compartir_comunidad).pack(side="left", padx=15)
+
+        # ── 3. Perfil del Agua (pestaña "Agua") ───────────────────────────
+        frame_agua = ctk.CTkFrame(scroll_agua)
+        frame_agua.pack(fill="x", padx=20, pady=10)
         frame_agua.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6, 7), weight=1)
         ctk.CTkLabel(frame_agua, text="💧 Perfil del Agua (ppm)", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
         self.combo_agua = ctk.CTkComboBox(frame_agua, values=list(PERFILES_AGUA_CORDOBA.keys()),
@@ -235,55 +270,67 @@ class CerveceraApp(GestionMixin, ctk.CTk):
                                               command=lambda e: self.calcular_y_mostrar(), width=180)
         self.combo_agua_obj.set("Balanceada (genérica)")
         self.combo_agua_obj.grid(row=2, column=5, columnspan=3, padx=2, pady=2, sticky="ew")
-        # ── 4. Maltas ────────────────────────────────────────────────────
-        frame_maltas = ctk.CTkFrame(self.scroll_receta)
-        frame_maltas.grid(row=3, column=0, padx=20, pady=10, sticky="ew")
-        header_maltas = ctk.CTkFrame(frame_maltas, fg_color="transparent")
-        header_maltas.pack(fill="x", padx=5, pady=5)
-        ctk.CTkLabel(header_maltas, text="🌾 Maltas y Adjuntos (Kg)", font=ctk.CTkFont(weight="bold")).pack(side="left")
-        ctk.CTkButton(header_maltas, text="+ Añadir Malta", width=100, command=lambda: self.add_fila_malta()).pack(side="right")
-        # Encabezados de columna (para saber qué es cada valor)
-        enc_m = ctk.CTkFrame(frame_maltas, fg_color="transparent")
-        enc_m.pack(fill="x", padx=5)
-        for etiqueta, ancho in [("Malta", 190), ("Kg", 55), ("Ext", 50), ("Color", 50), ("", 28)]:
-            ctk.CTkLabel(enc_m, text=etiqueta, width=ancho, anchor="w",
-                         font=ctk.CTkFont(size=11), text_color="#9CA3AF").pack(side="left", padx=2)
-        self.frame_lista_maltas = ctk.CTkFrame(frame_maltas, fg_color="transparent")
-        self.frame_lista_maltas.pack(fill="x")
-        # ── 5. Lúpulos ───────────────────────────────────────────────────
-        frame_lupulos = ctk.CTkFrame(self.scroll_receta)
-        frame_lupulos.grid(row=4, column=0, padx=20, pady=10, sticky="ew")
-        header_lupulos = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
-        header_lupulos.pack(fill="x", padx=5, pady=5)
-        ctk.CTkLabel(header_lupulos, text="🌿 Lúpulos (Mezclas y Escalonados)", font=ctk.CTkFont(weight="bold")).pack(side="left")
-        ctk.CTkButton(header_lupulos, text="+ Añadir Lúpulo", width=100, command=lambda: self.add_fila_lupulo()).pack(side="right")
-        # v17: auto-amargor (usa la fórmula activa Tinseth/Rager)
-        ctk.CTkButton(header_lupulos, text="🎯 Auto-amargor", width=110,
-                      fg_color="#0D9488", hover_color="#0F766E",
-                      command=self.auto_amargor).pack(side="right", padx=(0, 5))
-        # Encabezados de columna
-        enc_l = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
-        enc_l.pack(fill="x", padx=5)
-        for etiqueta, ancho in [("Lúpulo", 170), ("g", 50), ("AA%", 45), ("Min", 45), ("Formato", 70), ("", 28)]:
-            ctk.CTkLabel(enc_l, text=etiqueta, width=ancho, anchor="w",
-                         font=ctk.CTkFont(size=11), text_color="#9CA3AF").pack(side="left", padx=2)
-        self.frame_lista_lupulos = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
-        self.frame_lista_lupulos.pack(fill="x")
-        # ── 6. Notas ─────────────────────────────────────────────────────
-        frame_notas = ctk.CTkFrame(self.scroll_receta)
-        frame_notas.grid(row=5, column=0, padx=20, pady=10, sticky="ew")
-        ctk.CTkLabel(frame_notas, text="📝 Notas del Cocinero", font=ctk.CTkFont(weight="bold")).pack(anchor="w", padx=5, pady=5)
-        self.texto_notas = ctk.CTkTextbox(frame_notas, height=50, font=ctk.CTkFont(size=12))
-        self.texto_notas.pack(fill="x", padx=5, pady=(0, 5))
-        # ── 7. Acciones ──────────────────────────────────────────────────
-        frame_acciones = ctk.CTkFrame(self.scroll_receta, fg_color="transparent")
-        frame_acciones.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
-        ctk.CTkButton(frame_acciones, text="🔢 Calcular", command=self.calcular_y_mostrar, fg_color="#D97706", hover_color="#B45309").pack(side="left", padx=10)
-        ctk.CTkButton(frame_acciones, text="💾 Guardar / Modificar", command=self.guardar_receta, fg_color="#059669", hover_color="#047857").pack(side="left", padx=10)
-        ctk.CTkButton(frame_acciones, text="🗑️ Eliminar Receta", command=self.eliminar_receta, fg_color="#DC2626", hover_color="#991B1B").pack(side="left", padx=10)
-        self.var_compartir_comunidad = ctk.BooleanVar(value=False)
-        ctk.CTkCheckBox(frame_acciones, text="🌐 Compartir con la comunidad al guardar",
-                        variable=self.var_compartir_comunidad).pack(side="left", padx=15)
+
+        # ── Macerado: ratio, absorción, equipo, fórmula FG ───────────────
+        frame_mac = ctk.CTkFrame(scroll_mac)
+        frame_mac.pack(fill="x", padx=20, pady=10)
+        frame_mac.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        ctk.CTkLabel(frame_mac, text="🌾 Maceración", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
+        ctk.CTkLabel(frame_mac, text="Ratio (L/Kg):", anchor="w").grid(row=1, column=0, padx=5, pady=4, sticky="w")
+        self.entry_ratio = ctk.CTkEntry(frame_mac, placeholder_text="3.0", width=70)
+        self.entry_ratio.grid(row=1, column=1, padx=2, pady=4, sticky="w")
+        self.entry_ratio.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
+        ctk.CTkLabel(frame_mac, text="Absorción (L/Kg):", anchor="w").grid(row=1, column=2, padx=5, pady=4, sticky="w")
+        self.entry_absorcion = ctk.CTkEntry(frame_mac, placeholder_text="1.0", width=70)
+        self.entry_absorcion.grid(row=1, column=3, padx=2, pady=4, sticky="w")
+        self.entry_absorcion.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
+        ctk.CTkLabel(frame_mac, text="Equipo:", anchor="w").grid(row=2, column=0, padx=5, pady=4, sticky="w")
+        self.combo_equipo = ctk.CTkComboBox(frame_mac, values=self._nombres_equipos(),
+                                            command=self._on_equipo_change, width=190)
+        _eqs = self._nombres_equipos()
+        self.combo_equipo.set(_eqs[0] if _eqs else "")
+        self.combo_equipo.grid(row=2, column=1, columnspan=2, padx=2, pady=4, sticky="ew")
+        ctk.CTkLabel(frame_mac, text="Fórmula FG:", anchor="w").grid(row=3, column=0, padx=5, pady=4, sticky="w")
+        self.combo_f_fg = ctk.CTkComboBox(frame_mac, values=["Normal", "Simple"], width=110,
+                                          command=self._on_formula_change)
+        self.combo_f_fg.set("Simple" if self.db.get_setting("metodo_fg", "normal") == "simple" else "Normal")
+        self.combo_f_fg.grid(row=3, column=1, padx=2, pady=4, sticky="w")
+
+        # ── Hervido: tiempo, fórmula IBU ──────────────────────────────────
+        frame_herv = ctk.CTkFrame(scroll_herv)
+        frame_herv.pack(fill="x", padx=20, pady=10)
+        frame_herv.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        ctk.CTkLabel(frame_herv, text="🌿 Hervor", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
+        ctk.CTkLabel(frame_herv, text="Hervor (min):", anchor="w").grid(row=1, column=0, padx=5, pady=4, sticky="w")
+        self.entry_hervor = ctk.CTkEntry(frame_herv, placeholder_text="60", width=70)
+        self.entry_hervor.grid(row=1, column=1, padx=2, pady=4, sticky="w")
+        self.entry_hervor.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
+        ctk.CTkLabel(frame_herv, text="Fórmula IBU:", anchor="w").grid(row=1, column=2, padx=5, pady=4, sticky="w")
+        self.combo_f_ibu = ctk.CTkComboBox(frame_herv, values=["Tinseth", "Rager"], width=110,
+                                           command=self._on_formula_change)
+        self.combo_f_ibu.set("Rager" if self.db.get_setting("formula_ibu", "tinseth") == "rager" else "Tinseth")
+        self.combo_f_ibu.grid(row=1, column=3, padx=2, pady=4, sticky="w")
+        ctk.CTkLabel(frame_herv, text="Los lúpulos y el auto-amargor se cargan en la pestaña Receta.",
+                     text_color="#9CA3AF", font=ctk.CTkFont(size=11)
+                     ).grid(row=2, column=0, columnspan=4, sticky="w", padx=5, pady=(10, 5))
+
+        # ── Fermentación: levadura activa + fórmula ABV ──────────────────
+        frame_ferm = ctk.CTkFrame(scroll_ferm)
+        frame_ferm.pack(fill="x", padx=20, pady=10)
+        frame_ferm.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        ctk.CTkLabel(frame_ferm, text="🧫 Fermentación", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
+        ctk.CTkLabel(frame_ferm, text="Fórmula ABV:", anchor="w").grid(row=1, column=0, padx=5, pady=4, sticky="w")
+        self.combo_f_abv = ctk.CTkComboBox(frame_ferm, values=["Standard", "Alternative"], width=130,
+                                           command=self._on_formula_change)
+        self.combo_f_abv.set("Alternative" if self.db.get_setting("formula_abv", "standard") == "alternative" else "Standard")
+        self.combo_f_abv.grid(row=1, column=1, padx=2, pady=4, sticky="w")
+        ctk.CTkLabel(frame_ferm, text="La levadura se elige en la pestaña Receta (afecta FG y alerta de ABV).",
+                     text_color="#9CA3AF", font=ctk.CTkFont(size=11)
+                     ).grid(row=2, column=0, columnspan=4, sticky="w", padx=5, pady=(10, 5))
+
+        # ── Embotellado: calculadora de priming (Hall 1995 / Zahm & Nagel) ──
+        self._crear_calculadora_priming(scroll_embot)
+
         # ── COLUMNA DERECHA: PANEL DE RESULTADOS (tiempo real) ──
         self.panel_resultados = ctk.CTkScrollableFrame(self.tab_receta)
         self.panel_resultados.grid(row=0, column=1, sticky="nsew", padx=(5, 0))
@@ -322,10 +369,21 @@ class CerveceraApp(GestionMixin, ctk.CTk):
         self.lbl_alerta_lev = ctk.CTkLabel(self.panel_resultados, text="",
                                            font=ctk.CTkFont(size=12, weight="bold"))
         self.lbl_alerta_lev.grid(row=8, column=0, columnspan=2, sticky="w", padx=6, pady=4)
+        # Perfil sensorial (radar) y curva de gravedad (sparkline)
+        ctk.CTkLabel(self.panel_resultados, text="Perfil Sensorial", font=ctk.CTkFont(size=12, weight="bold")
+                     ).grid(row=9, column=0, columnspan=2, sticky="w", padx=6, pady=(6, 0))
+        self.canvas_radar = tk.Canvas(self.panel_resultados, width=260, height=200,
+                                      bg="#2b2b2b", highlightthickness=0)
+        self.canvas_radar.grid(row=10, column=0, columnspan=2, padx=6, pady=4)
+        ctk.CTkLabel(self.panel_resultados, text="Curva de Gravedad Estimada", font=ctk.CTkFont(size=12, weight="bold")
+                     ).grid(row=11, column=0, columnspan=2, sticky="w", padx=6, pady=(6, 0))
+        self.canvas_sparkline = tk.Canvas(self.panel_resultados, width=260, height=70,
+                                          bg="#2b2b2b", highlightthickness=0)
+        self.canvas_sparkline.grid(row=12, column=0, columnspan=2, padx=6, pady=4)
         # Detalle (agua, química, sales, BJCP, inventario)
-        self.texto_resultados = ctk.CTkTextbox(self.panel_resultados, height=320,
+        self.texto_resultados = ctk.CTkTextbox(self.panel_resultados, height=280,
                                                font=ctk.CTkFont(size=12))
-        self.texto_resultados.grid(row=9, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
+        self.texto_resultados.grid(row=13, column=0, columnspan=2, sticky="nsew", padx=5, pady=5)
         # ── FRANJA INFERIOR: PROCESOS EN ORDEN (instancias derivadas) ──
         self.frame_procesos = ctk.CTkFrame(self.tab_receta, corner_radius=8)
         self.frame_procesos.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(6, 0))
@@ -344,6 +402,68 @@ class CerveceraApp(GestionMixin, ctk.CTk):
             lbl.pack(anchor="w", padx=6, pady=(0, 6))
             self.proc_labels[clave] = lbl
 
+    # ==========================================
+    # EMBOTELLADO: calculadora de priming (Hall 1995 / curva Zahm & Nagel,
+    # el mismo modelo que usan BeerSmith/Brewer's Friend). Es una utilidad
+    # independiente del motor de cálculo de la receta: no se guarda en la BD.
+    # ==========================================
+    PRIMING_FACTORES = {
+        "Dextrosa (azúcar de maíz)": 4.0,
+        "Sacarosa (azúcar de mesa)": 3.8,
+        "DME (extracto seco)": 4.6,
+        "Miel": 5.0,
+    }
+
+    def _crear_calculadora_priming(self, parent):
+        f = ctk.CTkFrame(parent)
+        f.pack(fill="x", padx=20, pady=10)
+        f.grid_columnconfigure((0, 1, 2, 3), weight=1)
+        ctk.CTkLabel(f, text="🍾 Priming / Carbonatación en Botella",
+                     font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
+        ctk.CTkLabel(f, text="Volumen a embotellar (L):", anchor="w").grid(row=1, column=0, padx=5, pady=4, sticky="w")
+        self.entry_vol_embotellado = ctk.CTkEntry(f, placeholder_text="20", width=90)
+        self.entry_vol_embotellado.grid(row=1, column=1, padx=2, pady=4, sticky="w")
+        self.entry_vol_embotellado.bind("<KeyRelease>", lambda e: self._actualizar_priming())
+        ctk.CTkLabel(f, text="Temp. máx. de fermentación (°C):", anchor="w").grid(row=1, column=2, padx=5, pady=4, sticky="w")
+        self.entry_temp_embotellado = ctk.CTkEntry(f, placeholder_text="20", width=90)
+        self.entry_temp_embotellado.grid(row=1, column=3, padx=2, pady=4, sticky="w")
+        self.entry_temp_embotellado.bind("<KeyRelease>", lambda e: self._actualizar_priming())
+        ctk.CTkLabel(f, text="CO2 objetivo (vol):", anchor="w").grid(row=2, column=0, padx=5, pady=4, sticky="w")
+        self.entry_co2_objetivo = ctk.CTkEntry(f, placeholder_text="2.4", width=90)
+        self.entry_co2_objetivo.grid(row=2, column=1, padx=2, pady=4, sticky="w")
+        self.entry_co2_objetivo.bind("<KeyRelease>", lambda e: self._actualizar_priming())
+        ctk.CTkLabel(f, text="Tipo de azúcar:", anchor="w").grid(row=2, column=2, padx=5, pady=4, sticky="w")
+        self.combo_azucar_priming = ctk.CTkComboBox(f, values=list(self.PRIMING_FACTORES.keys()), width=200,
+                                                     command=lambda e: self._actualizar_priming())
+        self.combo_azucar_priming.set("Dextrosa (azúcar de maíz)")
+        self.combo_azucar_priming.grid(row=2, column=3, padx=2, pady=4, sticky="w")
+        ctk.CTkLabel(f, text="Referencia: Ale ~2.2-2.7 vol · Lager ~2.4-2.8 vol · Trigo ~3.3-4.5 vol · Cask ~1.5-2.0 vol",
+                     text_color="#9CA3AF", font=ctk.CTkFont(size=11)
+                     ).grid(row=3, column=0, columnspan=4, sticky="w", padx=5, pady=(8, 4))
+        self.lbl_priming_resultado = ctk.CTkLabel(f, text="Completá los datos para calcular.",
+                                                  font=ctk.CTkFont(size=14, weight="bold"))
+        self.lbl_priming_resultado.grid(row=4, column=0, columnspan=4, sticky="w", padx=5, pady=(6, 10))
+
+    def _actualizar_priming(self):
+        volumen = _flotar(self.entry_vol_embotellado.get(), None)
+        if volumen is None:
+            volumen = _flotar(self.combo_volumen.get(), 20) or 20
+        temp_c = _flotar(self.entry_temp_embotellado.get(), None)
+        co2_obj = _flotar(self.entry_co2_objetivo.get(), None)
+        if temp_c is None or co2_obj is None:
+            self.lbl_priming_resultado.configure(
+                text="Completá temperatura de fermentación y CO2 objetivo para calcular.")
+            return
+        factor = self.PRIMING_FACTORES.get(self.combo_azucar_priming.get(), 4.0)
+        temp_f = temp_c * 9 / 5 + 32
+        residual = 3.0378 - 0.050062 * temp_f + 0.00026555 * (temp_f ** 2)
+        diferencia = max(0.0, co2_obj - residual)
+        gramos = volumen * diferencia * factor
+        self.lbl_priming_resultado.configure(
+            text=(f"CO2 residual: {residual:.2f} vol  ·  A agregar: {diferencia:.2f} vol\n"
+                  f"➜ {gramos:.0f} g de {self.combo_azucar_priming.get().split(' (')[0]} "
+                  f"({format_num(round(gramos / volumen, 2)) if volumen else 0} g/L)"))
+
     # ── Reset del panel de resultados y procesos ────────────────────────
     def _reset_panel_resultados(self):
         for lbl in self.res_labels.values():
@@ -355,6 +475,57 @@ class CerveceraApp(GestionMixin, ctk.CTk):
         for lbl in self.proc_labels.values():
             lbl.configure(text="—")
         self.texto_resultados.delete("1.0", "end")
+        self.canvas_radar.delete("all")
+        self.canvas_sparkline.delete("all")
+
+    # ── Perfil sensorial (radar) y curva de gravedad (sparkline) ────────
+    # Ambos son estimaciones ilustrativas derivadas de OG/FG/IBU/ABV/SRM,
+    # no mediciones de un panel sensorial real ni una cinética de fermentación medida.
+    def _dibujar_radar(self, valores):
+        c = self.canvas_radar
+        c.delete("all")
+        cx, cy, radio = 130, 100, 68
+        ejes = list(valores.keys())
+        n = len(ejes)
+        if n < 3:
+            return
+        angs = [-math.pi / 2 + i * (2 * math.pi / n) for i in range(n)]
+        for frac in (0.33, 0.66, 1.0):
+            pts = []
+            for ang in angs:
+                pts += [cx + radio * frac * math.cos(ang), cy + radio * frac * math.sin(ang)]
+            c.create_polygon(pts, outline="#3F3F50", fill="", width=1)
+        for ang, eje in zip(angs, ejes):
+            xe, ye = cx + radio * math.cos(ang), cy + radio * math.sin(ang)
+            c.create_line(cx, cy, xe, ye, fill="#3F3F50")
+            xl, yl = cx + (radio + 24) * math.cos(ang), cy + (radio + 14) * math.sin(ang)
+            c.create_text(xl, yl, text=eje, fill="#9CA3AF", font=("Segoe UI", 8))
+        pts_val = []
+        for ang, eje in zip(angs, ejes):
+            val = max(0.0, min(100.0, valores[eje])) / 100.0
+            pts_val += [cx + radio * val * math.cos(ang), cy + radio * val * math.sin(ang)]
+        c.create_polygon(pts_val, outline="#3A7EBF", fill="#3A7EBF", width=2, stipple="gray25")
+        for i in range(0, len(pts_val), 2):
+            c.create_oval(pts_val[i] - 3, pts_val[i + 1] - 3, pts_val[i] + 3, pts_val[i + 1] + 3,
+                          fill="#3A7EBF", outline="")
+
+    def _dibujar_sparkline_gravedad(self, og, fg):
+        c = self.canvas_sparkline
+        c.delete("all")
+        w, h, pad = 260, 70, 12
+        dias, rango = 12, max(og - fg, 1e-6)
+        puntos = []
+        for i in range(dias + 1):
+            t = i / dias
+            g = fg + rango * math.exp(-4.5 * t)
+            frac = (g - fg) / rango
+            x = pad + (w - 2 * pad) * t
+            y = pad + (h - 2 * pad) * (1 - frac)
+            puntos += [x, y]
+        if len(puntos) >= 4:
+            c.create_line(*puntos, fill="#D97706", width=2, smooth=True)
+        c.create_text(pad, pad - 4, text=f"OG {og:.3f}", fill="#9CA3AF", anchor="w", font=("Segoe UI", 8))
+        c.create_text(w - pad, h - 4, text=f"FG {fg:.3f}", fill="#9CA3AF", anchor="e", font=("Segoe UI", 8))
 
     # ── Procesos en orden, derivados de la receta (tiempo real) ─────────
     def _actualizar_procesos(self, r, aguas, ratio, tiempo_hervor,
@@ -738,6 +909,14 @@ class CerveceraApp(GestionMixin, ctk.CTk):
                 'evaporacion_l_h': eq.get("evaporacion_l_h"),
             }
             r = BrewEngine.calcular_receta_completa(datos_calculo, eficiencia, altitud)
+            self._dibujar_sparkline_gravedad(r['og'], r['fg'])
+            self._dibujar_radar({
+                "Amargor": min(100.0, (r['ibu'] / 80) * 100),
+                "Dulzor": min(100.0, max(0.0, (r['fg'] - 1.000) / 0.020 * 100)),
+                "Cuerpo": min(100.0, max(0.0, (r['og'] - 1.030) / 0.060 * 100)),
+                "Alcohol": min(100.0, (r['abv'] / 12) * 100),
+                "Color": min(100.0, (r['srm'] / 40) * 100),
+            })
             granos_kg = sum(m.get('cantidad', 0) for m in maltas)
             aguas = BrewEngine.calcular_aguas(granos_kg, volumen, ratio, absorcion,
                                               EVAPORACION_PCT, tiempo_hervor,
