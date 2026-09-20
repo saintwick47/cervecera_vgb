@@ -22,16 +22,29 @@ profesional, sin suscripciones ni nube.
 ## 🧪 Funciones
 
 - Editor completo de recetas: maltas, lúpulos (escalonados), levaduras,
-  perfil de agua con pH, altitud, ratio L/kg, absorción y hervor.
+  perfil de agua con pH, altitud, ratio L/kg, absorción y hervor. Organizado
+  en sub-pestañas (Receta, Agua, Macerado, Hervido, Fermentación, Embotellado).
 - Resultados: OG, FG (por atenuación de levadura), ABV, IBU, SRM,
   BU/GU, calorías, aguas con evaporación, pH entrada/maceración/
-  post-hervor/final y corrección con ácido láctico.
+  post-hervor/final y corrección con ácido láctico. Incluye radar de perfil
+  sensorial y curva de gravedad estimada (OG→FG) en tiempo real.
+- Calculadora de priming/carbonatación en botella (Embotellado), con fórmula
+  estándar Zahm & Nagel / Hall 1995 y factor según tipo de azúcar.
 - Catálogo argentino de maltas, lúpulos, levaduras y aguas de Córdoba.
+- **Insumos e Inventario** unificados en una sola sección: catálogo editable
+  por tipo, alta/consumo de stock con Kardex de movimientos, valorización
+  en $, alerta de stock bajo y vencimientos, más importación rápida
+  "Pegar productos" (detecta nombre/cantidad/unidad y matchea con el catálogo).
+- **Equipos** con perfiles guardables y parámetros extendidos de maceración,
+  mermas/pérdidas y pH objetivo por etapa.
+- **Comunidad**: compartir recetas propias (vía GitHub, sin backend propio) y
+  descargar las que compartieron otros usuarios de la app.
 - **Química del agua**: perfiles objetivo por estilo, sales (yeso, CaCl₂, epsom,
   sal, bicarbonato), dilución con ósmosis inversa y relación SO₄:Cl.
-- Comparador BJCP 2021, inventario inteligente y exportación PDF/BeerXML.
+- Comparador BJCP 2021, y exportación PDF/BeerXML.
 - Fórmulas elegibles: IBU Tinseth/Rager (con whirlpool real), FG Normal/Simple,
   ABV Standard/Alternative, color Morey + EBC.
+- Tema visual propio (BrewTk Utilitarian, `Tema brewtk.json`).
 
 ## 📖 Recetario
 
@@ -75,6 +88,21 @@ instaladores al release desde GitHub Actions).
 nicoweb45@proton.me (Asunto: beer_vgb)
 
 ## 📝 Historial de cambios (CHANGELOG)
+
+### 2026-09-20 11:15 — archivos corregidos
+
+- Archivos: app.py, app_gestion.py, brew_engine.py, catalogo_ar.py, test_cervecera.py, database.py, Tema brewtk.json, .gitignore, README.md, archivos proyecto y comandos..txt, beer_vgb.png, build.bat, build.sh, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, packaging/icons/linux/logo-512.png, packaging/icons/logo-128.png, packaging/icons/logo-16.png, packaging/icons/logo-256.png, packaging/icons/logo-32.png, packaging/icons/logo-48.png, packaging/icons/logo-512.png, packaging/icons/logo-64.png, recetario_vgb.json, recetas_base_genericas.json
+
+
+### 2026-09-20 11:12 — archivos corregidos
+
+- Archivos: app.py, app_gestion.py, brew_engine.py, catalogo_ar.py, test_cervecera.py, database.py, Tema brewtk.json, .gitignore, README.md, "Tema brewtk.json", "archivos proyecto y comandos..txt", beer_vgb.png, build.bat, build.sh, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, packaging/icons/linux/logo-512.png, packaging/icons/logo-128.png, packaging/icons/logo-16.png, packaging/icons/logo-256.png, packaging/icons/logo-32.png, packaging/icons/logo-48.png, packaging/icons/logo-512.png, packaging/icons/logo-64.png, recetario_vgb.json, recetas_base_genericas.json
+
+
+### 2026-09-20 16:45 — feat: Comunidad, Insumos+Inventario con Kardex, Equipos extendido, sub-pestañas de Receta + priming + tema BrewTk
+
+- Archivos: app.py, app_gestion.py, database.py, "Tema brewtk.json", README.md
+
 
 ### 2026-09-20 11:06 — version nueva con funciones mejoradas
 
