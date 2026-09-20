@@ -40,6 +40,7 @@ from app_paths import get_data_dir
 from app_gestion import (GestionMixin, format_num, resource_path, _flotar,
                          VOLUMENES_PRESET, DEF_PERFIL_AGUA, DEF_LEVADURA,
                          DEF_ALTITUD, DEF_FORMATO, EVAPORACION_PCT)
+from app_recetas import RecetasMixin
 
 ctk.set_appearance_mode("dark")
 try:
@@ -48,7 +49,7 @@ except Exception:
     ctk.set_default_color_theme("blue")
 
 
-class CerveceraApp(GestionMixin, ctk.CTk):
+class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Cervecera VGB - By SaintWick")
