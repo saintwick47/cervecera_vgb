@@ -89,6 +89,11 @@ nicoweb45@proton.me (Asunto: beer_vgb)
 
 ## 📝 Historial de cambios (CHANGELOG)
 
+### 2026-09-26 13:38 — fix: quitar rutas absolutas de los comentarios + sacar informe interno del repo
+
+- Archivos: .gitignore, Cervecera_VGB.spec, README.md, app.py, bjcp_styles.py, database.py, export_engine.py, packaging/VERSION, packaging/windows/CerveceraVGB.iss, test_cervecera.py, Tema brewtk.json, app_gestion.py, app_recetas.py, beer_vgb.png, build.bat, build.sh, build_desktop.py, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, packaging/icons/linux/logo-512.png, packaging/icons/logo-128.png, packaging/icons/logo-16.png, packaging/icons/logo-256.png, packaging/icons/logo-32.png, packaging/icons/logo-48.png, packaging/icons/logo-512.png, packaging/icons/logo-64.png, recetario_vgb.json, recetas_base_genericas.json
+
+
 ### 2026-09-26 13:36 — chore: gitignore sin fugas de informacion + sacar notas internas del repo publico
 
 - Archivos: .gitignore, Cervecera_VGB.spec, README.md, app.py, database.py, packaging/VERSION, packaging/windows/CerveceraVGB.iss, test_cervecera.py, Tema brewtk.json, app_gestion.py, app_recetas.py, beer_vgb.png, build.bat, build.sh, build_desktop.py, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, packaging/icons/linux/logo-512.png, packaging/icons/logo-128.png, packaging/icons/logo-16.png, packaging/icons/logo-256.png, packaging/icons/logo-32.png, packaging/icons/logo-48.png, packaging/icons/logo-512.png, packaging/icons/logo-64.png, recetario_vgb.json, recetas_base_genericas.json
