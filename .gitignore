@@ -1,39 +1,28 @@
 # ═══════════════════════════════════════════════════════════════
-# CERVECERA VGB v1.0.0 — Archivos que Git debe ignorar
+# CERVECERA VGB — Archivos que Git NO debe versionar
 # ═══════════════════════════════════════════════════════════════
-# Autor: SaintWick
-# Fecha: 2026-09-18
-# Proyecto: /home/saintwick/Escritorio/beer_vgb
+# Criterio: todo lo que sea GENERADO, LOCAL o PRIVADO queda afuera.
+# Este archivo se publica: no lleva rutas absolutas ni detalles
+# internos de credenciales.
 #
-# ESQUEMA DE VERSIONADO:
-#   - Versión inicial: 1.0.0
-#   - Cada fix grande: +0.0.1
-#   - Cada archivo nuevo ignorado: +0.0.1
-#   - Features mayores: +0.1.0
-#
-# CAMBIOS v1.0.0:
-#   - Herramientas locales NUNCA versionables: subir_github.py,
-#     comitgit.py, borrar_remoto.py, tools/push.py, tools/commit.py.
-#   - Credenciales fuera: "tokens github.txt", *.token, *.pem, .env…
-#   - Runtime fuera: data/ (BD + logs), *.log, test_vgb.db.
-#   - Builds fuera: build/, dist/, *.spec, *.bundle, venv/.
+# ⚠️ IMPORTANTE: .gitignore NO protege archivos que YA están
+# trackeados. Para sacar algo del repo hay que:
+#     git rm --cached <archivo>     (lo quita del repo, no del disco)
 # ═══════════════════════════════════════════════════════════════
 
-# ═══════════════════════════════════════════════════════════════
-# 🚫 HERRAMIENTAS LOCALES (NUNCA SUBIR)
-# ═══════════════════════════════════════════════════════════════
+# ── 1. HERRAMIENTAS LOCALES DE PUBLICACIÓN ─────────────────────
+# Son de uso personal (hablan con la API / hacen push). No van al repo.
 subir_github.py
 comitgit.py
 borrar_remoto.py
-tools/push.py
-tools/commit.py
+publicar*.py
+tools/
 
-# ═══════════════════════════════════════════════════════════════
-# 🔐 CREDENCIALES (NUNCA SUBIR BAJO NINGUNA CIRCUNSTANCIA)
-# ═══════════════════════════════════════════════════════════════
-tokens github.txt
-*token*.txt
-*.token
+# ── 2. CREDENCIALES Y SECRETOS ─────────────────────────────────
+*token*
+*secret*
+*credential*
+*password*
 *.pem
 *.key
 *.crt
@@ -44,46 +33,54 @@ secrets.json
 credentials.json
 service_account.json
 api_keys.json
-*.secret
-*.password
-*token*.py
-*credential*.py
-*secret*.py
 .env
 .env.*
 
-# ═══════════════════════════════════════════════════════════════
-# 🗄️ RUNTIME: BD Y LOGS (los genera la app)
-# ═══════════════════════════════════════════════════════════════
+# ── 3. NOTAS INTERNAS DE TRABAJO ───────────────────────────────
+# Borradores, informes y memoria de trabajo: no son parte de la app.
+mem_history.md
+mem_*.md
+notas*.md
+NOTAS*.md
+archivos proyecto*
+*_informe.txt
+reemplazo_informe.txt
+
+# ── 4. DATOS DE RUNTIME (los genera la app) ────────────────────
 data/
 logs/
 *.log
+*.db
+*.sqlite3
+*.db-shm
+*.db-wal
 test_vgb.db
 
-# ═══════════════════════════════════════════════════════════════
-# 📦 BUILDS Y COMPILACIÓN (PyInstaller / AppImage)
-# ═══════════════════════════════════════════════════════════════
+# ── 5. BUILD Y ARTEFACTOS ──────────────────────────────────────
+# OJO: `packaging/` tiene archivos legítimos (iconos, leyendas,
+# scripts de build) — solo se ignoran las CARPETAS de salida.
 build/
 dist/
+dist_installers/
 *.spec
 *.bundle
-
-# ── Artefactos de build pesados (NUNCA versionar: cientos de MB y
-#    llevan rutas absolutas del equipo embebidas) ──
-dist_installers/
-packaging/linux/AppDir/
 *.AppImage
 *.AppImage.zsync
+*.AppImage.zsync.sha256
+*.exe
+*.msi
+*.dmg
+*.pkg
+*.deb
+*.rpm
+*.apk
+*.aab
+*.zip
+packaging/linux/AppDir/
+packaging/linux/appimage-build/
+packaging/linux/*.AppImage
 
-# ═══════════════════════════════════════════════════════════════
-# 📝 NOTAS INTERNAS DE TRABAJO (no van al repo público)
-# ═══════════════════════════════════════════════════════════════
-mem_history.md
-archivos proyecto y comandos..txt
-
-# ═══════════════════════════════════════════════════════════════
-# 🐍 ENTORNOS VIRTUALES Y CACHE DE PYTHON
-# ═══════════════════════════════════════════════════════════════
+# ── 6. ENTORNOS VIRTUALES Y CACHÉ DE PYTHON ────────────────────
 venv/
 .venv/
 env/
@@ -93,6 +90,8 @@ __pycache__/
 *$py.class
 *.so
 .Python
+
+# ── 7. EMPAQUETADO / DISTRIBUCIÓN ──────────────────────────────
 *.egg-info/
 .eggs/
 eggs/
@@ -102,9 +101,7 @@ develop-eggs/
 .installed.cfg
 MANIFEST
 
-# ═══════════════════════════════════════════════════════════════
-# 💻 IDEs Y EDITORES
-# ═══════════════════════════════════════════════════════════════
+# ── 8. EDITORES Y SISTEMA OPERATIVO ────────────────────────────
 .idea/
 .vscode/
 *.swp
@@ -115,10 +112,6 @@ MANIFEST
 .settings/
 *.sublime-project
 *.sublime-workspace
-
-# ═══════════════════════════════════════════════════════════════
-# 🖥️ SISTEMA
-# ═══════════════════════════════════════════════════════════════
 .DS_Store
 .DS_Store?
 ._*
@@ -128,9 +121,7 @@ ehthumbs.db
 Thumbs.db
 desktop.ini
 
-# ═══════════════════════════════════════════════════════════════
-# 🧪 TESTING / COBERTURA / MYPY / JUPYTER
-# ═══════════════════════════════════════════════════════════════
+# ── 9. TESTS Y HERRAMIENTAS DE CALIDAD ─────────────────────────
 .pytest_cache/
 .coverage
 htmlcov/
@@ -147,28 +138,15 @@ dmypy.json
 .ipynb_checkpoints/
 *.ipynb
 
-# ═══════════════════════════════════════════════════════════════
-# 🗑️ TEMPORALES Y BACKUPS LOCALES
-# ═══════════════════════════════════════════════════════════════
+# ── 10. TEMPORALES Y RESPALDOS ─────────────────────────────────
 *.tmp
 *.temp
 *.bak
 *.backup
 *.old
 *.orig
+*~
 
-# ═══════════════════════════════════════════════════════════════
-# 🗄️ BASES DE DATOS SUELTAS (fuera de data/)
-# ═══════════════════════════════════════════════════════════════
-*.sqlite3
-*.db-shm
-*.db-wal
-
-# ═══════════════════════════════════════════════════════════════
-# GIT
-# ═══════════════════════════════════════════════════════════════
+# ── EXCEPCIONES (sí se versionan) ──────────────────────────────
 !.gitkeep
-
-# ═══════════════════════════════════════════════════════════════
-# FIN DEL .gitignore — CERVECERA VGB v1.0.0
-# ═══════════════════════════════════════════════════════════════
+!.github/workflows/*.yml
