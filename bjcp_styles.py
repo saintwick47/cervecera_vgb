@@ -1,5 +1,4 @@
 # bjcp_styles.py
-# /home/saintwick/Escritorio/beer_vgb/bjcp_styles.py
 # 2024-05-17
 # Autor: SaintWick
 
