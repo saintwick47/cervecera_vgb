@@ -2,7 +2,7 @@
 ; Compilar: iscc CerveceraVGB.iss  (desde packaging/windows)
 
 #define MyAppName "Cervecera VGB"
-#define MyAppVersion "1.4.2"
+#define MyAppVersion "1.4.3"
 #define MyAppPublisher "SaintWick"
 #define MyAppExeName "Cervecera_VGB.exe"
 
