@@ -5,7 +5,7 @@ a = Analysis(
     ['app.py'],
     pathex=[],
     binaries=[],
-    datas=[('recetas_base.json', '.'), ('logo.ico', '.'), ('logo.png', '.')],
+    datas=[('recetas_base.json', '.'), ('logo.png', '.'), ('logo.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -32,7 +32,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['packaging/icons/windows/app_icon.ico'],
 )
 coll = COLLECT(
     exe,
