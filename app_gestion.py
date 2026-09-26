@@ -2,6 +2,8 @@
 # Autor: SaintWick
 """
 Módulo de gestión de Cervecera VGB (split de app.py, demasiado grande).
+Ruta: app_gestion.py
+Versión: v1.4.2 (coincide con APP_VERSION)
 
 Contiene:
 - Constantes y utilidades compartidas con app.py (format_num, resource_path,
