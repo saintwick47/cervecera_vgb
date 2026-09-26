@@ -2,25 +2,11 @@
 # Autor: SaintWick
 """
 Interfaz gráfica principal de Cervecera VGB (versión PC / escritorio).
-v17 — 🎯 AUTO-AMARGOR (pedido Stephan 15/9): botón que calcula los gramos de
-UNA única adición de amargor @60 min para el IBU objetivo (medio del rango
-BJCP del estilo elegido, o manual), usando la FÓRMULA ACTIVA del combo
-"Fórmula IBU" (Tinseth o Rager) y mostrando como referencia el gramaje de
-la otra fórmula. No requiere preguntar al cliente qué cálculo usa.
-v16.1 — FIX COSMÉTICO: sin recorte de labels (anchos ajustados, anchor=w,
-ventana 1400x900, split 2:1, lista de recetas 300 px).
-v16 — LAYOUT BREWOMATIC (pedido Stephan 14/9):
-· Inputs a la izquierda, Resultados en panel lateral derecho (tiempo real).
-· Procesos de elaboración en orden, como instancias derivadas, abajo.
-v15 — PARIDAD FUNCIONAL con beer_vgb_mobile (Android):
-· Mismo motor (brew_engine.py móvil): FG por atenuación de levadura,
-  IBU con altitud/formato/whirlpool, ácido láctico, pH post-hervor y final,
-  aguas con evaporación, calorías, etc.
-· Mismo catálogo argentino (catalogo_ar.py): maltas, lúpulos, levaduras,
-  altitudes y perfiles de agua con pH.
-· Misma persistencia: levadura, formato de lúpulo, color de malta, altitud,
-  ratio L/kg, absorción, tiempo de hervor y perfil de agua (Ca/Mg/HCO3/pH).
-· Adaptado a customtkinter (la diferencia es solo el medio de uso).
+Layout Brewomatic: inputs a la izquierda, resultados en tiempo real a la
+derecha y procesos de elaboración en orden abajo. Paridad funcional con
+beer_vgb_mobile (mismo brew_engine, catalogo_ar y persistencia).
+Ruta: app.py
+Versión: v17
 """
 import customtkinter as ctk
 from database import DatabaseManager
