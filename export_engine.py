@@ -1,5 +1,4 @@
 # export_engine.py
-# /home/saintwick/Escritorio/beer_vgb/export_engine.py
 # 2024-05-17
 # Autor: SaintWick
 
