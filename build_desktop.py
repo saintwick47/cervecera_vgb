@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # build_desktop.py — SCRIPT ÚNICO DE BUILD DE ESCRITORIO (Windows/Linux/macOS) v1
-# /home/saintwick/Escritorio/beer_vgb/build_desktop.py
+# Uso: python build_desktop.py
 # Autor: SaintWick
 #
 # Compila el instalador de escritorio para el sistema operativo donde se
