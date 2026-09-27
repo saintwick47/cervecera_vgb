@@ -17,6 +17,10 @@ from logger import logger
 from app_paths import get_data_dir
 
 
+# Marcador para "vaciar este campo" en los updates: None significa "no tocar".
+VACIO = object()
+
+
 class DatabaseManager:
     def __init__(self, db_name="cervecera_vgb.db", data_dir=None):
         # FIX CRÍTICO (WinError 5): si no se pasa data_dir, usar una carpeta del
@@ -109,6 +113,11 @@ class DatabaseManager:
                 cursor.execute("ALTER TABLE recipe_hops ADD COLUMN formato TEXT DEFAULT 'pellet'")
             except sqlite3.OperationalError:
                 pass
+        if 'momento' not in hop_cols:
+            try:
+                cursor.execute("ALTER TABLE recipe_hops ADD COLUMN momento TEXT DEFAULT 'Hervor'")
+            except sqlite3.OperationalError:
+                pass
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS recipe_yeasts (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -133,12 +142,40 @@ class DatabaseManager:
         inv_columns = [col[1] for col in cursor.fetchall()]
         for col, definition in [('costo_unitario', 'REAL DEFAULT 0'),
                                 ('minimo',         'REAL DEFAULT 0'),
-                                ('vencimiento',    "TEXT DEFAULT ''")]:
+                                ('vencimiento',    "TEXT DEFAULT ''"),
+                                ('ubicacion',      "TEXT DEFAULT ''"),
+                                ('lote',           "TEXT DEFAULT ''")]:
             if col not in inv_columns:
                 cursor.execute(f"ALTER TABLE inventory ADD COLUMN {col} {definition}")
         # Kardex de movimientos de inventario (entradas/salidas/mermas/ajustes).
         # Se denormaliza nombre/tipo del insumo para que el historial sobreviva
         # aunque el ítem se borre o se agote del todo.
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS lotes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                receta_id INTEGER,
+                receta_nombre TEXT DEFAULT '',
+                fecha_coccion TEXT DEFAULT '',
+                volumen REAL DEFAULT 0,
+                equipo TEXT DEFAULT '',
+                estado TEXT DEFAULT 'planificada',
+                notas TEXT DEFAULT '',
+                creado TEXT DEFAULT (datetime('now','localtime'))
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS lote_insumos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                lote_id INTEGER NOT NULL,
+                tipo TEXT DEFAULT '',
+                nombre TEXT NOT NULL,
+                cantidad REAL DEFAULT 0,
+                unidad TEXT DEFAULT '',
+                disponible REAL DEFAULT 0,
+                reservado INTEGER DEFAULT 1
+            )
+        ''')
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS inventory_movimientos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -200,14 +237,287 @@ class DatabaseManager:
                 attenuation REAL DEFAULT 0,     -- % atenuación (levadura)
                 abv_tolerance REAL DEFAULT 0,   -- tolerancia ABV (levadura)
                 temp_range TEXT DEFAULT '',
+                uso TEXT DEFAULT '',            -- Macerado / Hervido / Ajuste de agua…
+                pct_max REAL DEFAULT 0,         -- % máximo recomendado en la receta
+                dbfg REAL DEFAULT 0,            -- extracto fino base (Base Fina, %)
+                humedad REAL DEFAULT 0,         -- humedad (%)
+                proteina REAL DEFAULT 0,        -- proteína total (%)
+                maceracion TEXT DEFAULT '',     -- Monoinfusión / Escalonada / Decocción
                 UNIQUE(type, name)
             )
         ''')
         self.conn.commit()
+        self._migrar_columnas_faltantes()
 
     # ==========================================
     # MÉTODOS DE RECETAS
     # ==========================================
+    # ==========================================
+    # MIGRACIONES DEL ESQUEMA
+    # ==========================================
+    def _migrar_columnas_faltantes(self):
+        """Agrega a las tablas que YA EXISTEN las columnas nuevas del esquema.
+
+        `CREATE TABLE IF NOT EXISTS` no toca una tabla que ya está creada, así que
+        una base de datos vieja se quedaba sin las columnas nuevas y guardar
+        fallaba (p. ej. "table ingredients has no column named uso").
+        Las definiciones se leen del propio archivo: una sola fuente de verdad.
+        """
+        import re
+        try:
+            with open(__file__, encoding="utf-8") as f:
+                fuente = f.read()
+        except OSError:
+            return
+        fin_sql = "'''"
+        patron = r"CREATE TABLE IF NOT EXISTS (\w+)\s*\((.*?)\)\s*" + fin_sql
+        bloques = re.findall(patron, fuente, re.S)
+        cursor = self.conn.cursor()
+        agregadas = []
+        for tabla, definicion in bloques:
+            cursor.execute(f"PRAGMA table_info({tabla})")
+            existentes = {fila[1] for fila in cursor.fetchall()}
+            if not existentes:
+                continue            # la tabla no existe: la crea el CREATE TABLE
+            for linea in definicion.splitlines():
+                limpia = linea.split("--")[0].strip().rstrip(",")
+                if not limpia:
+                    continue
+                if limpia.upper().startswith(("PRIMARY KEY", "FOREIGN KEY",
+                                              "UNIQUE", "CHECK", "CONSTRAINT")):
+                    continue
+                columna = limpia.split()[0]
+                if columna in existentes:
+                    continue
+                try:
+                    cursor.execute(f"ALTER TABLE {tabla} ADD COLUMN {limpia}")
+                    agregadas.append(f"{tabla}.{columna}")
+                except Exception as e:
+                    logger.error(f"No se pudo agregar {tabla}.{columna}: {e}")
+        if agregadas:
+            self.conn.commit()
+            logger.info(f"Migración de esquema: {len(agregadas)} columnas agregadas -> "
+                        f"{', '.join(agregadas)}")
+
+    def refrescar_catalogo_insumos(self, maltas, lupulos, levaduras, miscelaneos=None):
+        """Completa el catálogo en instalaciones que ya existen.
+
+        - Agrega los insumos que falten (el catálogo creció).
+        - Rellena los datos técnicos que estén VACÍOS (productor, categoría, uso,
+          % máx, PPG…): lo que ahora muestran los filtros del catálogo.
+        - **Nunca** pisa un valor que el usuario haya cargado ni borra insumos.
+        Devuelve (agregados, completados).
+        """
+        existentes = {(i["type"], i["name"].strip().lower()): i for i in self.get_ingredients()}
+
+        def comunes(d):
+            return {"origin": d.get("origen", ""), "supplier": d.get("supplier", ""),
+                    "category": d.get("categoria", ""), "notes": d.get("notes", ""),
+                    "uso": d.get("uso", ""), "pct_max": d.get("pct_max", 0)}
+
+        por_tipo = [
+            ("Malta", maltas, lambda d: {"extract": d.get("extracto", 300), "color": d.get("color", 2),
+                                         "ppg": d.get("ppg", 0), "diastatic": d.get("diastatic", 0)}),
+            ("Lúpulo", lupulos, lambda d: {"alpha": d.get("aa", 5), "form": d.get("formato", "pellet")}),
+            ("Levadura", levaduras, lambda d: {"attenuation": d.get("atenuacion", 75),
+                                               "abv_tolerance": d.get("tolerancia_abv", 12),
+                                               "temp_range": d.get("temp_range", ""),
+                                               "form": d.get("formato", "seca")}),
+            ("Misceláneo", miscelaneos, lambda d: {}),
+        ]
+        agregados = completados = 0
+        for tipo, coleccion, extra in por_tipo:
+            for nombre, d in (coleccion or {}).items():
+                campos = dict(extra(d)); campos.update(comunes(d))
+                actual = existentes.get((tipo, nombre.strip().lower()))
+                if not actual:
+                    self.add_ingredient(tipo, nombre, **campos)
+                    agregados += 1
+                    continue
+                # completar SOLO lo que está vacío
+                faltantes = {}
+                for clave, valor in campos.items():
+                    if valor in (None, "", 0):
+                        continue
+                    guardado = actual.get(clave)
+                    if guardado in (None, "", 0):
+                        faltantes[clave] = valor
+                if faltantes:
+                    self.update_ingredient(tipo, actual["name"], **faltantes)
+                    completados += 1
+        return agregados, completados
+
+    def contar_recetas_por_insumo(self):
+        """{nombre en minúsculas: nº de recetas que lo usan} — columna "Recetas" del catálogo."""
+        cursor = self.conn.cursor()
+        conteo = {}
+        for tabla in ("recipe_fermentables", "recipe_hops", "recipe_yeasts"):
+            try:
+                cursor.execute(f"SELECT LOWER(name), COUNT(DISTINCT recipe_id) "
+                               f"FROM {tabla} GROUP BY LOWER(name)")
+                for nombre, n in cursor.fetchall():
+                    if nombre:
+                        conteo[nombre] = conteo.get(nombre, 0) + n
+            except Exception as e:
+                logger.error(f"contar_recetas_por_insumo ({tabla}): {e}")
+        return conteo
+
+    # ==========================================
+    # COCCIONES PROGRAMADAS (lotes) — del diseño de Stitch
+    # Al planificar un lote se RESERVAN sus insumos y se avisa lo que falta.
+    # ==========================================
+    def necesidades_de_receta(self, receta_id):
+        """Insumos que pide una receta: [{tipo, nombre, cantidad, unidad}]."""
+        receta = self.get_full_recipe(receta_id)
+        if not receta:
+            return []
+        necesidades = []
+        for m in receta.get("maltas", []):
+            necesidades.append({"tipo": "Malta", "nombre": m["name"],
+                                "cantidad": float(m.get("amount") or 0), "unidad": "kg"})
+        for h in receta.get("lupulos", []):
+            necesidades.append({"tipo": "Lúpulo", "nombre": h["name"],
+                                "cantidad": float(h.get("amount") or 0), "unidad": "g"})
+        for y in receta.get("levaduras", []):
+            necesidades.append({"tipo": "Levadura", "nombre": y["name"],
+                                "cantidad": 1.0, "unidad": "u"})
+        return necesidades
+
+    def _stock_de(self, tipo, nombre):
+        """Stock disponible para un insumo de la receta.
+
+        Primero busca el nombre exacto; si no está, busca por parecido (los nombres
+        de la receta y del inventario no siempre coinciden).
+        """
+        items = [i for i in self.get_all_inventory() if i["type"] == tipo]
+        buscado = (nombre or "").strip().lower()
+        for it in items:
+            if it["name"].strip().lower() == buscado:
+                return it
+        for it in items:                       # por parecido
+            guardado = it["name"].strip().lower()
+            if buscado and (buscado in guardado or guardado in buscado):
+                return it
+        return None
+
+    def _reservado_por_otros(self, tipo, nombre, excluir_lote=None):
+        """Cantidad ya comprometida por otros lotes planificados."""
+        cursor = self.conn.cursor()
+        cursor.execute("""SELECT COALESCE(SUM(li.cantidad), 0) FROM lote_insumos li
+                          JOIN lotes l ON l.id = li.lote_id
+                          WHERE l.estado = 'planificada' AND li.tipo = ?
+                            AND LOWER(li.nombre) = LOWER(?) AND li.lote_id != ?""",
+                       (tipo, nombre, excluir_lote or -1))
+        return float(cursor.fetchone()[0] or 0)
+
+    def planificar_lote(self, receta_id, fecha_coccion="", volumen=None, equipo="", nombre=None):
+        """Programa una cocción y reserva sus insumos. Devuelve el id del lote."""
+        receta = self.get_full_recipe(receta_id)
+        if not receta:
+            return None
+        nombre = nombre or f"Lote de {receta['name']}"
+        cursor = self.conn.cursor()
+        cursor.execute("""INSERT INTO lotes (nombre, receta_id, receta_nombre, fecha_coccion,
+                                             volumen, equipo, estado)
+                          VALUES (?, ?, ?, ?, ?, ?, 'planificada')""",
+                       (nombre, receta_id, receta["name"], fecha_coccion,
+                        float(volumen or receta.get("volume") or 0), equipo or ""))
+        lote_id = cursor.lastrowid
+        for n in self.necesidades_de_receta(receta_id):
+            item = self._stock_de(n["tipo"], n["nombre"])
+            disponible = float(item["amount"]) if item else 0.0
+            disponible -= self._reservado_por_otros(n["tipo"], n["nombre"], lote_id)
+            cursor.execute("""INSERT INTO lote_insumos (lote_id, tipo, nombre, cantidad,
+                                                        unidad, disponible, reservado)
+                              VALUES (?, ?, ?, ?, ?, ?, 1)""",
+                           (lote_id, n["tipo"], n["nombre"], n["cantidad"],
+                            n["unidad"], max(0.0, disponible)))
+        self.conn.commit()
+        return lote_id
+
+    def get_lotes(self, estado=None):
+        cursor = self.conn.cursor()
+        if estado:
+            cursor.execute("SELECT * FROM lotes WHERE estado=? ORDER BY fecha_coccion, id", (estado,))
+        else:
+            cursor.execute("SELECT * FROM lotes ORDER BY fecha_coccion, id")
+        return [dict(r) for r in cursor.fetchall()]
+
+    def faltantes_de_lote(self, lote_id):
+        """Lo que falta para cocinar: [{nombre, tipo, requerido, disponible}].
+
+        El stock se mira EN VIVO (no el que había al planificar): así, cuando llega
+        el pedido y se ingresa, el lote pasa solo a "insumos completos".
+        """
+        cursor = self.conn.cursor()
+        cursor.execute("""SELECT tipo, nombre, cantidad, unidad FROM lote_insumos
+                          WHERE lote_id=? ORDER BY tipo, nombre""", (lote_id,))
+        faltantes = []
+        for tipo, nombre, cantidad, unidad in cursor.fetchall():
+            item = self._stock_de(tipo, nombre)
+            actual = float(item["amount"]) if item else 0.0
+            actual -= self._reservado_por_otros(tipo, nombre, lote_id)
+            actual = max(0.0, actual)
+            requerido = float(cantidad or 0)
+            if actual < requerido:
+                faltantes.append({"tipo": tipo, "nombre": nombre, "unidad": unidad,
+                                  "requerido": requerido, "disponible": actual,
+                                  "faltante": requerido - actual})
+        return faltantes
+
+    def lotes_para_rail(self, limite=3):
+        """Datos del rail 'Próximas Cocciones Programadas' del diseño."""
+        salida = []
+        for lote in self.get_lotes("planificada")[:limite]:
+            faltantes = self.faltantes_de_lote(lote["id"])
+            salida.append({"id": lote["id"], "nombre": lote["nombre"],
+                           "volumen": lote["volumen"], "fecha": lote["fecha_coccion"],
+                           "estado": lote["estado"], "listo": not faltantes,
+                           "faltantes": faltantes})
+        return salida
+
+    def update_lote_estado(self, lote_id, estado):
+        cursor = self.conn.cursor()
+        cursor.execute("UPDATE lotes SET estado=? WHERE id=?", (estado, lote_id))
+        self.conn.commit()
+
+    def delete_lote(self, lote_id):
+        cursor = self.conn.cursor()
+        cursor.execute("DELETE FROM lote_insumos WHERE lote_id=?", (lote_id,))
+        cursor.execute("DELETE FROM lotes WHERE id=?", (lote_id,))
+        self.conn.commit()
+
+    def distribucion_almacenamiento(self):
+        """Ocupación por categoría (tarjeta 'Distribución de Espacio de Acopio')."""
+        totales = {}
+        for it in self.get_all_inventory():
+            clave = it["type"]
+            unidad = it["unit"] or "u"
+            acumulado = totales.setdefault(clave, {})
+            acumulado[unidad] = acumulado.get(unidad, 0.0) + float(it["amount"] or 0)
+        return totales
+
+    def ajustar_inventario(self, item_id, cantidad_contada, motivo="Ajuste físico"):
+        """Ajuste físico: deja el stock en la cantidad contada y lo registra en el Kardex.
+
+        Devuelve la diferencia aplicada (positiva si sobraba, negativa si faltaba).
+        """
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT name, type, amount, unit FROM inventory WHERE id=?", (item_id,))
+        fila = cursor.fetchone()
+        if not fila:
+            return None
+        nombre, tipo, actual, unidad = fila[0], fila[1], float(fila[2] or 0), fila[3]
+        contada = float(cantidad_contada)
+        diferencia = contada - actual
+        cursor.execute("UPDATE inventory SET amount=? WHERE id=?", (contada, item_id))
+        cursor.execute("""INSERT INTO inventory_movimientos
+                          (item_id, item_name, item_type, fecha, tipo, cantidad, motivo)
+                          VALUES (?, ?, ?, datetime('now','localtime'), 'Ajuste', ?, ?)""",
+                       (item_id, nombre, tipo, diferencia, motivo))
+        self.conn.commit()
+        return diferencia
+
     def save_recipe(self, recipe_data):
         try:
             cursor = self.conn.cursor()
@@ -237,8 +547,9 @@ class DatabaseManager:
                 cursor.execute('INSERT INTO recipe_fermentables (recipe_id, name, amount, extract, color) VALUES (?, ?, ?, ?, ?)',
                 (recipe_id, malt['nombre'], malt['cantidad'], malt.get('extracto', 300), malt.get('color', 2)))
             for hop in recipe_data.get('lupulos', []):
-                cursor.execute('INSERT INTO recipe_hops (recipe_id, name, amount, alpha_acids, time, formato) VALUES (?, ?, ?, ?, ?, ?)',
-                (recipe_id, hop['nombre'], hop['cantidad'], hop.get('aa', 5), hop.get('tiempo', 60), hop.get('formato', 'pellet')))
+                cursor.execute('INSERT INTO recipe_hops (recipe_id, name, amount, alpha_acids, time, formato, momento) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (recipe_id, hop['nombre'], hop['cantidad'], hop.get('aa', 5), hop.get('tiempo', 60),
+                 hop.get('formato', 'pellet'), hop.get('momento', 'Hervor')))
             for yeast in recipe_data.get('levaduras', []):
                 cursor.execute('INSERT INTO recipe_yeasts (recipe_id, name, attenuation, tolerance_abv) VALUES (?, ?, ?, ?)',
                 (recipe_id, yeast['nombre'], yeast.get('atenuacion', 75), yeast.get('tolerancia', 12)))
@@ -280,8 +591,9 @@ class DatabaseManager:
                 cursor.execute('INSERT INTO recipe_fermentables (recipe_id, name, amount, extract, color) VALUES (?, ?, ?, ?, ?)',
                 (recipe_id, malt['nombre'], malt['cantidad'], malt.get('extracto', 300), malt.get('color', 2)))
             for hop in recipe_data.get('lupulos', []):
-                cursor.execute('INSERT INTO recipe_hops (recipe_id, name, amount, alpha_acids, time, formato) VALUES (?, ?, ?, ?, ?, ?)',
-                (recipe_id, hop['nombre'], hop['cantidad'], hop.get('aa', 5), hop.get('tiempo', 60), hop.get('formato', 'pellet')))
+                cursor.execute('INSERT INTO recipe_hops (recipe_id, name, amount, alpha_acids, time, formato, momento) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (recipe_id, hop['nombre'], hop['cantidad'], hop.get('aa', 5), hop.get('tiempo', 60),
+                 hop.get('formato', 'pellet'), hop.get('momento', 'Hervor')))
             for yeast in recipe_data.get('levaduras', []):
                 cursor.execute('INSERT INTO recipe_yeasts (recipe_id, name, attenuation, tolerance_abv) VALUES (?, ?, ?, ?)',
                 (recipe_id, yeast['nombre'], yeast.get('atenuacion', 75), yeast.get('tolerancia', 12)))
@@ -304,7 +616,7 @@ class DatabaseManager:
     def get_all_recipes_summary(self):
         cursor = self.conn.cursor()
         cursor.execute("SELECT id, name, volume FROM recipes ORDER BY name")
-        return cursor.fetchall()
+        return [dict(r) for r in cursor.fetchall()]
 
     def recipe_exists(self, name):
         """Devuelve True si ya existe una receta con ese nombre."""
@@ -413,7 +725,8 @@ class DatabaseManager:
     # ==========================================
     CAMPOS_INSUMO = ("origin", "supplier", "category", "notes", "color", "extract",
                      "ppg", "yield_pct", "diastatic", "alpha", "form",
-                     "attenuation", "abv_tolerance", "temp_range")
+                     "attenuation", "abv_tolerance", "temp_range",
+                     "uso", "pct_max", "dbfg", "humedad", "proteina", "maceracion")
 
     def get_ingredients(self, tipo=None):
         """Lista de insumos (dicts), opcionalmente filtrada por tipo."""
@@ -443,15 +756,19 @@ class DatabaseManager:
             cursor.execute(
                 """INSERT INTO ingredients (type, name, origin, supplier, category, notes,
                        color, extract, ppg, yield_pct, diastatic, alpha, form,
-                       attenuation, abv_tolerance, temp_range)
-                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                       attenuation, abv_tolerance, temp_range, uso, pct_max,
+                       dbfg, humedad, proteina, maceracion)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                 (tipo, name, datos["origin"] or "", datos["supplier"] or "",
                  datos["category"] or "", datos["notes"] or "",
                  datos["color"] or 0, datos["extract"] or 0, datos["ppg"] or 0,
                  datos["yield_pct"] or 0, datos["diastatic"] or 0,
                  datos["alpha"] or 0, datos["form"] or "",
                  datos["attenuation"] or 0, datos["abv_tolerance"] or 0,
-                 datos["temp_range"] or ""))
+                 datos["temp_range"] or "", datos["uso"] or "",
+                 datos["pct_max"] or 0, datos["dbfg"] or 0,
+                 datos["humedad"] or 0, datos["proteina"] or 0,
+                 datos["maceracion"] or ""))
             self.conn.commit()
             return cursor.lastrowid
         except sqlite3.IntegrityError:
@@ -476,22 +793,37 @@ class DatabaseManager:
         cursor.execute("DELETE FROM ingredients WHERE type=? AND name=?", (tipo, name))
         self.conn.commit()
 
-    def seed_ingredients(self, maltas, lupulos, levaduras):
-        """Carga el catálogo base en la BD la primera vez (luego es editable)."""
+    def seed_ingredients(self, maltas, lupulos, levaduras, miscelaneos=None):
+        """Carga el catálogo base en la BD la primera vez (luego es editable).
+
+        Copia la ficha técnica completa (productor, categoría, uso, % máximo…),
+        que es lo que muestran los filtros y la tabla del catálogo.
+        """
         cursor = self.conn.cursor()
         cursor.execute("SELECT COUNT(*) FROM ingredients")
         if cursor.fetchone()[0] > 0:
             return 0
+
+        def comunes(d):
+            return {"origin": d.get("origen", ""), "supplier": d.get("supplier", ""),
+                    "category": d.get("categoria", ""), "notes": d.get("notes", ""),
+                    "uso": d.get("uso", ""), "pct_max": d.get("pct_max", 0)}
+
         n = 0
         for nombre, d in (maltas or {}).items():
             self.add_ingredient("Malta", nombre, extract=d.get("extracto", 300),
-                                color=d.get("color", 2)); n += 1
+                                color=d.get("color", 2), ppg=d.get("ppg", 0),
+                                diastatic=d.get("diastatic", 0), **comunes(d)); n += 1
         for nombre, d in (lupulos or {}).items():
             self.add_ingredient("Lúpulo", nombre, alpha=d.get("aa", 5),
-                                form=d.get("formato", "pellet")); n += 1
+                                form=d.get("formato", "pellet"), **comunes(d)); n += 1
         for nombre, d in (levaduras or {}).items():
             self.add_ingredient("Levadura", nombre, attenuation=d.get("atenuacion", 75),
-                                abv_tolerance=d.get("tolerancia_abv", 12)); n += 1
+                                abv_tolerance=d.get("tolerancia_abv", 12),
+                                temp_range=d.get("temp_range", ""),
+                                form=d.get("formato", "seca"), **comunes(d)); n += 1
+        for nombre, d in (miscelaneos or {}).items():
+            self.add_ingredient("Misceláneo", nombre, **comunes(d)); n += 1
         return n
 
     # ==========================================
@@ -538,14 +870,22 @@ class DatabaseManager:
             logger.error(f"Error restando inventario: {e}")
             return False
 
-    def update_inventory_details(self, item_id, costo_unitario=None, minimo=None, vencimiento=None):
+    def update_inventory_details(self, item_id, costo_unitario=None, minimo=None,
+                                 vencimiento=None, ubicacion=None, lote=None):
+        """Actualiza la ficha del ítem.
+
+        None = no tocar ese campo · VACIO (importado de este módulo) = dejarlo vacío.
+        """
         sets, vals = [], []
-        if costo_unitario is not None:
-            sets.append("costo_unitario=?"); vals.append(costo_unitario)
-        if minimo is not None:
-            sets.append("minimo=?"); vals.append(minimo)
-        if vencimiento is not None:
-            sets.append("vencimiento=?"); vals.append(vencimiento)
+        for columna, valor in (("costo_unitario", costo_unitario),
+                               ("minimo", minimo),
+                               ("vencimiento", vencimiento),
+                               ("ubicacion", ubicacion),
+                               ("lote", lote)):
+            if valor is VACIO:
+                sets.append(f"{columna}=NULL")
+            elif valor is not None:
+                sets.append(f"{columna}=?"); vals.append(valor)
         if not sets:
             return
         vals.append(item_id)
@@ -574,12 +914,13 @@ class DatabaseManager:
     def get_all_inventory(self):
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM inventory ORDER BY type, name")
-        return cursor.fetchall()
+        return [dict(r) for r in cursor.fetchall()]
 
     def get_inventory_item_by_name(self, item_type, name):
         cursor = self.conn.cursor()
         cursor.execute("SELECT * FROM inventory WHERE type=? AND LOWER(name)=?", (item_type, name.lower()))
-        return cursor.fetchone()
+        row = cursor.fetchone()
+        return dict(row) if row else None
 
     def close(self):
         if self.conn:
