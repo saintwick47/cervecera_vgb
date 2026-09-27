@@ -48,10 +48,31 @@ class RecetasMixin:
     # ==========================================
     # LISTA / SELECCIÓN / NUEVA / GUARDAR
     # ==========================================
+    def clonar_receta_actual(self):
+        """Clona la receta abierta con el nombre "… (copia)" (botón del diseño)."""
+        nombre = self.entry_nombre.get().strip()
+        if not nombre:
+            mb.showinfo("Clonar", "Abrí o creá una receta primero."); return
+        datos = self._recolectar_datos_exportacion()
+        if not datos:
+            mb.showwarning("Clonar", "No se pudo leer la receta actual."); return
+        datos["name"] = f"{nombre} (copia)"
+        nuevo_id = self.db.save_recipe(datos)
+        self.cargar_lista_recetas()
+        if nuevo_id:
+            self.seleccionar_receta(nuevo_id)
+            mb.showinfo("Clonar", f"Receta clonada:\n{datos['name']}")
+
     def cargar_lista_recetas(self):
         for w in self.lista_recetas.winfo_children():
             w.destroy()
+        busqueda = ""
+        entry = getattr(self, "entry_buscar_receta", None)
+        if entry is not None:
+            busqueda = entry.get().strip().lower()
         for r in self.db.get_all_recipes_summary():
+            if busqueda and busqueda not in r["name"].lower():
+                continue
             ctk.CTkButton(self.lista_recetas,
                           text=f"{r['name']} ({r['volume']}L)",
                           fg_color="transparent", border_width=1,
@@ -297,6 +318,14 @@ class RecetasMixin:
                 agregadas, omitidas, actualizadas = self._descargar_y_fusionar()
                 if agregadas or actualizadas:
                     self.after(0, self._refrescar_tras_auto, agregadas, actualizadas)
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    # El último release no publica el recetario: es un caso normal,
+                    # la app sigue usando el que trae adentro. No es un error.
+                    logger.info("Recetario web: el último release no publica "
+                                "recetas_cervecera_vgb.json (se usa el recetario local).")
+                else:
+                    logger.error(f"_auto_actualizar (HTTP {e.code}): {e}")
             except Exception as e:
                 logger.error(f"_auto_actualizar: {e}")
         threading.Thread(target=tarea, daemon=True).start()
@@ -601,50 +630,6 @@ class RecetasMixin:
             mb.showinfo("Éxito", f"BeerXML guardado en:\n{filepath}")
         else:
             mb.showerror("Error", "No se pudo generar el BeerXML.")
-
-    def abrir_menu_acciones(self):
-        """Despliega/oculta un dropdown propio bajo el botón Menú (se cierra al elegir
-        una opción o al perder el foco; no queda pegado como el tk.Menu nativo)."""
-        if self._menu_popup is not None and self._menu_popup.winfo_exists():
-            self._cerrar_menu_acciones()
-            return
-        x = self.btn_menu.winfo_rootx()
-        y = self.btn_menu.winfo_rooty() + self.btn_menu.winfo_height() + 2
-        popup = ctk.CTkToplevel(self)
-        popup.overrideredirect(True)
-        popup.geometry(f"+{x}+{y}")
-        popup.attributes("-topmost", True)
-        frame = ctk.CTkFrame(popup, fg_color="#2c2c2c", corner_radius=6, border_width=1,
-                             border_color="#475569")
-        frame.pack(fill="both", expand=True)
-        opciones = (
-            ("📂 Importar JSON", self.importar_json_ui),
-            ("🔄 Buscar recetas nuevas", self.actualizar_recetas_web),
-            ("🌐 Recetas de la Comunidad", self.buscar_recetas_comunidad_ui),
-            ("⬆️ Comprobar actualizaciones", self.comprobar_actualizaciones),
-            ("💾 Exportar PDF", self.exportar_pdf_ui),
-            ("💾 Exportar BeerXML", self.exportar_xml_ui),
-        )
-        for texto, accion in opciones:
-            ctk.CTkButton(frame, text=texto, anchor="w", fg_color="transparent",
-                         hover_color="#374151", height=30,
-                         command=lambda a=accion: self._ejecutar_accion_menu(a)
-                         ).pack(fill="x", padx=4, pady=2)
-        popup.bind("<FocusOut>", lambda e: self._cerrar_menu_acciones())
-        self._menu_popup = popup
-        popup.after(10, popup.focus_force)
-
-    def _ejecutar_accion_menu(self, accion):
-        self._cerrar_menu_acciones()
-        accion()
-
-    def _cerrar_menu_acciones(self):
-        if self._menu_popup is not None:
-            try:
-                self._menu_popup.destroy()
-            except Exception:
-                pass
-            self._menu_popup = None
 
     def toggle_lista_recetas(self):
         """Muestra u oculta la lista de recetas al presionar 'Mis Recetas'."""
