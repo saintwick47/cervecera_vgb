@@ -81,7 +81,9 @@ packaging/linux/appimage-build/
 packaging/linux/*.AppImage
 
 # ── 6. ENTORNOS VIRTUALES Y CACHÉ DE PYTHON ────────────────────
-venv/
+# Cualquier carpeta de entorno virtual, con el nombre que sea
+# (venv, .venv, .venv-test, myenv…): nunca se versiona.
+*venv*/
 .venv/
 env/
 ENV/
@@ -150,3 +152,7 @@ dmypy.json
 # ── EXCEPCIONES (sí se versionan) ──────────────────────────────
 !.gitkeep
 !.github/workflows/*.yml
+
+# Comparaciones con el diseño y material de Stitch (locales)
+comparaciones/
+diseno_stitch/
