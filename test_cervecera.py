@@ -14,6 +14,12 @@ from brew_engine import BrewEngine
 from database import DatabaseManager
 from bjcp_styles import comparar_con_estilo, get_style_list
 from app_gestion import parsear_texto_productos
+from logica_gestion import (
+    items_por_id, valores_ficha_inventario, kardex_de_item,
+    guardar_ficha_inventario, eliminar_item_inventario,
+    datos_ficha_insumo, guardar_ficha_insumo, limpiar_campos_insumo,
+    clave_fila_insumo, fila_a_insumo,
+)
 
 
 class TestBrewEngine(unittest.TestCase):
@@ -342,14 +348,149 @@ class TestParserPegarProductos(unittest.TestCase):
         self.assertEqual(p['cantidad'], 200.0)
         self.assertEqual(p['unidad'], 'g')
 
-    def test_sin_match_en_catalogo_tipo_otro(self):
+    def test_sin_match_en_catalogo_tipo_misceláneo(self):
         productos = parsear_texto_productos("Ingrediente Desconocido XYZ 3 kg", self.catalogo)
-        self.assertEqual(productos[0]['tipo'], 'Otro')
+        self.assertEqual(productos[0]['tipo'], 'Misceláneo')
 
     def test_multiples_lineas(self):
         texto = "Pale Ale (Ba-Malt) 25 kg\nCascade Argentino 500g\n"
         productos = parsear_texto_productos(texto, self.catalogo)
         self.assertEqual(len(productos), 2)
+
+
+class TestMaestroDetalle(unittest.TestCase):
+    """Maestro-detalle de Insumos e Inventario (lógica pura, sin pantalla).
+
+    Cubre el flujo completo: elegir fila -> se carga la ficha -> editar y guardar
+    -> queda persistido -> borrar. La interfaz (app_gestion.py) usa estas mismas
+    funciones de logica_gestion, así que lo que se prueba acá es lo que se ejecuta.
+    """
+
+    def setUp(self):
+        self.db = DatabaseManager(db_name="test_maestro_detalle.db")
+        self.db.add_inventory_item('Malta', 'Pale Ale', 25.0, 'Kg')
+        self.db.add_inventory_item('Lúpulo', 'Cascade', 500.0, 'g')
+        self.pale = self.db.get_inventory_item_by_name('Malta', 'Pale Ale')
+        self.cascade = self.db.get_inventory_item_by_name('Lúpulo', 'Cascade')
+
+    def tearDown(self):
+        self.db.close()
+        if os.path.exists(self.db.db_path):
+            os.remove(self.db.db_path)
+
+    # ── 1) Inventario: elegir fila -> se carga la Ficha de Insumo Activo ──
+    def test_elegir_fila_inventario_carga_la_ficha(self):
+        indice = items_por_id(self.db.get_all_inventory())
+        ficha = valores_ficha_inventario(indice[self.pale['id']])
+        self.assertIsNotNone(ficha)
+        self.assertEqual(ficha['titulo'], 'Pale Ale')
+        self.assertEqual(ficha['tipo'], 'Malta')
+        self.assertEqual(ficha['cantidad'], 25.0)
+        self.assertEqual(ficha['unidad'], 'Kg')
+
+    def test_ficha_de_item_inexistente_es_none(self):
+        self.assertIsNone(valores_ficha_inventario(None))
+        indice = items_por_id(self.db.get_all_inventory())
+        self.assertNotIn(99999, indice)
+
+    # ── 2) El Kardex queda filtrado al ítem elegido ──
+    def test_kardex_filtrado_al_item(self):
+        self.db.add_inventory_movimiento(self.pale['id'], 'Pale Ale', 'Malta', 'Entrada', 25.0)
+        self.db.add_inventory_movimiento(self.cascade['id'], 'Cascade', 'Lúpulo', 'Entrada', 500.0)
+        self.db.add_inventory_movimiento(self.pale['id'], 'Pale Ale', 'Malta', 'Salida', 3.0)
+
+        # add_inventory_item ya deja su propio movimiento de ingreso, así que
+        # comparamos contra lo que hay realmente en la base, sin hardcodear.
+        todos = kardex_de_item(self.db, None, limite=200)
+        esperados_pale = [m for m in todos if m['item_name'] == 'Pale Ale']
+        esperados_cascade = [m for m in todos if m['item_name'] == 'Cascade']
+
+        de_pale = kardex_de_item(self.db, 'Pale Ale')
+        self.assertEqual(len(de_pale), len(esperados_pale))
+        self.assertTrue(de_pale, "el Kardex del ítem no puede quedar vacío")
+        self.assertTrue(all(m['item_name'] == 'Pale Ale' for m in de_pale),
+                        "el Kardex filtrado no debe traer movimientos de otros ítems")
+
+        de_cascade = kardex_de_item(self.db, 'Cascade')
+        self.assertTrue(all(m['item_name'] == 'Cascade' for m in de_cascade))
+        self.assertEqual(len(de_cascade), len(esperados_cascade))
+
+        # filtrar devuelve menos que la lista global
+        self.assertLess(len(de_pale), len(todos))
+
+    def test_kardex_respeta_el_limite(self):
+        for i in range(20):
+            self.db.add_inventory_movimiento(self.pale['id'], 'Pale Ale', 'Malta', 'Entrada', i + 1)
+        self.assertEqual(len(kardex_de_item(self.db, 'Pale Ale', limite=15)), 15)
+
+    # ── 3) Editar la ficha y guardar -> queda persistido ──
+    def test_editar_ficha_guarda_costo_minimo_y_vencimiento(self):
+        self.assertTrue(guardar_ficha_inventario(self.db, self.pale['id'], 1500.0, 5.0, '2027-03-15'))
+        guardado = self.db.get_inventory_item_by_name('Malta', 'Pale Ale')
+        ficha = valores_ficha_inventario(guardado)
+        self.assertEqual(ficha['costo_unitario'], 1500.0)
+        self.assertEqual(ficha['minimo'], 5.0)
+        self.assertEqual(ficha['vencimiento'], '2027-03-15')
+
+    def test_guardar_ficha_vacia_limpia_los_campos(self):
+        guardar_ficha_inventario(self.db, self.pale['id'], 1500.0, 5.0, '2027-03-15')
+        # El usuario borra el contenido de las casillas -> se vacían de verdad
+        guardar_ficha_inventario(self.db, self.pale['id'], None, '', '')
+        ficha = valores_ficha_inventario(self.db.get_inventory_item_by_name('Malta', 'Pale Ale'))
+        self.assertIn(ficha['costo_unitario'], (None, 0))
+        self.assertIn(ficha['minimo'], (None, 0))
+        self.assertEqual(ficha['vencimiento'], '')
+
+    def test_guardar_ficha_sin_item_no_hace_nada(self):
+        self.assertFalse(guardar_ficha_inventario(self.db, None, 10.0, 1.0, '2027-01-01'))
+
+    # ── 4) Eliminar el ítem desde la ficha ──
+    def test_eliminar_item_desde_la_ficha(self):
+        self.assertTrue(eliminar_item_inventario(self.db, self.pale['id']))
+        self.assertIsNone(self.db.get_inventory_item_by_name('Malta', 'Pale Ale'))
+        # el otro ítem sigue intacto
+        self.assertIsNotNone(self.db.get_inventory_item_by_name('Lúpulo', 'Cascade'))
+
+    def test_eliminar_item_sin_id_no_hace_nada(self):
+        self.assertFalse(eliminar_item_inventario(self.db, None))
+        self.assertEqual(len(self.db.get_all_inventory()), 2)
+
+    # ── 5) Insumos: elegir fila -> ficha técnica -> editar -> guardar ──
+    def test_elegir_fila_insumo_carga_la_ficha(self):
+        self.db.add_ingredient('Malta', 'Pale Ale', color=3.5, extract=300, origin='Weyermann')
+        tipo, nombre = fila_a_insumo(clave_fila_insumo('Malta', 'Pale Ale'))
+        self.assertEqual((tipo, nombre), ('Malta', 'Pale Ale'))
+        ficha = datos_ficha_insumo(self.db, tipo, nombre)
+        self.assertEqual(ficha['color'], 3.5)
+        self.assertEqual(ficha['origin'], 'Weyermann')
+
+    def test_editar_ficha_insumo_guarda_los_cambios(self):
+        self.db.add_ingredient('Malta', 'Pale Ale', color=3.0)
+        ok, tipo, nombre = guardar_ficha_insumo(
+            self.db, 'Malta', 'Pale Ale',
+            {'color': 4.5, 'extract': 305, 'notes': 'Malta base'},
+            anterior=('Malta', 'Pale Ale'))
+        self.assertTrue(ok)
+        ficha = datos_ficha_insumo(self.db, tipo, nombre)
+        self.assertEqual(ficha['color'], 4.5)
+        self.assertEqual(ficha['extract'], 305)
+        self.assertEqual(ficha['notes'], 'Malta base')
+
+    def test_cambiar_nombre_o_tipo_borra_el_anterior(self):
+        # Si le cambian el nombre mientras edita, el insumo viejo no debe quedar huérfano
+        self.db.add_ingredient('Malta', 'Pale Ale Vieja', color=3.0)
+        guardar_ficha_insumo(self.db, 'Malta', 'Pale Ale Nueva', {'color': 3.5},
+                             anterior=('Malta', 'Pale Ale Vieja'))
+        self.assertEqual(datos_ficha_insumo(self.db, 'Malta', 'Pale Ale Vieja'), {})
+        self.assertEqual(datos_ficha_insumo(self.db, 'Malta', 'Pale Ale Nueva')['color'], 3.5)
+
+    def test_guardar_insumo_sin_nombre_no_guarda(self):
+        ok, _tipo, _nombre = guardar_ficha_insumo(self.db, 'Malta', '   ', {'color': 3.0})
+        self.assertFalse(ok)
+
+    def test_los_vacios_no_se_guardan_como_campos(self):
+        campos = limpiar_campos_insumo({'color': 3.0, 'notes': '', 'origin': None, 'extract': 0})
+        self.assertEqual(campos, {'color': 3.0, 'extract': 0})
 
 
 if __name__ == '__main__':
