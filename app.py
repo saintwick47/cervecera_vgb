@@ -12,7 +12,7 @@ import customtkinter as ctk
 from database import DatabaseManager
 from brew_engine import BrewEngine
 from bjcp_styles import comparar_con_estilo, get_style_list, STYLES
-from catalogo_ar import (MALTAS_AR, LUPULOS_AR, LEVADURAS_AR,
+from catalogo_ar import (MALTAS_AR, LUPULOS_AR, LEVADURAS_AR, MISCELANEOS_AR,
                          ALTITUDES_CORDOBA, PERFILES_AGUA_CORDOBA)
 import tkinter.messagebox as mb
 from tkinter import simpledialog
@@ -23,16 +23,45 @@ import math
 import threading
 from logger import logger
 from app_paths import get_data_dir
-from app_gestion import (GestionMixin, format_num, resource_path, _flotar,
+from app_gestion import (GestionMixin, format_num, resource_path, _flotar, APP_VERSION,
                          VOLUMENES_PRESET, DEF_PERFIL_AGUA, DEF_LEVADURA,
-                         DEF_ALTITUD, DEF_FORMATO, EVAPORACION_PCT)
+                         DEF_ALTITUD, DEF_FORMATO, EVAPORACION_PCT, USOS_GRANO, MOMENTOS_LUPULO,
+                         USO_A_DISEÑO)
 from app_recetas import RecetasMixin
 
 ctk.set_appearance_mode("dark")
-try:
-    ctk.set_default_color_theme(resource_path("tema_brewtk.json"))
-except Exception:
+
+# Tema propio "BrewTk Utilitarian". Se prueban los nombres posibles porque el
+# archivo puede venir como "tema_brewtk.json" o "Tema brewtk.json".
+_TEMA_CARGADO = None
+for _nombre_tema in ("tema_brewtk.json", "Tema brewtk.json", "Tema_brewtk.json"):
+    try:
+        _ruta_tema = resource_path(_nombre_tema)
+        if os.path.exists(_ruta_tema):
+            ctk.set_default_color_theme(_ruta_tema)
+            _TEMA_CARGADO = _nombre_tema
+            break
+    except Exception:
+        continue
+if _TEMA_CARGADO is None:
     ctk.set_default_color_theme("blue")
+
+
+class _NavSecciones:
+    """Compatibilidad: imita el .set()/.get() del CTkTabview que se usaba antes.
+
+    La navegación del diseño es un control segmentado; este objeto permite que el
+    código que hacía `self.tabview.set("...")` siga funcionando igual.
+    """
+
+    def __init__(self, app):
+        self._app = app
+
+    def set(self, nombre):
+        self._app._cambiar_seccion(nombre)
+
+    def get(self):
+        return self._app.nav_segmentada.get()
 
 
 class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
@@ -40,7 +69,7 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         super().__init__()
         self.title("Cervecera VGB - By SaintWick")
         self.geometry("1400x900")
-        self.minsize(1300, 760)
+        self.minsize(1280, 800)   # mínimo del diseño (DESIGN.md)
         # 📌 ASIGNAR ICONO A LA VENTANA (Multiplataforma)
         try:
             icon_path_ico = resource_path("logo.ico")
@@ -58,7 +87,12 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         self.receta_actual_id = None
         # Fase 2: cargar el catálogo de insumos en la BD la primera vez (luego es editable)
         try:
-            self.db.seed_ingredients(MALTAS_AR, LUPULOS_AR, LEVADURAS_AR)
+            self.db.seed_ingredients(MALTAS_AR, LUPULOS_AR, LEVADURAS_AR, MISCELANEOS_AR)
+            # Completa el catálogo en instalaciones que ya existen (aditivo, sin pisar lo del usuario)
+            agg, comp = self.db.refrescar_catalogo_insumos(MALTAS_AR, LUPULOS_AR,
+                                                           LEVADURAS_AR, MISCELANEOS_AR)
+            if agg or comp:
+                logger.info(f"Catálogo de insumos actualizado: {agg} nuevos, {comp} completados.")
             self.db.seed_equipment()
         except Exception as e:
             logger.warning(f"No se pudo sembrar el catálogo de insumos: {e}")
@@ -67,37 +101,66 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(1, weight=1)
         # --- BARRA SUPERIOR ---
-        frame_top = ctk.CTkFrame(self, height=40, corner_radius=0, fg_color="#2c2c2c")
+        frame_top = ctk.CTkFrame(self, height=40, corner_radius=0, fg_color="#24242C")
         frame_top.grid(row=0, column=0, columnspan=2, sticky="ew")
-        self._menu_popup = None
-        self.btn_menu = ctk.CTkButton(frame_top, text="☰ Menú", command=self.abrir_menu_acciones,
-                                      fg_color="#2563EB", hover_color="#1D4ED8", height=32)
-        self.btn_menu.pack(side="left", padx=10, pady=5)
-        ctk.CTkButton(frame_top, text="❓ Manual de Usuario", command=self.mostrar_ayuda, fg_color="#6B7280", hover_color="#4B5563", height=32).pack(side="right", padx=10, pady=5)
-        ctk.CTkButton(frame_top, text="🧾 Ver log", command=self.mostrar_log, fg_color="#475569", hover_color="#334155", height=32).pack(side="right", padx=10, pady=5)
+        # Barra de menú del diseño (Archivo · Herramientas · Ayuda)
+        self._crear_barra_menu()
+        ctk.CTkLabel(frame_top, text="🍺  Cervecera VGB  ·  Craft Brewing Studio",
+                     font=ctk.CTkFont(size=13, weight="bold")).pack(side="left", padx=14, pady=8)
+        ctk.CTkLabel(frame_top, text=f"v{APP_VERSION}", text_color="#9CA3AF",
+                     font=ctk.CTkFont(size=11)).pack(side="left")
         # --- COLUMNA IZQUIERDA (Recetas) ---
-        self.frame_izquierdo = ctk.CTkFrame(self, width=300, corner_radius=0)
+        self.frame_izquierdo = ctk.CTkFrame(self, width=260, corner_radius=0)   # rail del diseño (220-260)
         self.frame_izquierdo.grid(row=1, column=0, sticky="nsew")
-        self.frame_izquierdo.grid_rowconfigure(1, weight=1)
+        self.frame_izquierdo.grid_rowconfigure(3, weight=1)
         self._recetas_visibles = True
         self.btn_toggle_recetas = ctk.CTkButton(self.frame_izquierdo, text="🍺 Mis Recetas  ▾",
-                                                fg_color="transparent", hover_color="#2c2c2c",
+                                                fg_color="transparent", hover_color="#24242C",
                                                 text_color=("gray10", "gray90"),
                                                 font=ctk.CTkFont(size=20, weight="bold"),
                                                 command=self.toggle_lista_recetas)
         self.btn_toggle_recetas.grid(row=0, column=0, padx=20, pady=(20, 10))
         self.lista_recetas = ctk.CTkScrollableFrame(self.frame_izquierdo)
-        self.lista_recetas.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
-        ctk.CTkButton(self.frame_izquierdo, text="+ Crear Receta Manual", command=self.nueva_receta).grid(row=2, column=0, padx=20, pady=20)
-        # --- COLUMNA DERECHA (Tabs: Receta / Inventario) ---
-        self.tabview = ctk.CTkTabview(self, corner_radius=0)
-        self.tabview.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
-        self.tab_receta = self.tabview.add("🛠️ Receta")
-        self.tab_insumos = self.tabview.add("🧪 Insumos e Inventario")
-        self.tab_equipos = self.tabview.add("⚙️ Equipos")
+        # Buscar / Abrir y Clonar (botones del diseño)
+        barra_busqueda = ctk.CTkFrame(self.frame_izquierdo, fg_color="transparent")
+        barra_busqueda.grid(row=1, column=0, padx=10, pady=(0, 4), sticky="ew")
+        self.entry_buscar_receta = ctk.CTkEntry(barra_busqueda, placeholder_text="🔍 Buscar / Abrir receta")
+        self.entry_buscar_receta.pack(fill="x")
+        self.entry_buscar_receta.bind("<KeyRelease>", lambda e: self.cargar_lista_recetas())
+        ctk.CTkButton(self.frame_izquierdo, text="📄 Clonar", command=self.clonar_receta_actual,
+                      fg_color="#2B2B36", hover_color="#3F3F50").grid(row=2, column=0, padx=20, pady=(0, 4), sticky="ew")
+        self.lista_recetas.grid(row=3, column=0, padx=10, pady=10, sticky="nsew")
+        ctk.CTkButton(self.frame_izquierdo, text="➕ Nueva Receta", command=self.nueva_receta).grid(row=4, column=0, padx=20, pady=20)
+        # --- COLUMNA DERECHA: navegación segmentada del diseño ---
+        zona_derecha = ctk.CTkFrame(self, fg_color="transparent")
+        zona_derecha.grid(row=1, column=1, sticky="nsew", padx=10, pady=10)
+        zona_derecha.grid_columnconfigure(0, weight=1)
+        zona_derecha.grid_rowconfigure(1, weight=1)
+        # Control segmentado (píldoras) como el mockup: Recetas · Inventario · Insumos · Equipos
+        self.nav_segmentada = ctk.CTkSegmentedButton(
+            zona_derecha, values=["🛠️ Receta", "📦 Inventario", "🧪 Insumos", "⚙️ Equipos"],
+            command=self._cambiar_seccion, height=34,
+            selected_color="#3A7EBF", selected_hover_color="#1F538D",
+            unselected_color="#2B2B36", unselected_hover_color="#3F3F50")
+        self.nav_segmentada.grid(row=0, column=0, sticky="ew", pady=(0, 8))
+        self.nav_segmentada.set("🛠️ Receta")
+        self.contenedor_secciones = ctk.CTkFrame(zona_derecha, fg_color="transparent")
+        self.contenedor_secciones.grid(row=1, column=0, sticky="nsew")
+        self.contenedor_secciones.grid_columnconfigure(0, weight=1)
+        self.contenedor_secciones.grid_rowconfigure(0, weight=1)
+        self.tab_receta = ctk.CTkFrame(self.contenedor_secciones, fg_color="transparent")
+        self.tab_inventario = ctk.CTkFrame(self.contenedor_secciones, fg_color="transparent")
+        self.tab_insumos = ctk.CTkFrame(self.contenedor_secciones, fg_color="transparent")
+        self.tab_equipos = ctk.CTkFrame(self.contenedor_secciones, fg_color="transparent")
+        for marco in (self.tab_receta, self.tab_inventario, self.tab_insumos, self.tab_equipos):
+            marco.grid(row=0, column=0, sticky="nsew")
+            marco.grid_remove()
+        self.tabview = _NavSecciones(self)      # compatibilidad con el código existente
         self.setup_tab_receta()
         self.setup_tab_insumos()
+        self.setup_tab_inventario_tab()
         self.setup_tab_equipos()
+        self._cambiar_seccion("🛠️ Receta")
         self.cargar_lista_recetas()
         self.nueva_receta()
         # Auto-actualización silenciosa de recetas al abrir la app
@@ -106,6 +169,37 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
     # ==========================================
     # CONFIGURACIÓN PESTAÑA RECETA (v16: inputs izq. | resultados der. | procesos abajo)
     # ==========================================
+    def _informar_tema(self):
+        """Registra qué tema quedó activo (para detectar si no se encontró el archivo)."""
+        if _TEMA_CARGADO:
+            logger.info(f"Tema aplicado: {_TEMA_CARGADO} (BrewTk Utilitarian)")
+        else:
+            logger.warning("No se encontró el archivo del tema: se usa el tema por defecto Azul.\n"
+                           "  Esperado: 'tema_brewtk.json' junto a app.py")
+
+    def _cambiar_seccion(self, nombre):
+        """Cambia la sección visible (control segmentado del diseño)."""
+        mapa = {"🛠️ Receta": self.tab_receta, "📦 Inventario": self.tab_inventario,
+                "🧪 Insumos": self.tab_insumos, "⚙️ Equipos": self.tab_equipos}
+        for clave, marco in mapa.items():
+            if clave == nombre:
+                marco.grid()
+            else:
+                marco.grid_remove()
+        try:
+            self.nav_segmentada.set(nombre)
+        except Exception:
+            pass
+        try:                                   # datos al día al entrar
+            if nombre == "📦 Inventario":
+                self.cargar_lista_inventario()
+            elif nombre == "🧪 Insumos":
+                self.cargar_lista_insumos()
+            elif nombre == "⚙️ Equipos":
+                self._cargar_balance_teorico()
+        except Exception as e:
+            logger.error(f"_cambiar_seccion({nombre}): {e}")
+
     def setup_tab_receta(self):
         # ── Layout tipo Brewomatic: sub-pestañas izquierda, resultados derecha ──
         self.tab_receta.grid_columnconfigure(0, weight=2)
@@ -139,30 +233,33 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         frame_datos = ctk.CTkFrame(self.scroll_receta)
         frame_datos.grid(row=0, column=0, padx=20, pady=10, sticky="ew")
         frame_datos.grid_columnconfigure((0, 1, 2, 3), weight=1)
-        ctk.CTkLabel(frame_datos, text="Nombre:", anchor="w").grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        ctk.CTkLabel(frame_datos, text="📝 Datos Generales de la Cocción",
+                     font=ctk.CTkFont(size=13, weight="bold")
+                     ).grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=(8, 2))
+        ctk.CTkLabel(frame_datos, text="Nombre de Receta:", anchor="w").grid(row=2, column=0, padx=5, pady=5, sticky="w")
         self.entry_nombre = ctk.CTkEntry(frame_datos, placeholder_text="Ej: Mi IPA Argenta")
         self.entry_nombre.grid(row=0, column=1, columnspan=3, padx=5, pady=5, sticky="ew")
-        ctk.CTkLabel(frame_datos, text="Volumen (L):", anchor="w").grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        ctk.CTkLabel(frame_datos, text="Volumen (L):", anchor="w").grid(row=2, column=0, padx=5, pady=5, sticky="w")
         self.combo_volumen = ctk.CTkComboBox(frame_datos, values=VOLUMENES_PRESET, command=self.escalar_por_volumen, width=90)
         self.combo_volumen.set("20")
-        self.combo_volumen.grid(row=1, column=1, padx=5, pady=5)
-        ctk.CTkLabel(frame_datos, text="Eficiencia (%):", anchor="w").grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        self.combo_volumen.grid(row=2, column=1, padx=5, pady=5)
+        ctk.CTkLabel(frame_datos, text="Eficiencia (%):", anchor="w").grid(row=2, column=2, padx=5, pady=5, sticky="w")
         self.entry_eficiencia = ctk.CTkEntry(frame_datos, placeholder_text="75", width=70)
-        self.entry_eficiencia.grid(row=1, column=3, padx=5, pady=5)
+        self.entry_eficiencia.grid(row=2, column=3, padx=5, pady=5)
         self.entry_eficiencia.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
         # Altitud (afecta IBU por punto de ebullición) — paridad móvil
-        ctk.CTkLabel(frame_datos, text="Altitud:", anchor="w").grid(row=2, column=0, padx=5, pady=5, sticky="w")
+        ctk.CTkLabel(frame_datos, text="Altitud de Cocción:", anchor="w").grid(row=3, column=0, padx=5, pady=5, sticky="w")
         self.combo_altitud = ctk.CTkComboBox(frame_datos, values=list(ALTITUDES_CORDOBA.keys()),
                                              command=lambda e: self.calcular_y_mostrar(), width=150)
         self.combo_altitud.set(DEF_ALTITUD)
-        self.combo_altitud.grid(row=2, column=1, padx=5, pady=5)
+        self.combo_altitud.grid(row=3, column=1, padx=5, pady=5)
         # Levadura (define FG por atenuación + tolerancia ABV) — paridad móvil
-        ctk.CTkLabel(frame_datos, text="Levadura:", anchor="w").grid(row=2, column=2, padx=5, pady=5, sticky="w")
+        ctk.CTkLabel(frame_datos, text="Cepa de Levadura:", anchor="w").grid(row=3, column=2, padx=5, pady=5, sticky="w")
         _levs = self._opciones_insumo("Levadura")
         self.combo_levadura = ctk.CTkComboBox(frame_datos, values=_levs,
                                               command=lambda e: self.calcular_y_mostrar(), width=200)
         self.combo_levadura.set(DEF_LEVADURA if DEF_LEVADURA in _levs else (_levs[0] if _levs else ""))
-        self.combo_levadura.grid(row=2, column=3, padx=5, pady=5)
+        self.combo_levadura.grid(row=3, column=3, padx=5, pady=5)
         # Estilo BJCP
         ctk.CTkLabel(frame_datos, text="Estilo Objetivo:", anchor="w").grid(row=3, column=0, padx=5, pady=5, sticky="w")
         self.combo_estilo_bjcp = ctk.CTkComboBox(frame_datos, values=get_style_list(), command=lambda e: self.calcular_y_mostrar())
@@ -170,15 +267,16 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         self.combo_estilo_bjcp.grid(row=3, column=1, columnspan=3, padx=5, pady=5, sticky="ew")
         # ── 4. Maltas ────────────────────────────────────────────────────
         frame_maltas = ctk.CTkFrame(self.scroll_receta)
-        frame_maltas.grid(row=1, column=0, padx=20, pady=10, sticky="ew")
+        frame_maltas.grid(row=2, column=0, padx=20, pady=10, sticky="ew")
         header_maltas = ctk.CTkFrame(frame_maltas, fg_color="transparent")
         header_maltas.pack(fill="x", padx=5, pady=5)
-        ctk.CTkLabel(header_maltas, text="🌾 Maltas y Adjuntos (Kg)", font=ctk.CTkFont(weight="bold")).pack(side="left")
-        ctk.CTkButton(header_maltas, text="+ Añadir Malta", width=100, command=lambda: self.add_fila_malta()).pack(side="right")
+        ctk.CTkLabel(header_maltas, text="🌾 Granos y Fermentables", font=ctk.CTkFont(weight="bold")).pack(side="left")
+        ctk.CTkButton(header_maltas, text="+ Añadir Grano", width=110, command=lambda: self.add_fila_malta()).pack(side="right")
         # Encabezados de columna (para saber qué es cada valor)
         enc_m = ctk.CTkFrame(frame_maltas, fg_color="transparent")
         enc_m.pack(fill="x", padx=5)
-        for etiqueta, ancho in [("Malta", 190), ("Kg", 55), ("Ext", 50), ("Color", 50), ("", 28)]:
+        for etiqueta, ancho in [("Grano / Fermentable", 190), ("Cantidad (Kg)", 85), ("Extracto", 60),
+                                ("Color", 55), ("% Total", 60), ("Uso", 130), ("Acción", 60)]:
             ctk.CTkLabel(enc_m, text=etiqueta, width=ancho, anchor="w",
                          font=ctk.CTkFont(size=11), text_color="#9CA3AF").pack(side="left", padx=2)
         self.frame_lista_maltas = ctk.CTkFrame(frame_maltas, fg_color="transparent")
@@ -188,16 +286,18 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         frame_lupulos.grid(row=2, column=0, padx=20, pady=10, sticky="ew")
         header_lupulos = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
         header_lupulos.pack(fill="x", padx=5, pady=5)
-        ctk.CTkLabel(header_lupulos, text="🌿 Lúpulos (Mezclas y Escalonados)", font=ctk.CTkFont(weight="bold")).pack(side="left")
+        ctk.CTkLabel(header_lupulos, text="🌿 Lúpulos y Adiciones de Hervor", font=ctk.CTkFont(weight="bold")).pack(side="left")
         ctk.CTkButton(header_lupulos, text="+ Añadir Lúpulo", width=100, command=lambda: self.add_fila_lupulo()).pack(side="right")
         # v17: auto-amargor (usa la fórmula activa Tinseth/Rager)
         ctk.CTkButton(header_lupulos, text="🎯 Auto-amargor", width=110,
-                      fg_color="#0D9488", hover_color="#0F766E",
+                      fg_color="#3A7EBF", hover_color="#1F538D",
                       command=self.auto_amargor).pack(side="right", padx=(0, 5))
         # Encabezados de columna
         enc_l = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
         enc_l.pack(fill="x", padx=5)
-        for etiqueta, ancho in [("Lúpulo", 170), ("g", 50), ("AA%", 45), ("Min", 45), ("Formato", 70), ("", 28)]:
+        for etiqueta, ancho in [("Lúpulo", 155), ("Gramos", 55), ("Alpha Ac.", 55),
+                                ("Modo", 65), ("Momento", 85), ("Tiempo", 50), ("g/L", 45),
+                                ("IBU Aporte", 75), ("Acción", 55)]:
             ctk.CTkLabel(enc_l, text=etiqueta, width=ancho, anchor="w",
                          font=ctk.CTkFont(size=11), text_color="#9CA3AF").pack(side="left", padx=2)
         self.frame_lista_lupulos = ctk.CTkFrame(frame_lupulos, fg_color="transparent")
@@ -212,8 +312,13 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         frame_acciones = ctk.CTkFrame(self.scroll_receta, fg_color="transparent")
         frame_acciones.grid(row=4, column=0, padx=20, pady=10, sticky="ew")
         ctk.CTkButton(frame_acciones, text="🔢 Calcular", command=self.calcular_y_mostrar, fg_color="#D97706", hover_color="#B45309").pack(side="left", padx=10)
-        ctk.CTkButton(frame_acciones, text="💾 Guardar / Modificar", command=self.guardar_receta, fg_color="#059669", hover_color="#047857").pack(side="left", padx=10)
-        ctk.CTkButton(frame_acciones, text="🗑️ Eliminar Receta", command=self.eliminar_receta, fg_color="#DC2626", hover_color="#991B1B").pack(side="left", padx=10)
+        ctk.CTkButton(frame_acciones, text="💾 Guardar / Modificar", command=self.guardar_receta, fg_color="#22C55E", hover_color="#16A34A").pack(side="left", padx=10)
+        ctk.CTkButton(frame_acciones, text="🗑️ Eliminar Receta", command=self.eliminar_receta, fg_color="#DC2626", hover_color="#B91C1C").pack(side="left", padx=10)
+        # Botones del diseño: Recalcular e Imprimir Ficha
+        ctk.CTkButton(frame_acciones, text="🔄 Recalcular", command=self.calcular_y_mostrar,
+                      fg_color="#3A7EBF", hover_color="#1F538D").pack(side="left", padx=10)
+        ctk.CTkButton(frame_acciones, text="🖨️ Imprimir Ficha", command=self.exportar_pdf_ui,
+                      fg_color="#2B2B36", hover_color="#3F3F50").pack(side="left", padx=10)
         self.var_compartir_comunidad = ctk.BooleanVar(value=False)
         ctk.CTkCheckBox(frame_acciones, text="🌐 Compartir con la comunidad al guardar",
                         variable=self.var_compartir_comunidad).pack(side="left", padx=15)
@@ -222,7 +327,7 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         frame_agua = ctk.CTkFrame(scroll_agua)
         frame_agua.pack(fill="x", padx=20, pady=10)
         frame_agua.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6, 7), weight=1)
-        ctk.CTkLabel(frame_agua, text="💧 Perfil del Agua (ppm)", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
+        ctk.CTkLabel(frame_agua, text="💧 Perfil de Agua Inicial (ppm)", font=ctk.CTkFont(weight="bold")).grid(row=0, column=0, columnspan=4, sticky="w", padx=5, pady=5)
         self.combo_agua = ctk.CTkComboBox(frame_agua, values=list(PERFILES_AGUA_CORDOBA.keys()),
                                           command=self._on_perfil_agua, width=230)
         self.combo_agua.set(DEF_PERFIL_AGUA)
@@ -322,7 +427,21 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         self.panel_resultados = ctk.CTkScrollableFrame(self.tab_receta)
         self.panel_resultados.grid(row=0, column=1, sticky="nsew", padx=(5, 0))
         self.panel_resultados.grid_columnconfigure((0, 1), weight=1)
-        ctk.CTkLabel(self.panel_resultados, text="📊 Resultados (tiempo real)",
+        # Indicadores lineales del diseño (track 6 px, relleno azul/ámbar/verde)
+        self._gauges = {}
+        marco_gauges = ctk.CTkFrame(self.panel_resultados, fg_color="transparent")
+        marco_gauges.grid(row=99, column=0, columnspan=2, sticky="ew", padx=6, pady=(6, 2))
+        marco_gauges.grid_columnconfigure(0, weight=1)
+        for i, (clave, titulo) in enumerate((("atenuacion", "Atenuación real"),
+                                             ("eficiencia", "Eficiencia de macerado"))):
+            ctk.CTkLabel(marco_gauges, text=titulo, anchor="w", font=ctk.CTkFont(size=10),
+                         text_color="#9CA3AF").grid(row=i * 2, column=0, sticky="w")
+            barra = ctk.CTkProgressBar(marco_gauges, height=6, corner_radius=3,
+                                       progress_color="#3A7EBF", fg_color="#3F3F50")
+            barra.set(0)
+            barra.grid(row=i * 2 + 1, column=0, sticky="ew", pady=(0, 4))
+            self._gauges[clave] = barra
+        ctk.CTkLabel(self.panel_resultados, text="📊 Resultados (Tiempo Real)",
                      font=ctk.CTkFont(size=15, weight="bold")
                      ).grid(row=0, column=0, columnspan=2, sticky="w", padx=5, pady=(5, 0))
         self.lbl_resumen_receta = ctk.CTkLabel(self.panel_resultados, text="",
@@ -330,10 +449,11 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         self.lbl_resumen_receta.grid(row=1, column=0, columnspan=2, sticky="w", padx=6, pady=(0, 2))
         # Barra de color SRM (color dinámico del mosto)
         self.frame_srm_color = ctk.CTkFrame(self.panel_resultados, height=30,
-                                            corner_radius=6, fg_color="#333333")
+                                            corner_radius=6, fg_color="#2B2B36")
         self.frame_srm_color.grid(row=2, column=0, columnspan=2, sticky="ew", padx=5, pady=4)
         self.frame_srm_color.grid_columnconfigure(0, weight=1)
-        self.lbl_srm_hex = ctk.CTkLabel(self.frame_srm_color, text="", font=ctk.CTkFont(size=11))
+        self.lbl_srm_hex = ctk.CTkLabel(self.frame_srm_color, text="",
+                                        font=ctk.CTkFont(size=11, weight="bold"))
         self.lbl_srm_hex.grid(row=0, column=0, sticky="ew", padx=6, pady=4)
         # Indicadores clave (tarjetas)
         self.res_labels = {}
@@ -345,11 +465,11 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
             ("calorias", "Calorías /355ml"), ("ph", "pH Macerado"),
         ]
         for i, (clave, titulo) in enumerate(indicadores):
-            f = ctk.CTkFrame(self.panel_resultados, fg_color="#2b2b2b", corner_radius=6)
+            f = ctk.CTkFrame(self.panel_resultados, fg_color="#24242C", corner_radius=6)
             f.grid(row=3 + i // 2, column=i % 2, padx=4, pady=3, sticky="nsew")
-            ctk.CTkLabel(f, text=titulo, font=ctk.CTkFont(size=11),
+            ctk.CTkLabel(f, text=titulo.upper(), font=ctk.CTkFont(size=10),
                          text_color="#9CA3AF").pack(anchor="w", padx=6, pady=(4, 0))
-            v = ctk.CTkLabel(f, text="—", font=ctk.CTkFont(size=14, weight="bold"),
+            v = ctk.CTkLabel(f, text="—", font=ctk.CTkFont(size=22, weight="bold"),
                              anchor="w", justify="left")
             v.pack(anchor="w", padx=6, pady=(0, 4))
             self.res_labels[clave] = v
@@ -360,12 +480,12 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         ctk.CTkLabel(self.panel_resultados, text="Perfil Sensorial", font=ctk.CTkFont(size=12, weight="bold")
                      ).grid(row=9, column=0, columnspan=2, sticky="w", padx=6, pady=(6, 0))
         self.canvas_radar = tk.Canvas(self.panel_resultados, width=260, height=200,
-                                      bg="#2b2b2b", highlightthickness=0)
+                                      bg="#24242C", highlightthickness=0)
         self.canvas_radar.grid(row=10, column=0, columnspan=2, padx=6, pady=4)
         ctk.CTkLabel(self.panel_resultados, text="Curva de Gravedad Estimada", font=ctk.CTkFont(size=12, weight="bold")
                      ).grid(row=11, column=0, columnspan=2, sticky="w", padx=6, pady=(6, 0))
         self.canvas_sparkline = tk.Canvas(self.panel_resultados, width=260, height=70,
-                                          bg="#2b2b2b", highlightthickness=0)
+                                          bg="#24242C", highlightthickness=0)
         self.canvas_sparkline.grid(row=12, column=0, columnspan=2, padx=6, pady=4)
         # Detalle (agua, química, sales, BJCP, inventario)
         self.texto_resultados = ctk.CTkTextbox(self.panel_resultados, height=280,
@@ -381,7 +501,7 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
                     ("hervor", "3️⃣ Hervor"), ("fermentacion", "4️⃣ Fermentación")]
         for i, (clave, titulo) in enumerate(procesos):
             self.frame_procesos.grid_columnconfigure(i, weight=1)
-            card = ctk.CTkFrame(self.frame_procesos, fg_color="#2b2b2b", corner_radius=6)
+            card = ctk.CTkFrame(self.frame_procesos, fg_color="#24242C", corner_radius=6)
             card.grid(row=1, column=i, padx=4, pady=(0, 6), sticky="nsew")
             ctk.CTkLabel(card, text=titulo, font=ctk.CTkFont(size=12, weight="bold")
                          ).pack(anchor="w", padx=6, pady=(4, 0))
@@ -457,7 +577,9 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
             lbl.configure(text="—")
         self.lbl_resumen_receta.configure(text="")
         self.lbl_alerta_lev.configure(text="")
-        self.frame_srm_color.configure(fg_color="#333333")
+        self.frame_srm_color.configure(fg_color="#2B2B36")
+        for barra in getattr(self, "_gauges", {}).values():
+            barra.set(0)
         self.lbl_srm_hex.configure(text="")
         for lbl in self.proc_labels.values():
             lbl.configure(text="—")
@@ -699,10 +821,18 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         e_color = ctk.CTkEntry(fila, placeholder_text="Col", width=50)
         e_color.pack(side="left", padx=2)
         e_color.bind("<KeyRelease>", lambda e: self.calcular_y_mostrar())
-        btn_del = ctk.CTkButton(fila, text="X", width=28, fg_color="#DC2626", hover_color="#991B1B",
+        lbl_pct = ctk.CTkLabel(fila, text="—", width=60, text_color="#D97706",
+                               font=ctk.CTkFont(size=12, weight="bold"))
+        lbl_pct.pack(side="left", padx=2)
+        c_uso = ctk.CTkComboBox(fila, values=USOS_GRANO, width=130)
+        c_uso.set(USOS_GRANO[0])
+        c_uso.pack(side="left", padx=2)
+        c_uso.bind("<<ComboboxSelected>>", lambda e: self.calcular_y_mostrar())
+        btn_del = ctk.CTkButton(fila, text="X", width=28, fg_color="#DC2626", hover_color="#B91C1C",
                                 command=lambda: self._borrar_fila(fila))
         btn_del.pack(side="left", padx=5)
         fila.c_nombre, fila.e_cantidad, fila.e_extracto, fila.e_color = c_nombre, e_cant, e_ext, e_color
+        fila.lbl_pct, fila.c_uso = lbl_pct, c_uso
         if datos:
             e_cant.insert(0, format_num(datos.get('cantidad', '')))
             e_ext.insert(0, format_num(datos.get('extracto', 300)))
@@ -711,6 +841,80 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
             e_ext.insert(0, "300"); e_color.insert(0, "2")
         return fila
 
+    def _datos_catalogo_uso(self, tipo, nombre):
+        """'Uso' del insumo según el catálogo o la base (para la columna del diseño)."""
+        try:
+            ing = self.db.get_ingredient(tipo, nombre)
+            if ing and ing.get("uso"):
+                return ing["uso"]
+        except Exception:
+            pass
+        return ""
+
+    def _actualizar_gauges(self, r, eficiencia, levadura_datos):
+        """Indicadores lineales del diseño: atenuación real y eficiencia de macerado.
+
+        El color sigue al sistema de diseño: verde si está en rango, ámbar si se
+        aparta, azul mientras no hay referencia.
+        """
+        gauges = getattr(self, "_gauges", None)
+        if not gauges:
+            return
+        # Atenuación: la que logra la levadura elegida
+        atenuacion = 0.0
+        if r.get("og") and r.get("fg") and r["og"] > 1:
+            atenuacion = (r["og"] - r["fg"]) / (r["og"] - 1.0) * 100
+        esperada = float(levadura_datos.get("atenuacion") or 75)
+        gauges["atenuacion"].set(min(1.0, max(0.0, atenuacion / 100)))
+        diferencia = abs(atenuacion - esperada)
+        gauges["atenuacion"].configure(
+            progress_color="#22C55E" if diferencia <= 4 else "#D97706")
+        # Eficiencia: la usada contra el objetivo típico del 75 %
+        uso = min(1.0, max(0.0, (eficiencia * 100) / 100))
+        gauges["eficiencia"].set(uso)
+        gauges["eficiencia"].configure(
+            progress_color="#22C55E" if 0.70 <= eficiencia <= 0.85 else "#D97706")
+
+    def _actualizar_columnas_calculadas(self):
+        """Completa las columnas del diseño: % Total y Uso (granos), g/L e IBU (lúpulos)."""
+        try:
+            volumen, eficiencia, _ratio, _abs, tiempo_hervor, altitud = self._leer_parametros()
+            maltas, lupulos = self.leer_ingredientes_ui()
+            total_granos = sum(float(m.get("cantidad") or 0) for m in maltas) or 0.0
+            formula = "rager" if self.combo_f_ibu.get() == "Rager" else "tinseth"
+            og = BrewEngine.calcular_og(maltas, volumen, eficiencia) if maltas else 1.040
+
+            for fila, malta in zip(self._filas_de(self.frame_lista_maltas), maltas):
+                cantidad = float(malta.get("cantidad") or 0)
+                pct = (cantidad / total_granos * 100) if total_granos else 0
+                if hasattr(fila, "lbl_pct"):
+                    fila.lbl_pct.configure(text=f"{pct:.1f}%" if total_granos else "—")
+
+            for fila, lupulo in zip(self._filas_de(self.frame_lista_lupulos), lupulos):
+                gramos = float(lupulo.get("cantidad") or 0)
+                if hasattr(fila, "lbl_gl"):
+                    fila.lbl_gl.configure(text=f"{gramos / volumen:.2f}" if volumen else "—")
+                if hasattr(fila, "lbl_ibu"):
+                    momento = (lupulo.get("momento") or "Hervor")
+                    try:
+                        if momento == "Dry hop":
+                            ibu = 0.0        # el dry hop no isomeriza: no aporta IBU
+                        elif momento == "Whirlpool":
+                            # Se toma el tiempo como el reposo de whirlpool tras el apagado
+                            hop_wp = dict(lupulo, tiempo=0)
+                            ibu = BrewEngine.calcular_ibu([hop_wp], volumen, og, altitud,
+                                                          formula=formula,
+                                                          hop_stand_min=float(lupulo.get("tiempo") or 15))
+                        else:
+                            ibu = BrewEngine.calcular_ibu([lupulo], volumen, og, altitud,
+                                                          formula=formula,
+                                                          hop_stand_min=tiempo_hervor)
+                    except Exception:
+                        ibu = 0.0
+                    fila.lbl_ibu.configure(text=f"{ibu:.1f}")
+        except Exception as e:
+            logger.error(f"_actualizar_columnas_calculadas: {e}")
+
     def _on_malta_seleccion(self, fila):
         def cb(_=None):
             nombre = fila.c_nombre.get()
@@ -718,6 +922,9 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
             if d:
                 fila.e_extracto.delete(0, "end"); fila.e_extracto.insert(0, format_num(d["extracto"]))
                 fila.e_color.delete(0, "end");    fila.e_color.insert(0, format_num(d["color"]))
+                uso = self._datos_catalogo_uso("Malta", nombre)
+                if uso and hasattr(fila, "c_uso"):
+                    fila.c_uso.set(USO_A_DISEÑO.get(uso, uso))
             self.calcular_y_mostrar()
         return cb
 
@@ -745,10 +952,22 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
         c_formato.set(formato if formato in ("pellet", "flor") else DEF_FORMATO)
         c_formato.pack(side="left", padx=2)
         c_formato.bind("<<ComboboxSelected>>", lambda e: self.calcular_y_mostrar())
-        btn_del = ctk.CTkButton(fila, text="X", width=28, fg_color="#DC2626", hover_color="#991B1B",
+        c_momento = ctk.CTkComboBox(fila, values=MOMENTOS_LUPULO, width=85)
+        momento = datos.get('momento', MOMENTOS_LUPULO[0]) if datos else MOMENTOS_LUPULO[0]
+        c_momento.set(momento if momento in MOMENTOS_LUPULO else MOMENTOS_LUPULO[0])
+        c_momento.pack(side="left", padx=2)
+        c_momento.bind("<<ComboboxSelected>>", lambda e: self.calcular_y_mostrar())
+        lbl_gl = ctk.CTkLabel(fila, text="—", width=45, text_color="#9CA3AF")
+        lbl_gl.pack(side="left", padx=2)
+        lbl_ibu = ctk.CTkLabel(fila, text="—", width=80, text_color="#22C55E",
+                               font=ctk.CTkFont(size=12, weight="bold"))
+        lbl_ibu.pack(side="left", padx=2)
+        btn_del = ctk.CTkButton(fila, text="X", width=28, fg_color="#DC2626", hover_color="#B91C1C",
                                 command=lambda: self._borrar_fila(fila))
         btn_del.pack(side="left", padx=5)
         fila.c_nombre, fila.e_cantidad, fila.e_aa, fila.e_tiempo, fila.c_formato = c_nombre, e_cant, e_aa, e_tiempo, c_formato
+        fila.lbl_gl, fila.lbl_ibu = lbl_gl, lbl_ibu
+        fila.c_momento = c_momento
         if datos:
             e_cant.insert(0, format_num(datos.get('cantidad', '')))
             e_aa.insert(0, format_num(datos.get('aa', 5)))
@@ -795,6 +1014,7 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
                     'aa': _flotar(fila.e_aa.get(), 5),
                     'tiempo': int(_flotar(fila.e_tiempo.get(), 60)),
                     'formato': fila.c_formato.get() or DEF_FORMATO,
+                    'momento': getattr(fila, "c_momento", None).get() if hasattr(fila, "c_momento") else "Hervor",
                 })
             except Exception:
                 pass
@@ -935,10 +1155,16 @@ class CerveceraApp(GestionMixin, RecetasMixin, ctk.CTk):
             self.res_labels["calorias"].configure(text=f"{r['calorias']} kcal")
             self.res_labels["ph"].configure(text=f"{r['ph']:.2f}")
             self.frame_srm_color.configure(fg_color=r.get('srm_hex', '#333333'))
-            self.lbl_srm_hex.configure(text=f"Color: SRM {r['srm']} · {color_desc} · EBC {r.get('ebc', 0)}")
+            # Texto adaptativo del diseño: oscuro sobre colores claros, blanco sobre oscuros
+            hexa = r.get("srm_hex", "#2B2B36").lstrip("#")
+            luminancia = (0.299 * int(hexa[0:2], 16) + 0.587 * int(hexa[2:4], 16)
+                          + 0.114 * int(hexa[4:6], 16)) if len(hexa) == 6 else 0
+            self.lbl_srm_hex.configure(
+                text=f"Color: SRM {r['srm']} · {color_desc} · EBC {r.get('ebc', 0)}",
+                text_color="#1E1E24" if luminancia > 140 else "#FFFFFF")
             self.lbl_alerta_lev.configure(
                 text=alerta_alcohol,
-                text_color="#F87171" if r.get('alerta_abv') else "#34D399")
+                text_color="#DC2626" if r.get('alerta_abv') else "#22C55E")
             # ── PANEL DERECHO: detalle (agua, química, sales, BJCP, inventario) ──
             texto = f"""💧 AGUA (evap. {EVAPORACION_PCT}%/h, hervor {tiempo_hervor} min)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -965,6 +1191,8 @@ Para fijar pH en 5.3 añadir: {r['acido_lactico_ml']} ml de Ácido Láctico (88%
             # ── FRANJA INFERIOR: procesos en orden ──
             self._actualizar_procesos(r, aguas, ratio, tiempo_hervor,
                                       levadura_nombre, lupulos, eq)
+            self._actualizar_columnas_calculadas()
+            self._actualizar_gauges(r, eficiencia, levadura_datos)
             return {
                 'og': r['og'], 'fg': r['fg'], 'abv': r['abv'], 'ibu': r['ibu'],
                 'srm': r['srm'], 'ph': r['ph'], 'ph_hervor': r['ph_hervor'],
