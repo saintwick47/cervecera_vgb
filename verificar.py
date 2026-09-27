@@ -22,6 +22,8 @@ VERIFICACIONES = [
      [PY_PRUEBAS, "-m", "unittest", "test_cervecera"], RAIZ, "ventana"),
     ("paleta de colores del sistema de diseño",
      [sys.executable, "probar_paleta.py"], RAIZ, None),
+    ("texto del Manual de Usuario (secciones y funciones)",
+     [sys.executable, "probar_manual_texto.py"], RAIZ, None),
     ("paridad PC ↔ Android",
      [sys.executable, os.path.join(RAIZ, "herramientas", "paridad.py")], RAIZ, None),
     ("maestro-detalle de Insumos/Inventario (abre la app)",
