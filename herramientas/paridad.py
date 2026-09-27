@@ -28,26 +28,60 @@ COMPARTIDOS = [
     "herramientas/LEEME_importar_brewomatic.md",
 ]
 
-# Funciones que deben existir en las dos apps (aunque se llamen distinto)
+# Funciones que deben existir en las dos apps (aunque se llamen distinto).
+# El refactor movió parte del código a app_gestion.py / app_recetas.py.
 MARCAS = {
-    "Refresco del recetario sin tocar las recetas del usuario":
-        {"app.py": ["recetas_refrescables", "refrescar=True"],
-         "main.py": ["recetas_refrescables", "_fusionar_recetario"]},
-    "Levadura de la receta al importar (no forzar US-05)":
-        {"app.py": ["datos.get('levaduras')"], "main.py": ["_levaduras_de"]},
-    "Origen de la receta guardado en las notas":
-        {"app.py": ["datos.get('notas'"], "main.py": ['d.get("notas"']},
-    "Módulo de agua: perfiles objetivo y sales":
-        {"app.py": ["calcular_sales", "PERFILES_AGUA_OBJETIVO"],
-         "main.py": ["calcular_sales", "PERFILES_AGUA_OBJETIVO"]},
-    "Fórmulas elegibles (IBU / FG / ABV)":
-        {"app.py": ["formula_ibu", "metodo_fg", "formula_abv"],
-         "main.py": ["formula_ibu", "metodo_fg", "formula_abv"]},
-    "Perfiles de equipo":
-        {"app.py": ["seed_equipment"], "main.py": ["seed_equipment"]},
-    "Catálogo de insumos editable":
-        {"app.py": ["seed_ingredients"], "main.py": ["seed_ingredients"]},
+    "Refresco del recetario sin tocar las recetas del usuario": {
+        "pc": [("app_recetas.py", ["recetas_refrescables", "refrescar=True"])],
+        "android": [("main.py", ["recetas_refrescables", "_fusionar_recetario"])]},
+    "Levadura de la receta al importar (no forzar US-05)": {
+        "pc": [("app_recetas.py", ["datos.get('levaduras')"])],
+        "android": [("main.py", ["_levaduras_de"])]},
+    "Origen de la receta guardado en las notas": {
+        "pc": [("app_recetas.py", ["datos.get('notas'"])],
+        "android": [("main.py", ['d.get("notas"'])]},
+    "Módulo de agua: perfiles objetivo y sales": {
+        "pc": [("app.py", ["calcular_sales", "PERFILES_AGUA_OBJETIVO"])],
+        "android": [("main.py", ["calcular_sales", "PERFILES_AGUA_OBJETIVO"])]},
+    "Fórmulas elegibles (IBU / FG / ABV)": {
+        "pc": [("app.py", ["formula_ibu", "metodo_fg", "formula_abv"])],
+        "android": [("main.py", ["formula_ibu", "metodo_fg", "formula_abv"])]},
+    "Perfiles de equipo": {
+        "pc": [("app.py", ["seed_equipment"]), ("app_gestion.py", ["equipment"])],
+        "android": [("main.py", ["seed_equipment"])]},
+    "Catálogo de insumos editable": {
+        "pc": [("app.py", ["seed_ingredients"])],
+        "android": [("main.py", ["seed_ingredients"])]},
 }
+
+# Funciones que hoy existen SOLO en PC (se informan, no se toman como error).
+# Cuando se lleven a Android, sacarlas de acá.
+SOLO_PC = {
+    "Maestro-detalle con ficha y Kardex (Insumos/Inventario)":
+        "logica_gestion.py + app_gestion.py (Android todavía usa listas simples)",
+    "Auto-amargor (calcular gramos para un IBU objetivo)":
+        "brew_engine.py (el motor ya está sincronizado en las dos)",
+    "Priming / carbonatación, sub-pestañas de receta, Comunidad, comparador":
+        "app_recetas.py / app_gestion.py (funciones de escritorio)",
+}
+
+# Tablas/funciones que existen en PC y todavía NO en Android porque se desarrollan
+# primero en PC y se trasladan al final (regla de trabajo del proyecto).
+# Columnas nuevas de tablas que existen en las dos versiones: se avisan como
+# pendientes de traslado en vez de contarse como error.
+COLUMNAS_PENDIENTES = {
+    "ingredients": ["dbfg", "humedad", "proteina"],
+    "inventory": ["ubicacion", "lote"],
+}
+
+PENDIENTES_DE_TRASLADO = {
+    "inventory_movimientos": "Kardex de inventario (función de PC, se traslada al final)",
+    "lotes": "cocciones programadas (función de PC, se traslada al final)",
+    "lote_insumos": "reserva de insumos de cada cocción (función de PC, se traslada al final)",
+}
+
+# Archivos donde puede vivir la versión (el refactor la movió de app.py)
+ARCHIVOS_VERSION_PC = ("app.py", "app_gestion.py")
 
 
 def localizar():
@@ -134,7 +168,13 @@ def main():
 
     # ── 2) Versión ───────────────────────────────────────────────────────────
     print("\n── Versión ──")
-    v_pc = version_de(os.path.join(pc, "app.py"), r'APP_VERSION\s*=\s*"([^"]+)"')
+    v_pc = "?"
+    for archivo in ARCHIVOS_VERSION_PC:
+        ruta = os.path.join(pc, archivo)
+        if os.path.exists(ruta):
+            v_pc = version_de(ruta, r'APP_VERSION\s*=\s*"([^"]+)"')
+            if v_pc != "?":
+                break
     v_and = version_de(os.path.join(android, "main.py"), r'APP_VERSION\s*=\s*"([^"]+)"')
     if v_pc == v_and:
         print(f"  ✓ PC y Android en la versión {v_pc}")
@@ -164,26 +204,44 @@ def main():
         for tabla in sorted(set(ea) | set(eb)):
             if ea.get(tabla) == eb.get(tabla):
                 print(f"  ✓ {tabla} ({len(ea.get(tabla, []))} columnas)")
+            elif tabla in PENDIENTES_DE_TRASLADO and eb.get(tabla) is None:
+                print(f"  ⏳ {tabla}: solo en PC — {PENDIENTES_DE_TRASLADO[tabla]}")
+            elif tabla in COLUMNAS_PENDIENTES and set(ea.get(tabla, [])) - set(eb.get(tabla, [])) \
+                    and all(col in " ".join(ea.get(tabla, [])) and col not in " ".join(eb.get(tabla, []))
+                            for col in COLUMNAS_PENDIENTES[tabla]):
+                faltan = [c for c in COLUMNAS_PENDIENTES[tabla] if c not in " ".join(eb.get(tabla, []))]
+                print(f"  ⏳ {tabla}: columnas en PC que se trasladan después -> {', '.join(faltan)}")
             else:
                 print(f"  ✗ {tabla}  PC={ea.get(tabla)}\n        Android={eb.get(tabla)}")
                 fallos.append(f"tabla {tabla}")
 
     # ── 5) Funciones presentes en las dos apps ───────────────────────────────
     print("\n── Funciones que deben estar en las dos versiones ──")
-    for descripcion, por_archivo in MARCAS.items():
+    for descripcion, lados in MARCAS.items():
         faltan = []
-        for archivo, claves in por_archivo.items():
-            ruta = os.path.join(pc if archivo == "app.py" else android, archivo)
-            if not os.path.exists(ruta):
-                faltan.append(f"{archivo} (no existe)")
-                continue
-            contenido = open(ruta, encoding="utf-8").read()
-            faltan += [f"{archivo}: {k}" for k in claves if k not in contenido]
+        for lado, archivos in lados.items():
+            base = pc if lado == "pc" else android
+            for archivo, claves in archivos:
+                ruta = os.path.join(base, archivo)
+                if not os.path.exists(ruta):
+                    faltan.append(f"{archivo} (no existe)")
+                    continue
+                contenido = open(ruta, encoding="utf-8").read()
+                faltan += [f"{archivo}: {k}" for k in claves if k not in contenido]
         if faltan:
             print(f"  ✗ {descripcion}  -> falta {', '.join(faltan)}")
             fallos.append(descripcion)
         else:
             print(f"  ✓ {descripcion}")
+
+    # ── Solo en PC (informativo) ─────────────────────────────────────────────
+    print("\n── Funciones que hoy están solo en PC (no cuentan como error) ──")
+    for que, donde in SOLO_PC.items():
+        existe = any(clave in open(os.path.join(pc, arch), encoding="utf-8").read()
+                     for arch in ("app.py", "app_gestion.py", "app_recetas.py", "logica_gestion.py")
+                     if os.path.exists(os.path.join(pc, arch))
+                     for clave in [que.split(" (")[0][:14]])
+        print(f"  ℹ️  {que}\n      {donde}")
 
     # ── Resultado ────────────────────────────────────────────────────────────
     print()
