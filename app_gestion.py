@@ -221,7 +221,24 @@ class AyudaDialog(ctk.CTkToplevel):
         btn_cerrar = ctk.CTkButton(self, text="Cerrar Manual", command=self.destroy, fg_color="#2B2B36", hover_color="#3F3F50")
         btn_cerrar.grid(row=3, column=0, padx=20, pady=(10, 20))
         mensaje = """
-🍺 MANUAL DE USUARIO - CERVECERA VGB (v18 - Comunidad + Insumos/Inventario unificado)
+🍺 MANUAL DE USUARIO - CERVECERA VGB v1.4.4
+   (interfaz BrewTK · Comunidad · Cocciones programadas · Inventario unificado)
+
+🧭 0. CÓMO ESTÁ ORGANIZADA LA VENTANA (v1.4.4):
+   • RAIL IZQUIERDO: "🍺 Mis Recetas" para abrir/clonar/buscar recetas, y
+     las sub-pestañas del editor (Receta, Agua, Macerado, Hervido,
+     Fermentación, Embotellado).
+   • NAVEGACIÓN SEGMENTADA (arriba, en píldoras): 🛠️ Receta ·
+     📦 Inventario · 🧪 Insumos · ⚙️ Equipos. Es un solo clic para saltar
+     de módulo; la sección activa queda resaltada en azul.
+   • COLUMNA DERECHA (telemetría): resultados en vivo + INDICADORES
+     LINEALES (gauges) de atenuación real y eficiencia de macerado, y el
+     rail de Próximas Cocciones Programadas con la orden de compra.
+   • Aspecto: tema BrewTK (Inter, fondo #1E1E24, paneles #24242C, azul
+     #3A7EBF, ámbar #D97706). Los indicadores pasan a verde cuando el
+     valor está en rango y a ámbar cuando se aparta.
+   • Altura mínima de ventana: 1280x800 (la app avisa si la pantalla es
+     más chica; maximizala para ver todo el ancho).
 
 📝 1. RECETA — organizada en sub-pestañas:
    • Receta: nombre, volumen, eficiencia, ALTITUD (afecta IBU), LEVADURA
@@ -235,10 +252,18 @@ class AyudaDialog(ctk.CTkToplevel):
      embotellar, temperatura máxima de fermentación y CO2 objetivo →
      gramos de azúcar (dextrosa/sacarosa/DME/miel) y g/L.
    RESULTADOS en el panel derecho, en TIEMPO REAL: OG, FG, ABV, IBU, SRM,
-   EBC, BU/GU, calorías, pH, más un gráfico de PERFIL SENSORIAL (radar) y
-   la CURVA DE GRAVEDAD estimada (OG→FG) — ambos son estimaciones
-   ilustrativas, no mediciones. Abajo, los PROCESOS en orden (Macerado →
-   Lavado → Hervor → Fermentación).
+   EBC, BU/GU, calorías, pH, más un gráfico de PERFIL SENSORIAL (radar),
+   la CURVA DE GRAVEDAD estimada (OG→FG) y los GAUGES de atenuación y
+   eficiencia — todos son estimaciones ilustrativas, no mediciones.
+   Abajo, los PROCESOS en orden (Macerado → Lavado → Hervor →
+   Fermentación).
+   La barra de color SRM se muestra al lado de los resultados y el texto
+   cambia a claro/oscuro según el color para que siempre se lea.
+   COLUMNAS CALCULADAS: en Granos se completa "% Total" (participación
+   de cada malta en la carga) y "Uso"; en Lúpulos se completa "g/L" e
+   "IBU" de cada adición, recalculadas con la fórmula activa.
+   📂 IMPORTAR BeerXML: carga recetas de BeerSmith, Brewfather u otro
+   software (.xml) directo al editor, sin pasar por JSON.
 🎯 AUTO-AMARGOR: botón en el header de Lúpulos. Calcula los gramos de UNA
 única adición de amargor @60 min para el IBU objetivo (medio del rango BJCP
 del estilo elegido, o cargado a mano), usando la FÓRMULA ACTIVA del combo
@@ -249,16 +274,44 @@ AA%/formato).
 
 🧪 2. INSUMOS E INVENTARIO (una sola pestaña):
    Arriba, el CATÁLOGO de insumos (editable), con filtro por tipo (Todos/
-   Malta/Lúpulo/Levadura). Abajo, el INVENTARIO: alta y suma de stock con
-   costo unitario, mínimo de alerta y vencimiento opcionales por ítem.
-   KPIs en vivo: valorización total en $ y cantidad con stock bajo.
+   Malta/Lúpulo/Levadura) y dos filtros del diseño: ORIGEN/PRODUCTOR
+   (Uma Malta, Weyermann, Castle, BestMalz…) y FAMILIA DE GRANO
+   (Base, Caramelo, Tostada, Adjunto…). La FICHA TÉCNICA de cada insumo
+   guarda además uso, porcentaje máximo sugerido, DBFG, humedad,
+   proteína, maceración recomendada, ubicación física, lote y momento
+   de uso.
+   Abajo, el INVENTARIO: alta y suma de stock con costo unitario, mínimo
+   de alerta y vencimiento opcionales por ítem. La tabla se puede filtrar
+   por UBICACIÓN y se ordena por urgencia / stock mínimo.
+   KPIs en vivo: valorización total en $, cantidad con stock bajo y
+   DISTRIBUCIÓN DE ALMACENAMIENTO por ubicación.
    "📋 Pegar productos": pegás texto de una factura o planilla y detecta
    solo nombre/cantidad/unidad por línea, matcheando cada nombre contra el
    catálogo automáticamente (revisás y confirmás antes de importar).
    "🔻 Consumo/Merma": descuenta stock a mano (cocción, rotura, ajuste).
-   KARDEX: historial de movimientos (entradas/salidas/mermas), se registra
-   solo con cada alta o consumo y sobrevive aunque el ítem se agote.
-   Al calcular una receta, se valida la disponibilidad contra este inventario.
+   "⚖️ Ajuste Físico": cargás la cantidad REAL contada en depósito y la
+   app registra la diferencia como movimiento (así el Kardex explica
+   siempre la diferencia entre lo teórico y lo real).
+   KARDEX: historial de movimientos (entradas/salidas/mermas/ajustes), se
+   registra solo con cada alta, consumo o ajuste y sobrevive aunque el
+   ítem se agote.
+   🛒 ORDEN DE COMPRA SUGERIDA: toma los insumos que están por debajo
+   del mínimo, repone hasta el DOBLE del mínimo (stock de seguridad) y
+   estima el costo con el costo unitario; se guarda en CSV (mismas
+   columnas en PC y en Android).
+   Al calcular una receta, se valida la disponibilidad contra este
+   inventario.
+
+📅 2b. COCCIONES PROGRAMADAS (rail derecho):
+   "➕ Programar cocción" reserva los insumos de una receta para una fecha
+   y hora (por ejemplo "Mañana 08:00"). Esa reserva descuenta del stock
+   disponible, así que dos cocciones no pueden reservar el mismo grano dos
+   veces.
+   Si falta algo, la tarjeta de la cocción lo marca como FALTANTE y el
+   botón "Resolver" permite completar la reserva (o ajustar la cantidad)
+   cuando comprás o encontrás el insumo.
+   🏷️ ETIQUETA QR / LOTE: elegís el lote y genera un PDF con la etiqueta
+   y el código QR para pegar en el fermentador o en la botella.
 
 ⚙️ 3. EQUIPOS: perfiles guardables (lote, olla, pérdidas, evaporación,
 eficiencia, temp. de macerado) más parámetros extendidos por perfil:
@@ -266,6 +319,10 @@ maceración/empaste (temp. de grano, relación de empaste, pérdida térmica,
 temp./tiempo de lavado), mermas y pérdidas (espacio muerto, absorción,
 duración de pre-hervor/enfriado, caudal, expansión térmica) y pH objetivo
 por etapa + tasa de inoculación.
+   ⬇️ IMPORTAR BREWOMATIC: trae los perfiles de equipo desde el formato
+   de Brew-o-Matic (el recetario open source) sin reescribirlos a mano.
+   📤 EXPORTAR / IMPORTAR BeerXML: guarda tu perfil de equipo o lo carga
+   desde un archivo BeerXML de otro software.
 
 📊 4. COMPARADOR BJCP: estilo objetivo con rangos oficiales (OG, FG, IBU, SRM).
 
