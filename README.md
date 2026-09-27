@@ -1,10 +1,15 @@
 # Cervecera VGB 🍺
 
+**Versión 1.4.4**
+
 Cervecera VGB: App **offline** para diseñar recetas con motor profesional
 (Tinseth/IBU, Morey/SRM, Palmer/pH y correcciones por altitud), valida
-+80 estilos BJCP 2021, gestiona inventario, estima el pH con perfil de
-agua (Ca/Mg/HCO₃/pH) y exporta a PDF/BeerXML. Precisión técnica
-profesional, sin suscripciones ni nube.
++80 estilos BJCP 2021, gestiona inventario y stock, planea cocciones, estima
+el pH con perfil de agua (Ca/Mg/HCO₃/pH) y exporta a PDF/BeerXML.
+Precisión técnica profesional, sin suscripciones ni nube.
+
+> 🎨 Interfaz alineada con el sistema de diseño **BrewTk Utilitarian**
+> (tema oscuro, tipografía Inter, colores del mockup de Stitch).
 
 ## 📲 Plataformas
 
@@ -31,12 +36,34 @@ profesional, sin suscripciones ni nube.
 - Calculadora de priming/carbonatación en botella (Embotellado), con fórmula
   estándar Zahm & Nagel / Hall 1995 y factor según tipo de azúcar.
 - Catálogo argentino de maltas, lúpulos, levaduras y aguas de Córdoba.
-- **Insumos e Inventario** unificados en una sola sección: catálogo editable
-  por tipo, alta/consumo de stock con Kardex de movimientos, valorización
-  en $, alerta de stock bajo y vencimientos, más importación rápida
-  "Pegar productos" (detecta nombre/cantidad/unidad y matchea con el catálogo).
-- **Equipos** con perfiles guardables y parámetros extendidos de maceración,
-  mermas/pérdidas y pH objetivo por etapa.
+- **Cuatro secciones** (navegación segmentada): **Receta · Inventario · Insumos · Equipos**.
+
+**Insumos (catálogo maestro)**
+- Rail de categorías con contadores, **filtro por productor/maltería** y por familia
+  de grano, búsqueda y **paginación**.
+- Tabla con `Origen · Potencial (SG) / AA% / Atenuación · Color SRM / Temp. · Uso · % Max · Recetas`.
+- **Ficha técnica en 3 secciones** (información general, parámetros físico-químicos,
+  reglas de dosificación) con **ID del insumo** (`INS-MLT-001`), color estimado en
+  **SRM y EBC**, y campos DBFG, humedad, proteína, uso, maceración y % máximo en grist.
+- **Duplicar** insumo, **Exportar CSV** e **Importar BeerXML** (Brewfather, BeerSmith,
+  Brew-o-Matic).
+
+**Inventario y stock**
+- 4 tarjetas KPI (valorización, totales, stock bajo, **por vencer < 30 días**), filtro por
+  **categoría con contadores** y por **ubicación física** (depósito, freezer, cámara, armario).
+- Planilla operativa con `Lote / Ubicación · Categoría · Específico · Físico · Nivel/Mín ·
+  Costo · Estado` (🔴 Crítico / 🟠 Bajo / 🟢 En Stock), paginación y acciones por fila.
+- **Ajuste Físico** (inventario contado, queda en el Kardex), **Kardex** por insumo,
+  **🛒 Generar Orden de Compra Sugerida** (CSV con lo que falta y costo estimado).
+- **Cocciones programadas:** al planificar un lote se **reservan** sus insumos, se avisa el
+  **faltante** (*"Faltante: Mosaic (se requieren 250 g, hay 120"*) y el botón **Resolver**
+  permite ingresar el pedido; el estado se recalcula en vivo.
+- **Distribución de espacio de acopio** y **🏷️ Etiqueta QR / Lote** (PDF imprimible con QR).
+- **Equipos** en 4 sub-pestañas: **Perfiles** · **Valores por Defecto** · **Calibración de
+  Ollas** · **Exportar / Importar BeerXML**, con **Importar Brewomatic**, ~26 parámetros
+  (maceración, mermas, pH, **Strike Water** calculado, tasa de inoculación, visibilidad en
+  comunidad) y el rail de **Balance Teórico del Lote** (agua total, mash/lavado con %, pérdidas
+  desglosadas).
 - **Comunidad**: compartir recetas propias (vía GitHub, sin backend propio) y
   descargar las que compartieron otros usuarios de la app.
 - **Química del agua**: perfiles objetivo por estilo, sales (yeso, CaCl₂, epsom,
@@ -44,7 +71,12 @@ profesional, sin suscripciones ni nube.
 - Comparador BJCP 2021, y exportación PDF/BeerXML.
 - Fórmulas elegibles: IBU Tinseth/Rager (con whirlpool real), FG Normal/Simple,
   ABV Standard/Alternative, color Morey + EBC.
-- Tema visual propio (BrewTk Utilitarian, `Tema brewtk.json`).
+- Tema visual propio (BrewTk Utilitarian, `Tema brewtk.json`) que **se empaqueta en los
+  instaladores**; si no se encuentra, la app avisa en el log y usa el tema por defecto.
+- **Barra de menú** Archivo · Herramientas · Ayuda, indicadores lineales (atenuación y
+  eficiencia) y mosaico de color SRM con texto adaptativo.
+- **Columnas calculadas** en la receta: % del total del grist, uso, g/L e **IBU que aporta
+  cada adición** según su **momento** (Hervor / Whirlpool / Dry hop — el dry hop aporta 0 IBU).
 
 ## 📖 Recetario
 
@@ -75,9 +107,36 @@ esta comprobación sola antes de compilar y **frena** si algo no coincide
 
 ## 🗂️ Estructura del repositorio
 
-- `app.py` y módulos `*.py` → app de escritorio (PC).
+- `app.py`, `app_gestion.py`, `app_recetas.py` → app de escritorio (ventana, gestión y recetas).
+- `brew_engine.py` → motor de cálculos · `logica_gestion.py` → lógica del catálogo/inventario
+  separada de los widgets · `importador.py` → lectura de BeerXML.
+- `database.py` → SQLite con migraciones automáticas · `logger.py` → log con rotación.
 - `packaging/` → scripts e íconos para generar los instaladores.
-- `test_cervecera.py` → suite de tests (`python -m unittest test_cervecera.py -v`).
+- `herramientas/` → paridad PC↔Android e importación de recetas de Brew-o-Matic.
+
+## 🧪 Desarrollo y pruebas
+
+```bash
+python verificar.py        # corre TODO (11 comprobaciones) con resumen de una línea
+python verificar.py rapido # sin las pruebas que abren ventanas
+python app.py              # ejecutar la app
+python build_desktop.py    # generar el instalador de escritorio
+```
+
+| Verificación | Qué comprueba |
+|---|---|
+| `test_cervecera.py` | 48 tests del motor, la base y la lógica |
+| `probar_paleta.py` | que los colores y el tema sean los del sistema de diseño |
+| `probar_arranque.py` | abre la app, recorre 30 pasos de uso y falla si el log registra errores |
+| `probar_catalogo_insumos.py` | filtros, rail, paginación, ID, duplicar e importar BeerXML |
+| `probar_inventario_ui.py` | KPIs, ubicaciones, estados, ajuste físico y orden de compra |
+| `probar_cocciones_ui.py` | cocciones programadas, faltantes y etiqueta QR |
+| `probar_equipos_ui.py` | sub-pestañas, importación y balance teórico |
+| `probar_receta_columnas.py` | columnas calculadas, gauges y mosaico SRM |
+| `probar_menu.py` | barra de menú del diseño |
+| `herramientas/paridad.py` | PC ↔ Android: verifica y sincroniza |
+
+> Las pruebas corren con `VGB_TEST=1`: **no escriben el log del usuario**.
 
 ## 🚀 Publicar instaladores
 
@@ -88,6 +147,11 @@ instaladores al release desde GitHub Actions).
 nicoweb45@proton.me (Asunto: beer_vgb)
 
 ## 📝 Historial de cambios (CHANGELOG)
+
+### 2026-09-27 12:20 — v1.4.4: interfaz alineada con el diseno de Stitch (tema propio + tipografia Inter, navegacion segmentada, paleta, filas alternadas, gauges, mosaico SRM) + cocciones programadas con reserva de insumos y aviso de faltante, orden de compra sugerida, etiqueta QR, importar BeerXML, ficha tecnica ampliada, log con rotacion y verificador con 11 comprobaciones
+
+- Archivos: .gitignore, Cervecera_VGB.spec, README.md, app.py, bjcp_styles.py, catalogo_ar.py, database.py, export_engine.py, herramientas/paridad.py, logger.py, packaging/VERSION, packaging/windows/CerveceraVGB.iss, test_cervecera.py, Tema brewtk.json, app_gestion.py, app_recetas.py, beer_vgb.png, build.bat, build.sh, build_desktop.py, herramientas/recetario_real.json, herramientas/urls_brewomatic.txt, importador.py, logica_gestion.py, packaging/icons/linux/logo-512.png, packaging/icons/logo-128.png, packaging/icons/logo-16.png, packaging/icons/logo-256.png, packaging/icons/logo-32.png, packaging/icons/logo-48.png, packaging/icons/logo-512.png, packaging/icons/logo-64.png, probar_arranque.py, probar_catalogo_insumos.py, probar_cocciones_ui.py, probar_equipos_ui.py, probar_inventario_ui.py, probar_maestro_detalle_ui.py, probar_menu.py, probar_paleta.py, probar_receta_columnas.py, recetario_vgb.json, recetas_base_genericas.json, verificar.py
+
 
 ### 2026-09-26 13:38 — fix: quitar rutas absolutas de los comentarios + sacar informe interno del repo
 
