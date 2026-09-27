@@ -117,7 +117,7 @@ esta comprobación sola antes de compilar y **frena** si algo no coincide
 ## 🧪 Desarrollo y pruebas
 
 ```bash
-python verificar.py        # corre TODO (11 comprobaciones) con resumen de una línea
+python verificar.py        # corre TODO (12 comprobaciones) con resumen de una línea
 python verificar.py rapido # sin las pruebas que abren ventanas
 python app.py              # ejecutar la app
 python build_desktop.py    # generar el instalador de escritorio
@@ -127,6 +127,7 @@ python build_desktop.py    # generar el instalador de escritorio
 |---|---|
 | `test_cervecera.py` | 48 tests del motor, la base y la lógica |
 | `probar_paleta.py` | que los colores y el tema sean los del sistema de diseño |
+| `probar_manual_texto.py` | que el Manual de Usuario tenga todas las secciones y no queden textos viejos |
 | `probar_arranque.py` | abre la app, recorre 30 pasos de uso y falla si el log registra errores |
 | `probar_catalogo_insumos.py` | filtros, rail, paginación, ID, duplicar e importar BeerXML |
 | `probar_inventario_ui.py` | KPIs, ubicaciones, estados, ajuste físico y orden de compra |
@@ -143,10 +144,28 @@ python build_desktop.py    # generar el instalador de escritorio
 Ver `README_INSTALADORES.md` (paso a paso para generar y adjuntar los
 instaladores al release desde GitHub Actions).
 
+## 📤 Publicar cambios en el código
+
+```bash
+python subir_github.py "descripción del cambio"     # publica y sincroniza el repo local
+python subir_github.py "mensaje" --no-sync          # publica sin tocar el repo local
+```
+
+Sube los cambios por la API de GitHub, descarta por seguridad los artefactos de
+build y las notas internas, y **al terminar deja el repositorio local igual a
+GitHub** (rama y árbol de trabajo) para que `git status` no quede mostrando todo
+como modificado. Si algún archivo local no está publicado, **no toca nada** y lo
+avisa, así nunca se pierde trabajo.
+
 ## 📧 Soporte
 nicoweb45@proton.me (Asunto: beer_vgb)
 
 ## 📝 Historial de cambios (CHANGELOG)
+
+### 2026-09-27 13:16 — docs: como publicar cambios (subir_github.py ahora sincroniza el repo local) + tabla de verificaciones al dia
+
+- Archivos: README.md
+
 
 ### 2026-09-27 13:06 — Manual de usuario actualizado a v1.4.4 y comprobacion nueva del manual (probar_manual_texto.py)
 
