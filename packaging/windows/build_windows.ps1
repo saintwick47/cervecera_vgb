@@ -9,6 +9,7 @@ python -m PyInstaller --noconfirm --clean --onedir --windowed `
     --add-data "recetas_base.json;." `
     --add-data "logo.png;." `
     --add-data "logo.ico;." `
+    --add-data "Tema brewtk.json;." `
     app.py
 
 Write-Host "== Inno Setup =="
