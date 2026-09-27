@@ -25,6 +25,7 @@ python3 -m PyInstaller --noconfirm --clean --windowed \
     --add-data "recetas_base.json:." \
     --add-data "logo.png:." \
     --add-data "logo.ico:." \
+    --add-data "Tema brewtk.json:." \
     app.py
 
 echo "== DMG =="
