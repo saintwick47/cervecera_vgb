@@ -58,7 +58,8 @@ OWNER, REPO = "saintwick47", "cervecera_vgb"
 TOKEN_ENV = ("GITHUB_TOKEN", "GH_TOKEN", "GITHUB_PAT")  # mismos nombres que subir_github.py/comitgit.py
 TOKEN_FILE = Path.home() / ".config" / "cervecera_vgb" / "token"  # mismo archivo que ya usan esos scripts
 
-ARCHIVOS_REQUERIDOS = ["app.py", "recetas_base.json", "logo.ico", "logo.png", "packaging/VERSION"]
+ARCHIVOS_REQUERIDOS = ["app.py", "recetas_base.json", "logo.ico", "logo.png",
+                       "packaging/VERSION", "Tema brewtk.json"]
 
 # ── COLORES ANSI (mismo esquema que build_apk.py) ─────────────────────────────
 _OK = "\033[92m✅\033[0m"
